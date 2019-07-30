@@ -1,4 +1,4 @@
-# database.js
+# databasejs
 Wrapper for some of the standard Firebase real-time database functionality
 
 ### Include database.js in your project
