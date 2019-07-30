@@ -1,12 +1,15 @@
 # database.js
 Wrapper for Firebase real-time database functionality across multiple projects
 
-### Add database.js to your project
-
-Download or clone this repository. Copy or move `database.js` into the `scripts/` directory of your project.
-
 ### Include database.js in your project
 
+**Option 1:** Include the latest version hosted on Github Pages with the following line.
+
+```html
+<script src="https://mayacakmak.github.io/databasejs/scripts/database.js"></script>
+```
+
+**Option 2:** Download or clone this repository. Copy or move `database.js` into the `scripts/` directory of your project.
 Somewhere at the bottom of your .html file include the following line.
 
 ```html
