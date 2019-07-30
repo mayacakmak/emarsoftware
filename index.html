@@ -19,6 +19,53 @@
       <div class="row mx-1 mb-3 pb-3 border-top">
         <p>Javascript library that wraps Firebse database interactions.</p>
       </div>
+      <div class="row mx-1 mb-3 pb-3 border-top">
+        <h3>Include database.js in your project</h3>
+        <p><strong>Option 1:</strong> Include the latest version hosted on Github Pages with the following line.</p>
+        <pre class="hljs language-html"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://mayacakmak.github.io/databasejs/scripts/database.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+        </code></pre>
+        <p><strong>Option 2:</strong> Download or clone this repository. Copy or move <code>database.js</code> into the <code>scripts/</code> directory of your project.
+        Somewhere at the bottom of your .html file include the following line.</p>
+        <pre class="hljs language-html"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"scripts/database.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+        </code></pre>
+        <h3>Create a Database instance</h3>
+        <p>First, obtian the config information of your Firebase database and add it into the .js file where you will create the Database instance, e.g.:</p>
+        <pre class="hljs language-javascript"><code><span class="hljs-keyword">var</span> config = {
+            <span class="hljs-attr">apiKey</span>: <span class="hljs-string">"AIzaSyAisnI9BEW_Uc0-z1ad25nB6eNXEEQ_xQQ"</span>,
+            <span class="hljs-attr">authDomain</span>: <span class="hljs-string">"emar-database.firebaseapp.com"</span>,
+            <span class="hljs-attr">databaseURL</span>: <span class="hljs-string">"https://emar-database.firebaseio.com"</span>,
+            <span class="hljs-attr">projectId</span>: <span class="hljs-string">"emar-database"</span>,
+            <span class="hljs-attr">storageBucket</span>: <span class="hljs-string">"emar-database.appspot.com"</span>,
+            <span class="hljs-attr">messagingSenderId</span>: <span class="hljs-string">"672114317207"</span>
+        };
+        </code></pre>
+        <p>Then create an instance within your .js file with the following constructor, giving it the config information and, optionally, a callback function to be called when the databse is ready.</p>
+        <pre class="hljs language-javascript"><code><span class="hljs-keyword">var</span> db = <span class="hljs-keyword">new</span> Database(config, databaseReadyCallback);
+        </code></pre>
+        <h3>Use Database functionality</h3>
+        <p>Here is an example function that writes data into your Firebase database:</p>
+        <pre class="hljs language-javascript"><code><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">writeToDatabase</span>(<span class="hljs-params"></span>) </span>{
+          <span class="hljs-keyword">var</span> dir = <span class="hljs-string">"/"</span>;
+          <span class="hljs-keyword">var</span> dbRef = firebase.database().ref(dir);
+          dbRef.set({<span class="hljs-attr">test</span>:<span class="hljs-string">"dummy data"</span>});
+        }
+        </code></pre>
+        <p>Here is an example of receiving data from Firebase (once when first connection is established and later anytime there is a value change in the database):</p>
+        <pre class="hljs language-javascript"><code><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">valueChangeCallback</span>(<span class="hljs-params">snapshot</span>) </span>{
+          <span class="hljs-keyword">var</span> database = snapshot.val();
+          <span class="hljs-built_in">console</span>.log(database);
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">databaseReadyCallback</span>(<span class="hljs-params"></span>) </span>{
+          <span class="hljs-comment">// Register value change callback when the database is ready.</span>
+          <span class="hljs-keyword">var</span> dbRef = firebase.database().ref(<span class="hljs-string">'/'</span>);
+          dbRef.on(<span class="hljs-string">"value"</span>, valueChangeCallback);
+        }
+        </code></pre>
+        <h3>More information on Firebase</h3>
+        <p>Check out the <a href="https://firebase.google.com/docs">Firebase documentation</a>.</p>
+        <p>For reference, here’s the <a href="https://codepen.io/mayacakmak/project/editor/AKazPV">CodePen project</a> involving <code>database.js</code> and and an example <code>index.js</code> with the above sample code.</p>
+      </div>
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
