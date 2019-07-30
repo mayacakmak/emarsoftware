@@ -1,11 +1,11 @@
 # database.js
 Wrapper for Firebase real-time database functionality across multiple projects
 
-## Add database.js to your project
+### Add database.js to your project
 
 Download or clone this repository. Copy or move `database.js` into the `scripts/` directory of your project.
 
-## Include database.js in your project
+### Include database.js in your project
 
 Somewhere at the bottom of your .html file include the following line.
 
@@ -13,7 +13,7 @@ Somewhere at the bottom of your .html file include the following line.
 <script src="scripts/database.js"></script>
 ```
 
-## Create a Database instance
+### Create a Database instance
 
 First, obtian the config information of your Firebase database and add it into the .js file where you will create the Database instance, e.g.:
 ```javascript
@@ -33,7 +33,7 @@ Then create an instance within your .js file with the following constructor, giv
 var db = new Database(config, databaseReadyCallback);
 ```
 
-## Use Database functionality
+### Use Database functionality
 
 Here is an example function that writes data into your Firebase database:
 
@@ -60,7 +60,7 @@ function databaseReadyCallback() {
 }
 ```
 
-## More information on Firebase
+### More information on Firebase
 
 Check out the [Firebase documentation](https://firebase.google.com/docs).
 
