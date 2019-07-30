@@ -1,6 +1,8 @@
 # robotapijs
 
-### Include database.js in your project
+Javascript library for EMAR robot backend functionality provided through Firebase database updates.
+
+### Include robotapi.js in your project
 
 Note that robotapijs depends on [databasejs](https://github.com/mayacakmak/databasejs/blob/master/README.md#databasejs) so be sure to include `database.js` as well.
 
