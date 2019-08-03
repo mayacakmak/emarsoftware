@@ -51,7 +51,7 @@ function databaseReadyCallback() {
 This constructs an instance of robot with ID number 0. To change the robot ID dynamicalluy use the following function:
 
 ```javascript
-robot.setRobotID();
+robot.setRobotID(1);
 ```
 
 ### Use Robot functionality
@@ -60,10 +60,13 @@ Here is an example function that calls different robot functions which can be ca
 
 ```javascript
 function testRobotActions() {
-  robot.setFace(0);
-  robot.speak("Hello world");
-  robot.sleep(1000);
-  robot.setSpeechBubble("Hello world");
+  (async () => {
+    robot.setFace(0);
+    robot.playSound(1);
+    await robot.sleep(2000);
+    robot.speak("Hello world");
+    robot.setSpeechBubble("Hello world");
+  })();
 }
 ```
 
