@@ -39,9 +39,17 @@ function Robot(robotId, apiDiv) {
                         "Sets the robot's speech bubble to the given text.",
                        "<b>text</b> is a String within single or double quotes",
                        "robot.setSpeechBubble(\"Hello world\");");
+    apiText += Robot._getAPICardHTML("robot.playSound(soundIndex)",
+                        "Makes the robot play one of its preset sounds.",
+                       "<b>soundIndex</b> is an Integer between 0 and " +
+                        (Robot.sounds.length-1) +  ", available sounds are:" +
+                        Robot._getSoundNames(),
+                       "robot.playSound(0);");
     apiText += Robot._getAPICardHTML("robot.setFace(faceIndex)",
                         "Sets the robot's face to one of pre-designed faces.",
-                       "<b>faceIndex</b> is an Integer between 0 and numberOfFaces-1, available faces are:" + Robot._getFaceNames(),
+                       "<b>faceIndex</b> is an Integer between 0 and " +
+                        (Robot.faces.length-1) + ", available faces are:" +
+                        Robot._getFaceNames(),
                        "robot.setFace(0);");
     apiText += Robot._getAPICardHTML("robot.sleep(duration)",
                         "Makes the robot sleep for the specified duration.",
@@ -61,6 +69,15 @@ function Robot(robotId, apiDiv) {
     cardText += "<b>Example:</b> <samp>" + example + "</samp>";
     cardText += "</div></div>"
     return cardText;
+  }
+  
+  Robot._getSoundNames = function() {
+    var namesText = "<ul>";
+    for (var i=0; i<Robot.sounds.length; i++) {
+      namesText += "<li>" + i + ": "+ Robot.sounds[i].name + "</li>";
+    }
+    namesText += "</ul>";
+    return namesText;
   }
   
   Robot._getFaceNames = function() {
