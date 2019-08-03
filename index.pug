@@ -17,9 +17,11 @@ body
     .container
       .row.mx-1.mt-5
           h1.display-4 robotapijs
-      .row.mx-1.mb-3.pb-3.border-top
+      .row.mx-1.mb-1.border-top
         p Javascript library for EMAR robot backend functionality provided through Firebase database updates. See the <a href="https://github.com/mayacakmak/robotapijs#robotapijs">readme on github</a> to learn more.
-      .row.mx-1.mb-3.pb-3.border-top
+      .row.mx-1.mb-3.pb-3
+        button(type="button" class="btn btn-warning" onclick="testRobotActions()") Test functions
+      .row.mx-1.mb-1.pt-1.border-top
         .p-1 
           h4 Available robot functions
         .p-1.ml-auto
@@ -29,7 +31,7 @@ body
               span.pl-2 Loading robots...
             .dropdown-menu#robots
  
-      .row.mx-1.mb-3.pb-3.border-top
+      .row.mx-1.mb-3.pt-3.pb-3.border-top
         div#apiDiv
 
   block scripts

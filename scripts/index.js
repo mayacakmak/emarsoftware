@@ -9,6 +9,7 @@ var config = {
 
 var robot = new Robot(0);
 var db = new Database(config, databaseReadyCallback);
+var robotNames = [];
 
 function databaseReadyCallback() {
   var apiDiv = document.getElementById("apiDiv");
@@ -16,8 +17,6 @@ function databaseReadyCallback() {
   
   var dbRef = firebase.database().ref('/');
   dbRef.on("value", loadRobotInfo);
-  
-  testRobotActions();
 }
 
 function loadRobotInfo(snapshot) {
@@ -42,8 +41,11 @@ function setRobot(robotId) {
 }
 
 function testRobotActions() {
-  robot.setFace(0);
-  robot.speak("Hello world");
-  robot.sleep(1000);
-  robot.setSpeechBubble("Hello world");
+  (async () => {
+    robot.setFace(0);
+    robot.playSound(1);
+    await robot.sleep(2000);
+    robot.speak("Hello world");
+    robot.setSpeechBubble("Hello world");
+  })();
 }

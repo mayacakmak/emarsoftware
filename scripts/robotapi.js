@@ -8,6 +8,10 @@ function Robot(robotId, apiDiv) {
   Robot.robotId = robotId;
   Robot.apiDiv = apiDiv;
   
+  Robot.faces = null;
+  Robot.bellyScreens = null;
+  Robot.sounds = null;
+  
   Robot.setRobotId = function(robotId) {
     Robot.robotId = robotId;
     Robot.initialize();
@@ -17,8 +21,9 @@ function Robot(robotId, apiDiv) {
     if (apiDiv != undefined)
       Robot.apiDiv = apiDiv;
 
-    var dbRef = firebase.database().ref('/robots/' + Robot.robotId + '/');
-    dbRef.on("value", Robot._handleDatabaseChange);
+    var dbRefAPI = firebase.database().ref(
+      '/robots/' + Robot.robotId + '/customAPI/');
+    dbRefAPI.on("value", Robot._updateRobotAPI);
     
     console.log("Robot initialized.");
   }
@@ -60,8 +65,8 @@ function Robot(robotId, apiDiv) {
   
   Robot._getFaceNames = function() {
     var namesText = "<ul>";
-    for (var i=0; i<Robot.FaceNames.length; i++) {
-      namesText += "<li>" + i + ": "+ Robot.FaceNames[i] + "</li>";
+    for (var i=0; i<Robot.faces.length; i++) {
+      namesText += "<li>" + i + ": "+ Robot.faces[i].name + "</li>";
     }
     namesText += "</ul>";
     return namesText;
@@ -69,16 +74,15 @@ function Robot(robotId, apiDiv) {
 
   /*
   * Function called when a new value is received from the database
-  * @param snapshot is a snapshot of the whole database
+  * @param snapshot is a snapshot of the part of the database that
+  * the callback was registered
   */
-  Robot._handleDatabaseChange = function(snapshot) {
-    var data = snapshot.val();
-    var robotFaces = data.customAPI.states.faces;
-    Robot.FaceNames = [];
-    for (var i=0; i<robotFaces.length; i++) {
-      Robot.FaceNames.push(robotFaces[i].name);
-    }
-    
+  Robot._updateRobotAPI = function(snapshot) {
+    var apiData = snapshot.val();
+    Robot.faces = apiData.states.faces;
+    Robot.bellyScreens = apiData.inputs.bellyScreens;
+    Robot.sounds = apiData.actions.sounds;
+
     if (Robot.apiDiv != undefined) {
       Robot.apiDiv.innerHTML = Robot.getAPIHTML();
     }
@@ -107,13 +111,17 @@ function Robot(robotId, apiDiv) {
     Robot._requestRobotState("currentText", text);
   }
 
-  Robot.FaceNames = null;
   this.setFace = function(faceIndex){
     console.log("Setting face to " + faceIndex);
-    if (faceIndex < 0 || faceIndex>=Robot.FaceNames.length)
+    if (faceIndex < 0 || faceIndex>=Robot.faces.length)
       console.log("Wrong face index.");
     else
       Robot._requestRobotState("currentFace", faceIndex);
+  }
+  
+  this.playSound = function(soundIndex){
+    console.log("Playing sound: " + soundIndex);
+    Robot._requestRobotAction("sound", {index:soundIndex});
   }
 
   this.sleep = async function(milliseconds) {
