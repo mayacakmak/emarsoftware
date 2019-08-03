@@ -53,6 +53,12 @@ function Robot(robotId, apiDiv) {
                         (Robot.faces.length-1) + ", available faces are:" +
                         Robot._getFaceNames(),
                        "robot.setFace(0);");
+      apiText += Robot._getAPICardHTML("robot.setScreen(screenIndex)",
+                        "Sets the robot's belly screen to one of pre-designed screens.",
+                       "<b>screenIndex</b> is an Integer between 0 and " +
+                        (Robot.bellyScreens.length-1) + ", available screens are:" +
+                        Robot._getScreenNames(),
+                       "robot.setScreen(0);");
     apiText += Robot._getAPICardHTML("robot.sleep(duration)",
                         "Makes the robot sleep for the specified duration.",
                        "<b>duration</b> is an Integer that specifies how long the robot will sleep/wait/do nothing in <i>milliseconds</i>",
@@ -73,19 +79,23 @@ function Robot(robotId, apiDiv) {
     return cardText;
   }
   
-  Robot._getSoundNames = function() {
-    var namesText = "<ul>";
-    for (var i=0; i<Robot.sounds.length; i++) {
-      namesText += "<li>" + i + ": "+ Robot.sounds[i].name + "</li>";
-    }
-    namesText += "</ul>";
-    return namesText;
-  }
   
+  Robot._getScreenNames = function() {
+    return Robot._getNames(Robot.bellyScreens);
+  }
+
+  Robot._getSoundNames = function() {
+    return Robot._getNames(Robot.sounds);
+  }
+
   Robot._getFaceNames = function() {
+    return Robot._getNames(Robot.faces);
+  }
+
+  Robot._getNames = function(objectList) {
     var namesText = "<ul>";
-    for (var i=0; i<Robot.faces.length; i++) {
-      namesText += "<li>" + i + ": "+ Robot.faces[i].name + "</li>";
+    for (var i=0; i<objectList.length; i++) {
+      namesText += "<li>" + i + ": "+ objectList[i].name + "</li>";
     }
     namesText += "</ul>";
     return namesText;
@@ -136,6 +146,14 @@ function Robot(robotId, apiDiv) {
       console.log("Wrong face index.");
     else
       Robot._requestRobotState("currentFace", faceIndex);
+  }
+  
+  this.setScreen = function(screenIndex){
+    console.log("Setting face to " + screenIndex);
+    if (screenIndex < 0 || screenIndex>=Robot.bellyScreens.length)
+      console.log("Wrong screen index.");
+    else
+      Robot._requestRobotState("currentBellyScreen", screenIndex);
   }
   
   this.playSound = function(soundIndex){

@@ -26,8 +26,8 @@ function loadRobotInfo(snapshot) {
   robotNames = [];
   for (var i=0; i<robots.length; i++) {
     robotNames.push(robots[i].name);
-		robotListHTML += "<a class='dropdown-item' href='#' onclick='setRobot(" + i + ")'>" + robots[i].name + "</a>";
-	}
+    robotListHTML += "<a class='dropdown-item' href='#' onclick='setRobot(" + i + ")'>" + robots[i].name + "</a>";
+  }
   var robotsDiv = document.getElementById("robots");
   robotsDiv.innerHTML = robotListHTML;
   setRobot(0);
@@ -43,6 +43,7 @@ function setRobot(robotId) {
 function testRobotActions() {
   (async () => {
     robot.setFace(0);
+    robot.setScreen(1);
     robot.playSound(1);
     await robot.sleep(2000);
     robot.speak("Hello world");
