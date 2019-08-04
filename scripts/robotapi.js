@@ -2,14 +2,13 @@
 * Robot class for defining the API functions
 */
 function Robot(robotId, apiDiv) {
-  /*
-  * The robot has an instance of the database
-  */
+
   Robot.robotId = robotId;
   Robot.apiDiv = apiDiv;
   
   Robot.faces = null;
   Robot.bellyScreens = null;
+  Robot.currentScreen = -1;
   Robot.sounds = null;
   
   Robot.setRobotId = function(robotId) {
@@ -117,6 +116,91 @@ function Robot(robotId, apiDiv) {
     }
   }
   
+  this.getSliderValue = function() {
+    var sliderValue = null;
+    if (Robot.bellyScreens!=null && Robot.currentScreen>=0 
+        && Robot.currentScreen < Robot.bellyScreens.length) {
+      if (Number(Robot.bellyScreens[Robot.currentScreen].slider.isShown) == 1)
+        sliderValue = Number(Robot.bellyScreens[Robot.currentScreen].slider.current);
+    }
+    return sliderValue;
+  }
+
+  this.waitForButton = async function(name) {
+    var buttonPressed = null;
+    
+    if (Robot.bellyScreens!=null && Robot.currentScreen>=0 
+        && Robot.currentScreen < Robot.bellyScreens.length) {
+      var buttonList = Robot.bellyScreens[Robot.currentScreen].buttons.list;
+      if (buttonList != undefined || buttonlist.length > 0) {
+        if (name == undefined)
+          buttonPressed = await this._waitForAnyButton();
+        else
+          buttonPressed = await this._waitForSpecificButton(name);
+      }
+    }
+    else {
+      console.log("The robot has no belly screen.");
+    }
+    
+    return buttonPressed;
+  } 
+  
+  this._waitForAnyButton = async function() {
+    var date = new Date();
+    var buttonList = Robot.bellyScreens[Robot.currentScreen].buttons.list;
+    var buttonPressed = null;
+    
+    console.log("Will wait for any button.");
+    var waiting = true;
+    while (waiting) {
+      buttonList = Robot.bellyScreens[Robot.currentScreen].buttons.list;
+      for (var i=0; i<buttonList.length; i++) {
+        var button = buttonList[i];
+        var currentTime = date.getTime();
+        var buttonTime = button.lastPressed;
+        if (buttonTime>currentTime) {
+          buttonPressed = buttonList[i].name
+          waiting = false;
+        }
+      }
+      if (waiting)
+        await this.sleep(100);           
+    }
+    return buttonPressed;
+  }
+  
+  this._waitForSpecificButton = async function(name) {
+    var date = new Date();
+    var buttonIndex = -1;
+    var buttonList = Robot.bellyScreens[Robot.currentScreen].buttons.list;
+    
+    for (var i=0; i<buttonList.length; i++) {
+      if (buttonList[i].name == name)
+        buttonIndex = i;
+    }
+    
+    if (buttonIndex == -1) {
+      console.log("Warning: There is no button: " + name);
+      return null;
+    }
+    else {
+      console.log("Will wait for button: " + name);
+      var waiting = true;
+      while (waiting) {
+        buttonList = Robot.bellyScreens[Robot.currentScreen].buttons.list;
+        var button = buttonList[buttonIndex];
+        var currentTime = date.getTime();
+        var buttonTime = button.lastPressed;
+        if (buttonTime>currentTime)
+          waiting = false;
+        else
+          await this.sleep(100);           
+      }
+      return name;
+    }
+  }
+  
   Robot._requestRobotAction = function(actionName, params) {
     var dbRef = firebase.database().ref("/robots/" + Robot.robotId
                                       + "/actions/" + actionName + "/");
@@ -152,8 +236,10 @@ function Robot(robotId, apiDiv) {
     console.log("Setting face to " + screenIndex);
     if (screenIndex < 0 || screenIndex>=Robot.bellyScreens.length)
       console.log("Wrong screen index.");
-    else
+    else {
+      Robot.currentScreen = screenIndex;
       Robot._requestRobotState("currentBellyScreen", screenIndex);
+    }
   }
   
   this.playSound = function(soundIndex){
