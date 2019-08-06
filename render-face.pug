@@ -1,0 +1,14 @@
+extends structure/_layout.pug
+
+block content
+  .wrapper#robotFace
+      svg#faceSVG
+
+block append scripts
+  script(src="https://code.responsivevoice.org/responsivevoice.js")
+  script(src="scripts/config.js")
+  script(src="scripts/eyes.js")
+  script(src="scripts/face.js")
+  script(src="scripts/sound.js")
+  script(src="scripts/robot-backend.js")
+  script(src="scripts/render-face.js")
