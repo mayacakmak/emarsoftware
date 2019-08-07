@@ -81,11 +81,6 @@ function Face() {
     var bubbleText = document.getElementById("bubbleText");
     var bubbleTextExists = (bubbleText != null);
 
-    console.log("bubbleExists:" + bubbleExists);
-    console.log("arrowExists:" + arrowExists);
-    console.log("bubbleTextExists:" + bubbleTextExists);
-    console.log(bubbleText);
-
     if (hasText) {
       if (!bubbleExists)
         bubble = document.createElementNS(svgNS, "rect");
@@ -295,8 +290,6 @@ function Face() {
   
   /* Callback function for when the parameter database is updated*/
   Face.updateParameters = function(newParameters) {
-
-    console.log("updateParameters");
     for (var i=0; i<Object.keys(newParameters).length; i++)
     {
       var key = Object.keys(newParameters)[i];
@@ -312,7 +305,6 @@ function Face() {
   }
 
   Face.updateState = function(state) {
-    console.log("updateState");
     currentState = state;
   }
   
