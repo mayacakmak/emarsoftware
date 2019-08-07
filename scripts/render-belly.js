@@ -8,6 +8,7 @@ function initializeRenderBelly() {
   if (robotParam != null)
     currentRobot = Number(robotParam);
   console.log("currentRobot: " + currentRobot);
+  
   var robot = new RobotBackend(currentRobot);
   RobotBackend.initializeAPI();
   RobotBackend.initializeBelly();

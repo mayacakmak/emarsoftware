@@ -14,5 +14,4 @@ function initializeRenderFace() {
   RobotBackend.initializeFace();
   
   window.onresize = Face.draw;
-  loadVoice();
 }

@@ -108,7 +108,7 @@ function RobotBackend(robotId, scale) {
 
     if (RobotBackend.sound != null) {
       // Load sounds only once in the beginning
-      if (Sound.sounds == null) {
+      if (Sound.sounds == null && apiData.actions!=undefined) {
         var newSounds = apiData.actions.sounds;
         if (newSounds != undefined && newSounds.length > 0)
           Sound.loadSounds(newSounds);

@@ -57,7 +57,9 @@ function Eyes() {
   }
 
   Eyes.getOuterRadiusPercent = function() {
-    return Math.min(Face.parameters.eyeOuterRadiusPercent, Face.parameters.eyeOuterRadiusPercent*Face.parameters.eyeShapeRatio);
+    return Math.min(
+      Face.parameters.eyeOuterRadiusPercent,
+      Face.parameters.eyeOuterRadiusPercent*Face.parameters.eyeShapeRatio);
   }
 
   Eyes.getOuterRadius = function() {
@@ -76,7 +78,7 @@ function Eyes() {
 
   Eyes.lookAngles = {"right": 0, "left": Math.PI, "down": 0.5*Math.PI, "up":1.5*Math.PI};
   // TODO: how does this get set?
-  Eyes.currentLookAt = null;
+  Eyes.currentLookAt = "none";
 
   Eyes.lookAt = function() {
     if (Eyes.currentLookAt == "none") {
