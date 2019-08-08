@@ -21,8 +21,7 @@ function RobotBackend(robotId, scale) {
     
     var dbRefState = firebase.database().ref(
       '/robots/' + RobotBackend.robotId + '/state/');
-    dbRefState.on("value", RobotBackend.eyesChangeReceived);
-    dbRefState.on("value", RobotBackend.updateRobotFace);
+    dbRefState.on("value", Face.updateRobotFace);
     
     var dbRefActions = firebase.database().ref(
       '/robots/' + RobotBackend.robotId + '/actions/');
@@ -36,6 +35,7 @@ function RobotBackend(robotId, scale) {
     var dbRefState = firebase.database().ref(
       '/robots/' + RobotBackend.robotId + '/state/');
     dbRefState.on("value", Belly.updateRobotBelly);
+    
     var dbRefAPI = firebase.database().ref(
       '/robots/' + RobotBackend.robotId + '/customAPI/');
     dbRefAPI.on("value", Belly.updateRobotBelly);
@@ -91,12 +91,6 @@ function RobotBackend(robotId, scale) {
   
   /* STATE CHANGES */
 
-  RobotBackend.eyesChangeReceived = function(snapshot) {
-    var robotState = snapshot.val();
-    Face.setLookAt(robotState.currentEyes);
-    Face.draw();
-  }
-
   RobotBackend.updateRobotAPI = function(snapshot) {
     var apiData = snapshot.val();
       
@@ -113,21 +107,6 @@ function RobotBackend(robotId, scale) {
         if (newSounds != undefined && newSounds.length > 0)
           Sound.loadSounds(newSounds);
       }
-    }
-  }
-
-  RobotBackend.updateRobotFace = function(snapshot) {
-    var robotState = snapshot.val();
-    var faceIndex = robotState.currentFace;
-
-    if (Face.faces != null && Face.faces.length > 0) {
-      if (faceIndex<0 || faceIndex>=Face.faces.length)
-        faceIndex = 0;
-      var faceParameters = Face.faces[faceIndex];
-      Face.updateState(robotState);
-      Face.updateParameters(faceParameters);
-    } else {
-      alert("This robot has no faces. Use the 'Robot Setup' tool to add faces.");
     }
   }
 }

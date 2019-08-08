@@ -13,6 +13,23 @@ function Face() {
 
   // List of available faces (with all face parameter info)
   Face.faces = null;
+  
+  Face.updateRobotFace = function(snapshot) {
+    var robotState = snapshot.val();
+    var faceIndex = robotState.currentFace;
+
+    if (Face.faces != null && Face.faces.length > 0) {
+      if (faceIndex<0 || faceIndex>=Face.faces.length)
+        faceIndex = 0;
+      var faceParameters = Face.faces[faceIndex];
+      Face.updateState(robotState);
+      Face.updateParameters(faceParameters);
+      Face.setLookAt(robotState.currentEyes);
+      Face.draw();
+    } else {
+      alert("This robot has no faces. Use the 'Robot Setup' tool to add faces.");
+    }
+  }
 
   Face.draw = function() {
 
