@@ -242,6 +242,10 @@ function Robot(robotId, apiDiv) {
     }
   }
   
+  this.setEyes = function(value) {
+    Robot._requestRobotState("currentEyes", value);
+  }
+  
   this.playSound = function(soundIndex){
     console.log("Playing sound: " + soundIndex);
     Robot._requestRobotAction("sound", {index:soundIndex});
