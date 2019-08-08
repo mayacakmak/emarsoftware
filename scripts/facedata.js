@@ -273,8 +273,11 @@ function addPresetFace() {
  * Function to add a copy of the currently displayed face to the current user's face list on the database
  */
 function createNewFace() {
+  var newFaceIndex = 0;
+  if (currentUserData.faces != undefined)
+    newFaceIndex = currentUserData.faces.length;
   var dir = 'users/' + (Database.uid);
-  var dbRef = firebase.database().ref(dir + '/faces/' + (currentUserData.faces.length) + '/');
+  var dbRef = firebase.database().ref(dir + '/faces/' + newFaceIndex + '/');
   dbRef.set(newParameters);
 }
 
