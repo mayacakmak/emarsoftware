@@ -1,0 +1,80 @@
+extends structure/_layout.pug
+
+block content
+  include structure/_tool_header.pug
+  
+  .container-fluid.px-sm-5.pb-4
+    .row
+      .col.text-center
+        h1.display-4 Robot Controller
+    .row
+      .col
+        .card.mb-4
+          .card-header
+            h2 Set robot face
+          .card-body
+            .h-scrollable.green-scroll
+              .btn-group.mr-2.py-2#robotFaceList
+                span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+
+    .row
+      .col-sm-7
+        .card
+          .card-header
+            h2 Robot speech
+          .card-body
+            .preset-controls#presetSpeak
+              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+            .voice
+              input(type="text" class="large-text" name="speakText" id="speakText" x-webkit-speech)
+              button(class="btn btn-success full-button" id="speak" onclick="speakPressed()") Speak
+            .preset-controls#userAdded
+        .card
+          .card-header
+            h2 Robot speech bubble
+          .card-body
+            .top-aligned#bubbleControls
+              .screen-checkboxes
+                input(type="checkbox" id="speakAndBubbleCheck")
+                span Add bubble to speech?
+                span.ml-4 Speech bubble duration (sec):
+                input(type="text" class='small' id="bubbleDuration" value="3")
+              input(type="text" class="large-text" name="bubbleInputText")#bubbleInputText
+              button(class="btn btn-success full-button" id="sendBubble" onclick="bubblePressed()") Send to speech bubble
+              button(class="btn btn-warning full-button" id="clearBubble" onclick="bubbleClear()") Clear speech bubble
+        .card
+          .card-header
+            h2 Set robot screen
+          .card-body
+            .top-aligned#screenControls
+              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+        .card
+          .card-header
+            h2 Set robot eyes
+          .card-body
+            .top-aligned#faceControls
+              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+
+      .col-sm-5
+        .card
+          .card-header
+            h2 Face preview
+          .card-body
+            .left-aligned
+              #robotFace
+                svg#faceSVG
+        .card
+          .card-header
+            h2 Belly screen preview
+          .card-body
+            .screen-box-outer.mb-4
+              .screen-box-inner#screenDiv
+
+block append scripts
+  script(src="https://code.responsivevoice.org/responsivevoice.js")
+  script(src="https://mayacakmak.github.io/robotbackend/scripts/eyes.js")
+  script(src="https://mayacakmak.github.io/robotbackend/scripts/face.js")
+  script(src="https://mayacakmak.github.io/robotbackend/scripts/belly.js")
+  script(src="https://mayacakmak.github.io/robotapijs/scripts/robotapi.js")
+  script(src="scripts/facedata.js")
+  script(src="scripts/control.js")

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+</html>
+
+<head>
+  <meta charset="utf-8">
+  <title>EMAR Robot Frontend Tools</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles/style.processed.css">
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="topbar-left" id="topLeft"><button class="btn btn-info" onclick="backToIndexPage()"><<</button></div>
+    <div class="topbar-right" id="top"></div>
+  </div>
+  <div class="container-fluid px-sm-5 pb-4">
+    <div class="row">
+      <div class="col text-center">
+        <h1 class="display-4">Robot Controller</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h2>Set robot face</h2>
+          </div>
+          <div class="card-body">
+            <div class="h-scrollable green-scroll">
+              <div class="btn-group mr-2 py-2" id="robotFaceList"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-7">
+        <div class="card">
+          <div class="card-header">
+            <h2>Robot speech</h2>
+          </div>
+          <div class="card-body">
+            <div class="preset-controls" id="presetSpeak"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+            <div class="voice"><input class="large-text" type="text" name="speakText" id="speakText" x-webkit-speech><button class="btn btn-success full-button" id="speak" onclick="speakPressed()">Speak</button></div>
+            <div class="preset-controls" id="userAdded"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Robot speech bubble</h2>
+          </div>
+          <div class="card-body">
+            <div class="top-aligned" id="bubbleControls">
+              <div class="screen-checkboxes"><input type="checkbox" id="speakAndBubbleCheck"><span>Add bubble to speech?</span><span class="ml-4">Speech bubble duration (sec):</span><input class="small" type="text" id="bubbleDuration" value="3"></div><input class="large-text" type="text"
+                name="bubbleInputText" id="bubbleInputText"><button class="btn btn-success full-button" id="sendBubble" onclick="bubblePressed()">Send to speech bubble</button><button class="btn btn-warning full-button" id="clearBubble" onclick="bubbleClear()">Clear speech bubble</button></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Set robot screen</h2>
+          </div>
+          <div class="card-body">
+            <div class="top-aligned" id="screenControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Set robot eyes</h2>
+          </div>
+          <div class="card-body">
+            <div class="top-aligned" id="faceControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-5">
+        <div class="card">
+          <div class="card-header">
+            <h2>Face preview</h2>
+          </div>
+          <div class="card-body">
+            <div class="left-aligned">
+              <div id="robotFace"><svg id="faceSVG"></svg></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Belly screen preview</h2>
+          </div>
+          <div class="card-body">
+            <div class="screen-box-outer mb-4">
+              <div class="screen-box-inner" id="screenDiv"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://mayacakmak.github.io/robotbackend/scripts/config.js"></script>
+  <script src="https://mayacakmak.github.io/databasejs/scripts/database.js"></script>
+  <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+  <script src="https://mayacakmak.github.io/robotbackend/scripts/eyes.js"></script>
+  <script src="https://mayacakmak.github.io/robotbackend/scripts/face.js"></script>
+  <script src="https://mayacakmak.github.io/robotbackend/scripts/belly.js"></script>
+  <script src="https://mayacakmak.github.io/robotapijs/scripts/robotapi.js"></script>
+  <script src="scripts/facedata.js"></script>
+  <script src="scripts/control.js"></script>
+</body>

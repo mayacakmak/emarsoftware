@@ -1,0 +1,53 @@
+extends structure/_layout.pug
+
+block content
+  include structure/_tool_header.pug
+
+  .container-fluid.px-sm-5.pb-4
+    .row
+      .col.text-center
+        h1.display-4 Face Editing Panel
+    .row
+      .col.py-3
+        .card
+          .card-header.bg-light
+            h2 All faces
+          .card-body.h-scrollable.green-scroll
+            .btn-group.mr-2#otherFaceList
+              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+        .p-1
+          button(type="button" class="btn btn-success" onclick='createNewFace()') Add selected face to my faces
+    .row.pb-3
+      .col
+        .card
+          .card-header.bg-light
+            h2 My faces
+          .card-body.h-scrollable.green-scroll
+            .btn-group.mr-2#myFaceList
+              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+
+    .row
+      .col-sm-7
+        .card
+          .card-header.bg-light
+            h2 Face Parameters
+          .card-body.scrollable.green-scroll
+            div#faceParameters
+              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+
+      .col-sm-5
+        .card
+          .card-header.bg-light
+            h2 Face Preview
+          .card-body
+            #robotFace
+              svg#faceSVG
+            .d-flex.justify-content-center.mt-2
+              input(type="text" class="centered" onblur="faceRenamed()")#faceName
+
+block append scripts
+  script(src="https://mayacakmak.github.io/robotbackend/scripts/eyes.js")
+  script(src="https://mayacakmak.github.io/robotbackend/scripts/face.js")
+  script(src="scripts/facedata.js")
+  script(src="scripts/edit.js")
+

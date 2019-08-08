@@ -1,0 +1,73 @@
+extends structure/_layout.pug
+
+block content
+  include structure/_tool_header.pug
+
+  .container-fluid.px-sm-5.pb-4
+    .row
+      .col.text-center
+        h1.display-4 Robot Setup
+    .row.mb-2
+      .col
+        .card
+          .card-header#headingFaces
+            button(class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseFaces" aria-expanded="true" aria-controls="collapseFaces") Select robot faces
+          .collapse.collapsed(aria-labelledby="headingFaces")#collapseFaces
+            .card-body
+              .mt-2 
+                h3 All faces
+              .h-scrollable.green-scroll
+                .btn-group.mr-2#otherFaceList
+                  span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+              .row.justify-content-end.my-4.mr-2
+                button.btn.btn-primary(type="button" onclick="addRobotFace()")#addFaceButton Add selected
+              .mt-2 
+                h3 Faces on this robot
+              .h-scrollable.green-scroll
+                .btn-group.mr-2.py-2#robotFaceList
+                  span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+
+    .row.mb-2
+      .col
+        .card
+          .card-header#headingSpeak
+            button(class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseSpeak" aria-expanded="true" aria-controls="collapseSpeak") Edit Preset Utterances
+          .collapse.collapsed(aria-labelledby="headingSpeak")#collapseSpeak
+            .card-body
+              .top-aligned#utteranceList
+                span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+
+    .row.mb-2
+      .col
+        .card
+          .card-header#headingBelly
+            button(class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseBelly" aria-expanded="true" aria-controls="collapseBelly") Edit Belly Input
+          .collapse.collapsed(aria-labelledby="headingBelly")#collapseBelly
+            .card-body
+              .top-aligned#bellySetup
+                span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+
+    .row.mb-2
+      .col
+        .card
+          .card-header#headingSounds
+            button(class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseSounds" aria-expanded="true" aria-controls="collapseSounds") Select robot sounds
+          .collapse.collapsed(aria-labelledby="headingSounds")#collapseSounds
+            .card-body#soundSetup
+              .row
+                .col-5
+                  p.lead Available sounds
+                  ul(class="list-group")#allSoundsList
+                    span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+                .col-5
+                  p.lead Sounds on this robot
+                  ul(class="list-group")#robotSoundsList
+                    span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+
+
+block append scripts
+  script(src="https://mayacakmak.github.io/robotbackend/scripts/eyes.js")
+  script(src="https://mayacakmak.github.io/robotbackend/scripts/face.js")
+  script(src="scripts/facedata.js")
+  script(src="scripts/setup.js")
+  
