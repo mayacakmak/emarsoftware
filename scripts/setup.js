@@ -185,9 +185,9 @@ function updateBellyScreenList(snapshot) {
 
       if (screen.buttons.isShown) {
         bellyHTML += "<div class='screen-element mt-4'>";
-        if (screen.buttons.names != undefined) {
-          for (var j=0; j<screen.buttons.names.length; j++) {
-            var name = screen.buttons.names[j];
+        if (screen.buttons.list != undefined) {
+          for (var j=0; j<screen.buttons.list.length; j++) {
+            var name = screen.buttons.list[j].name;
             bellyHTML += "<div class='deletable-button mx-1'>";
             bellyHTML += "<div><button class='btn btn-secondary' disabled>" + name + "</button></div>";
             bellyHTML += "<div class='delete-btn-button'><button name='buttonDelete'  onclick='changeScreenElement(this, " + i + "," + j + ")' class='btn btn-secondary btn-circle-sm'>X</button></div>";
@@ -329,7 +329,7 @@ function addScreen() {
                     instructionSmall: {isShown: 0, text: ""},
                     slider: {isShown: 0, min: "0", max: "100", current: 50},
                     checkboxes: {isShown: 0, names: ["Choice 1"], values: [0]},
-                    buttons: {isShown: 0, names: ["Continue"]},
+                    buttons: {isShown: 0, list: [{name:"Continue", lastPressed:0}]},
                     name: screenName};
   bellyScreens.push(blankScreen);
   var dbRef = firebase.database().ref(dir);
