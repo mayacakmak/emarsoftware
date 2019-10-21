@@ -244,9 +244,9 @@ function changeScreenElement(target, screenID, itemID) {
   
   if (target.name == "buttonAdd") {
     var buttonNameTextInput = document.getElementById("buttonAdd" + screenID);
-    if (bellyScreens[screenID].buttons.names == undefined)
-      bellyScreens[screenID].buttons.names = [];
-    bellyScreens[screenID].buttons.names.push(buttonNameTextInput.value);
+    if (bellyScreens[screenID].buttons.list == undefined)
+      bellyScreens[screenID].buttons.list = [];
+    bellyScreens[screenID].buttons.list.push({name:buttonNameTextInput.value, lastPressed:0});
   }
   
   if (target.name == "buttonDelete") {
