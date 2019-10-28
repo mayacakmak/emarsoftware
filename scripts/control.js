@@ -92,7 +92,7 @@ function updateCustomRobotAPI(snapshot) {
 function createStateChangeInterface(divName, stateName, options, values, changeFunctionName, currentOption) {
   var div = document.getElementById(divName);
 
-  var optionHTML = "<div class='btn-group btn-group-toggle' data-toggle='buttons'>";
+  var optionHTML = "<div class='btn-group btn-group-toggle flex-wrap' data-toggle='buttons'>";
   for (var i=0; i<options.length; i++) {
     optionHTML += "<label class='btn btn-secondary ";
     if (options[i] == currentOption)
