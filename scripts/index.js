@@ -42,6 +42,9 @@ function setRobot(robotId) {
 
 function testRobotActions() {
   (async () => {
+    console.log("sensor0 value:" + robot.getTactileSensor("sensor0"));
+    console.log("sensor1 value:" + robot.getTactileSensor("sensor1"));
+    robot.moveNeck(10, 20);
     robot.setScreen(0);
     var buttonName = await robot.waitForButton();
     if (buttonName == 'Okay')

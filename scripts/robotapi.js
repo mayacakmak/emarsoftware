@@ -10,6 +10,7 @@ function Robot(robotId, apiDiv) {
   Robot.bellyScreens = null;
   Robot.currentScreen = -1;
   Robot.sounds = null;
+  Robot.tactile = null;
   
   Robot.setRobotId = function(robotId) {
     Robot.robotId = robotId;
@@ -24,6 +25,10 @@ function Robot(robotId, apiDiv) {
       '/robots/' + Robot.robotId + '/customAPI/');
     dbRefAPI.on("value", Robot._updateRobotAPI);
     
+    var dbRefInput = firebase.database().ref(
+      '/robots/' + Robot.robotId + '/inputs/');
+    dbRefInput.on("value", Robot._updateRobotInput);
+
     console.log("Robot initialized.");
   }
 
@@ -34,6 +39,11 @@ function Robot(robotId, apiDiv) {
                         "Makes the robot speak the given text out loud.",
                        "<b>text</b> is a String within single or double quotes",
                        "robot.speak(\"Hello world\");");
+    apiText += Robot._getAPICardHTML("robot.moveNeck(pan, tilt)",
+                        "Makes the robot's neck move to the indicated pan/tilt angles.",
+                       "<b>pan</b> is an Integer representing the pan angle in degrees.<br>" +
+                       "<b>tilt</b> is an Integer representing the tilt angle in degrees.",
+                       "robot.moveNeck(0, -30);");
     apiText += Robot._getAPICardHTML("robot.setSpeechBubble(text)",
                         "Sets the robot's speech bubble to the given text.",
                        "<b>text</b> is a String within single or double quotes",
@@ -52,16 +62,34 @@ function Robot(robotId, apiDiv) {
                         (Robot.faces.length-1) + ", available faces are:" +
                         Robot._getFaceNames(),
                        "robot.setFace(0);");
+    if (Robot.bellyScreens != null && Robot.bellyScreens.length>0){
       apiText += Robot._getAPICardHTML("robot.setScreen(screenIndex)",
                         "Sets the robot's belly screen to one of pre-designed screens.",
                        "<b>screenIndex</b> is an Integer between 0 and " +
                         (Robot.bellyScreens.length-1) + ", available screens are:" +
                         Robot._getScreenNames(),
                        "robot.setScreen(0);");
+      apiText += Robot._getAPICardHTML("(sliderValue) robot.getSliderValue()",
+                        "Obtains the current value of the slider on the screen.",
+                       "<b>sliderValue</b> is an Integer between 0 and 100 indicating the current value of the slider.",
+                       "var sliderValue = robot.getSliderValue();");
+      apiText += Robot._getAPICardHTML("(buttonName) robot.waitForButton()",
+                        "Makes the robot wait until a button in the screen is pressed and returns the name of the pressed button.",
+                       "<b>buttonName</b> is a String that indicates the name of the button that was pressed.",
+                       "var buttonName = await robot.waitForButton();");
+    }
+
+    apiText += Robot._getAPICardHTML("(sensorValue) robot.getTactileSensor(sensorName)",
+                        "Obtains the current value of the indicated tactile sensor.",
+                       "<b>sensorName</b> is an String corresponding to the specific sensor. (TODO include list of names here once finalized) <br>"+
+                       "<b>sensorValue</b> is an Interger corresponding to the current value of the sensor. (TODO include range and meaning here once finalized)",
+                       "var sensorValue = robot.getTactileSensor(\"sensor1\");");
     apiText += Robot._getAPICardHTML("robot.sleep(duration)",
                         "Makes the robot sleep for the specified duration.",
                        "<b>duration</b> is an Integer that specifies how long the robot will sleep/wait/do nothing in <i>milliseconds</i>",
-                       "robot.sleep(1000);");
+                       "await robot.sleep(1000);");
+
+
     return apiText;
   }
   
@@ -115,6 +143,11 @@ function Robot(robotId, apiDiv) {
       Robot.apiDiv.innerHTML = Robot.getAPIHTML();
     }
   }
+
+  Robot._updateRobotInput = function(snapshot) {
+    var inputData = snapshot.val();
+    Robot.tactile = inputData.tactile;
+  }
   
   this.getSliderValue = function() {
     var sliderValue = null;
@@ -124,6 +157,14 @@ function Robot(robotId, apiDiv) {
         sliderValue = Number(Robot.bellyScreens[Robot.currentScreen].slider.current);
     }
     return sliderValue;
+  }
+
+  this.getTactileSensor = function(sensorName) {
+    var sensorValue = null;
+    if (Robot.tactile!=null) {
+      sensorValue = Robot.tactile[sensorName]
+    }
+    return sensorValue;
   }
 
   this.waitForButton = async function(name) {
@@ -249,6 +290,12 @@ function Robot(robotId, apiDiv) {
   this.playSound = function(soundIndex){
     console.log("Playing sound: " + soundIndex);
     Robot._requestRobotAction("sound", {index:soundIndex});
+    //TODO: Implement callback for when action is done
+  }
+
+  this.moveNeck = function(pan, tilt) {
+    Robot._requestRobotAction("neck", {panAngle:pan, tiltAngle:tilt});
+    //TODO: Implement callback for when action is done
   }
 
   this.sleep = async function(milliseconds) {
