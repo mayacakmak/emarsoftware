@@ -39,6 +39,27 @@
       <div class="col-sm-7">
         <div class="card">
           <div class="card-header">
+            <h2>Neck control</h2>
+          </div>
+          <div class="card-body">
+            <div class="top-aligned" id="neckControl">
+              <div class='screen-element mt-4'>
+                <div class='min-value screen-item'> Pan: 0 </div>
+                <input type='range' class='screen-slider' id='pan'
+              onchange='neckValueChanged(this)' value='50' min='0' max='100'>
+                <div class='max-value screen-item'> 100 </div>
+              </div>
+              <div class='screen-element mt-4'>
+                <div class='min-value screen-item'> Tilt: 0 </div>
+                <input type='range' class='screen-slider' id='tilt'
+              onchange='neckValueChanged(this)' value='50' min='0' max='100'>
+                <div class='max-value screen-item'> 100 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
             <h2>Robot speech</h2>
           </div>
           <div class="card-body">

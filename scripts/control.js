@@ -106,6 +106,14 @@ function createStateChangeInterface(divName, stateName, options, values, changeF
   div.innerHTML = optionHTML;
 }
 
+function neckValueChanged(target) {
+  const panElement = document.getElementById("pan");
+  const pan = panElement.value;
+  const tiltElement = document.getElementById("tilt");
+  const tilt = tiltElement.value;
+  robot.moveNeck(pan, tilt);
+}
+
 function lookatChanged(target) {
   robot.setEyes("currentEyes", target.id);
 }
