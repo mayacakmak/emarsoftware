@@ -250,7 +250,7 @@ function changeScreenElement(target, screenID, itemID) {
   }
   
   if (target.name == "buttonDelete") {
-    bellyScreens[screenID].buttons.names.splice(itemID, 1);
+    bellyScreens[screenID].buttons.list.splice(itemID, 1);
   }
   
   if (target.name == "checkboxAdd") {
