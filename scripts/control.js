@@ -115,7 +115,7 @@ function neckValueChanged(target) {
 }
 
 function lookatChanged(target) {
-  robot.setEyes("currentEyes", target.id);
+  robot.setEyes(target.id, "currentEyes");
 }
 
 function bellyScreenChanged(target) {
