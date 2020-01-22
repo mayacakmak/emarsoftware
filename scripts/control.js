@@ -52,10 +52,11 @@ function updateRobotState(snapshot) {
     // EYES
     var div = document.getElementById("faceControls");
     div.innerHTML = "";
-    createStateChangeInterface("faceControls", "Eyes",
-                               robotAPI.states.lookat, robotAPI.states.lookat, "lookatChanged",
+    buttons = robotAPI.states.lookat;
+    orderedButtons = ["", buttons[0], buttons[5], buttons[2], buttons[4], buttons[3], "", buttons[1], ""];
+    createStateChangeInterfaceEyeButtons("faceControls", "Eyes",
+                               orderedButtons, orderedButtons, "lookatChanged",
                                robotState.currentEyes);
-
     // BELLY
     Belly.updateRobotBelly(snapshot);
     var screens = customAPI.inputs.bellyScreens;
@@ -87,6 +88,30 @@ function updateCustomRobotAPI(snapshot) {
     }
     presetDiv.innerHTML = presetHTML;
   }
+}
+
+function createStateChangeInterfaceEyeButtons(divName, stateName, options, values, changeFunctionName, currentOption) {
+  var div = document.getElementById(divName);
+
+  var optionHTML = "<div class='btn-group btn-group-toggle flex-wrap' style='justify-content:space-around'>";
+  for (var i = 0; i < options.length; i++) {
+    optionHTML += "<label class='btn btn-secondary"
+    if (options[i] !== "") {
+      optionHTML += "btn btn-secondary ";
+      if (options[i] == currentOption)
+        optionHTML += "active";
+      optionHTML += "' data-toggle='buttons' style='flex: 0 0 32%; margin-bottom: 5px; border-radius: 4px'>"
+      optionHTML += " <input type='radio' name='" + stateName + "' autocomplete='off' id='" + values[i] + "'";
+      if (options[i] == currentOption) 
+        optionHTML += "checked";
+      optionHTML += "' onchange='" + changeFunctionName + "(this)'>";
+    } else {
+      optionHTML += " disabled' style='flex: 0 0 32%; margin-bottom: 5px; border-radius: 4px'>"
+    }
+    optionHTML += options[i] + "</label>";
+  }
+  optionHTML += "</div>";
+  div.innerHTML = optionHTML;
 }
 
 function createStateChangeInterface(divName, stateName, options, values, changeFunctionName, currentOption) {
