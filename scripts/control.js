@@ -101,7 +101,7 @@ function updateCustomRobotAPI(snapshot) {
 function createStateChangeInterface(divName, stateName, options, values, changeFunctionName, currentOption) {
   var div = document.getElementById(divName);
 
-  var optionHTML = "<div class='btn-group btn-group-toggle' data-toggle='buttons'>";
+  var optionHTML = "<div class='btn-group btn-group-toggle flex-wrap' data-toggle='buttons'>";
   for (var i=0; i<options.length; i++) {
     optionHTML += "<label class='btn btn-secondary ";
     if (options[i] == currentOption)
@@ -113,6 +113,14 @@ function createStateChangeInterface(divName, stateName, options, values, changeF
   }
   optionHTML += "</div>";
   div.innerHTML = optionHTML;
+}
+
+function neckValueChanged(target) {
+  const panElement = document.getElementById("pan");
+  const pan = panElement.value;
+  const tiltElement = document.getElementById("tilt");
+  const tilt = tiltElement.value;
+  robot.moveNeck(pan, tilt);
 }
 
 function lookatChanged(target) {
