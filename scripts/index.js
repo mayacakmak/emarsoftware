@@ -5,7 +5,21 @@ var robotNames = [];
 
 function databaseReadyCallback() {
   var dbRef = firebase.database().ref('/');
-  dbRef.on("value", updateUserRobotInfo);
+  // dbRef.on("value", updateUserRobotInfo);
+
+  var uid = firebase.auth().currentUser.uid;
+  var uidDiv = document.getElementById('uid');
+  uidDiv.innerHTML = Database.displayName;
+  var profilePic = document.getElementById('profilePic');
+  profilePic.src = Database.profilePic;
+  firebase
+    .database()
+    .ref('/users/' + uid + '/analytics/' + Database.session)
+    .on('value', function (snapshot) {
+      var username =
+        (snapshot.val() && snapshot.val().SessionStarted.date) || 'other';
+      console.log(username);
+    });
 }
 
 function updateUserRobotInfo(snapshot) {
@@ -34,13 +48,13 @@ function updateUserRobotInfo(snapshot) {
       selectedRobotDiv.innerHTML = robotNames[currentRobot];
   }
   
-    if (Database.isAnonymous){
-      disableButton("adminButton");
-      //TODO: Ultimtely most things should not be available anonymously.
-    } else {
-      enableButton("adminButton");
-      //TODO: Re-enable anything disabled above
-    }  
+    // if (Database.isAnonymous){
+    //   disableButton("adminButton");
+    //   //TODO: Ultimtely most things should not be available anonymously.
+    // } else {
+    //   enableButton("adminButton");
+    //   //TODO: Re-enable anything disabled above
+    // }  
 }
 
 function setRobot(robotId) {
@@ -64,15 +78,15 @@ function startEditor() {
   window.location.href = "edit.html";
 }
 
-function startAdmin() {
-  window.location.href = "admin.html";
+function startWebRobot() {
+  window.location.href = 'web-robot.html';
 }
 
-function startSetup() {
-  window.location.href = "setup.html?robot=" + currentRobot;
+function startGallery() {
+    window.location.href = 'gallery.html';
 }
 
-function startController() {
-  window.location.href = "control.html?robot=" + currentRobot;
+function logout() {
+  Database.signOut();
+  window.location.href = 'signin.html';
 }
-

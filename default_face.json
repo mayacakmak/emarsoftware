@@ -1,0 +1,256 @@
+{
+  "backgroundColor": {
+    "current": "#FFFFFF",
+    "name": "Background color",
+    "order": 0,
+    "type": "color"
+  },
+  "betweenCircleDistancePercent": {
+    "current": 5,
+    "max": 50,
+    "min": 0,
+    "type": "number",
+    "v2eyes": true
+  },
+  "eyeBackgroundColor": {
+    "current": "#848484",
+    "type": "color",
+    "v2eyes": true
+  },
+  "eyeCenterDistPercent": {
+    "current": 17.5,
+    "max": 40,
+    "min": 10,
+    "name": "Distance between eyes",
+    "type": "number"
+  },
+  "eyeHPercent": {
+    "current": 34,
+    "max": 50,
+    "min": 10,
+    "name": "Height of eyes",
+    "type": "number",
+    "v2eyes": true
+  },
+  "eyeInnerColor": {
+    "current": "#ac5f16",
+    "name": "Inner eye color",
+    "order": 2,
+    "type": "color"
+  },
+  "eyeInnerRadiusPercent": {
+    "current": 64,
+    "max": 100,
+    "min": 0,
+    "nIncrements": 50,
+    "name": "Inner eye size",
+    "type": "number"
+  },
+  "eyeLEDOffColor": {
+    "current": "#656565",
+    "type": "color",
+    "v2eyes": true
+  },
+  "eyeLEDOnColor": {
+    "current": "#84e6ee",
+    "type": "color",
+    "v2eyes": true
+  },
+  "eyeLineStrokeWidth": {
+    "current": 19,
+    "max": 20,
+    "min": 0,
+    "name": "Thickness of eye lines",
+    "type": "number"
+  },
+  "eyeOuterColor": {
+    "current": "#ffffff",
+    "name": "Outer eye color",
+    "order": 1,
+    "type": "color"
+  },
+  "eyeOuterRadiusPercent": {
+    "current": 13,
+    "max": 25,
+    "min": 5,
+    "nIncrements": 50,
+    "name": "Outer eye size",
+    "type": "number"
+  },
+  "eyeOutlineColor": {
+    "current": "#000000",
+    "name": "Eye outline color",
+    "type": "color"
+  },
+  "eyeOutlineThickness": {
+    "current": 1.95,
+    "max": 20,
+    "min": 1,
+    "name": "Eye outline thickness",
+    "type": "number"
+  },
+  "eyePupilColor": {
+    "current": "#000000",
+    "name": "Pupil color",
+    "order": 3,
+    "type": "color"
+  },
+  "eyePupilRadiusPercent": {
+    "current": 90,
+    "max": 100,
+    "min": 0,
+    "name": "Pupil size",
+    "type": "number"
+  },
+  "eyeShapeRatio": {
+    "current": 1.1,
+    "max": 2.1,
+    "min": 0.1,
+    "name": "Eye shape ratio",
+    "type": "number"
+  },
+  "eyeWPercent": {
+    "current": 30,
+    "max": 50,
+    "min": 10,
+    "name": "Eye size",
+    "type": "number",
+    "v2eyes": true
+  },
+  "eyeYPercent": {
+    "current": 47,
+    "max": 80,
+    "min": 20,
+    "name": "Vertical eye position",
+    "type": "number"
+  },
+  "eyelidOffset": {
+    "current": -40,
+    "max": 25,
+    "min": -40,
+    "name": "Eyelid offset",
+    "type": "number"
+  },
+  "hasBlinking": {
+    "current": 1,
+    "name": "Has blinking?",
+    "type": "boolean"
+  },
+  "hasEyeLines": {
+    "current": 1,
+    "name": "Eye lines?",
+    "type": "boolean"
+  },
+  "hasEyelid": {
+    "current": 1,
+    "name": "Has eyelid?",
+    "type": "boolean"
+  },
+  "hasMouth": {
+    "current": 1,
+    "name": "Mouth?",
+    "type": "boolean"
+  },
+  "hasNose": {
+    "current": 0,
+    "name": "Nose?",
+    "type": "boolean"
+  },
+  "hasPupil": {
+    "current": 1,
+    "name": "Pupil?",
+    "type": "boolean"
+  },
+  "hasReflection": {
+    "current": 1,
+    "name": "Reflection?",
+    "type": "boolean"
+  },
+  "hasText": {
+    "current": 0,
+    "name": "Has text?",
+    "type": "boolean"
+  },
+  "isHorizontal": {
+    "current": 1,
+    "name": "Horizontal?",
+    "type": "boolean"
+  },
+  "isLEDEyes": {
+    "current": 0,
+    "type": "boolean",
+    "v2eyes": true
+  },
+  "mouthColor": {
+    "current": "#000000",
+    "name": "Mouth color",
+    "order": 4,
+    "type": "color"
+  },
+  "mouthH": {
+    "current": 6,
+    "max": 60,
+    "min": 5,
+    "name": "Mouth height",
+    "type": "number"
+  },
+  "mouthSlope": {
+    "current": 41,
+    "max": 50,
+    "min": 5,
+    "name": "Mouth slope",
+    "type": "number"
+  },
+  "mouthStrokeWidth": {
+    "current": 2.95,
+    "max": 40,
+    "min": 1,
+    "name": "Mouth tickness",
+    "type": "number"
+  },
+  "mouthWPercent": {
+    "current": 6.3,
+    "max": 45,
+    "min": 2,
+    "name": "Mouth width",
+    "type": "number"
+  },
+  "mouthYPercent": {
+    "current": 85,
+    "max": 100,
+    "min": 50,
+    "name": "Vertical mouth position",
+    "type": "number"
+  },
+  "nCircles": {
+    "current": 9,
+    "max": 25,
+    "min": 3,
+    "type": "number",
+    "v2eyes": true
+  },
+  "name": "new face",
+  "thumb": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJmYWNlU1ZHIiB2aWV3Qm94PSIwIDAgNzA0IDM5NiI+PHJlY3QgaWQ9ImJhY2tncm91bmRSZWN0IiBoZWlnaHQ9IjcwNCIgd2lkdGg9IjcwNCIgY3g9IjAiIGN5PSIwIiBmaWxsPSIjRkZGRkZGIi8+PGVsbGlwc2UgaWQ9IkxlZnQiIGN4PSIzMi41JSIgY3k9IjQ3JSIgcng9IjkzLjk1IiByeT0iMTAzIiBmaWxsPSIjMDAwMDAwIj48YW5pbWF0ZSBpZD0iY2xvc2VFeWVMZWZ0IiBhdHRyaWJ1dGVOYW1lPSJyeSIgZnJvbT0iMTAzIiB0bz0iMCIgZHVyPSIwLjA1cyIvPjxhbmltYXRlIGlkPSJvcGVuRXllTGVmdCIgYXR0cmlidXRlTmFtZT0icnkiIGZyb209IjAiIHRvPSIxMDMiIGR1cj0iMC4xcyIgYmVnaW49ImNsb3NlRXllTGVmdC5lbmQiLz48L2VsbGlwc2U+PGxpbmUgeDE9IjEzNyIgeTE9Ijk0IiB4Mj0iMzIxIiB5Mj0iMjc4IiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjU1LCAyNTUsIDI1NSk7IHN0cm9rZS13aWR0aDogMTk7Ii8+PGxpbmUgeDE9IjEzNyIgeTE9IjE4NiIgeDI9IjMyMSIgeTI9IjE4NiIgc3R5bGU9InN0cm9rZTogcmdiKDI1NSwgMjU1LCAyNTUpOyBzdHJva2Utd2lkdGg6IDE5OyIvPjxsaW5lIHgxPSIzMjEiIHkxPSI5NCIgeDI9IjEzNyIgeTI9IjI3OCIgc3R5bGU9InN0cm9rZTogcmdiKDI1NSwgMjU1LCAyNTUpOyBzdHJva2Utd2lkdGg6IDE5OyIvPjxsaW5lIHgxPSIyMjkiIHkxPSI5NCIgeDI9IjIyOSIgeTI9IjI3OCIgc3R5bGU9InN0cm9rZTogcmdiKDI1NSwgMjU1LCAyNTUpOyBzdHJva2Utd2lkdGg6IDE5OyIvPjxlbGxpcHNlIGlkPSJPdXRlckxlZnQiIGN4PSIzMi41JSIgY3k9IjQ3JSIgcng9IjkyIiByeT0iMTAxIiBmaWxsPSIjZmZmZmZmIj48YW5pbWF0ZSBpZD0iY2xvc2VFeWVPdXRlckxlZnQiIGF0dHJpYnV0ZU5hbWU9InJ5IiBmcm9tPSIxMDEiIHRvPSIwIiBkdXI9IjAuMDVzIi8+PGFuaW1hdGUgaWQ9Im9wZW5FeWVPdXRlckxlZnQiIGF0dHJpYnV0ZU5hbWU9InJ5IiBmcm9tPSIwIiB0bz0iMTAxIiBkdXI9IjAuMXMiIGJlZ2luPSJjbG9zZUV5ZU91dGVyTGVmdC5lbmQiLz48L2VsbGlwc2U+PGVsbGlwc2UgaWQ9IklubmVyTGVmdCIgY3g9IjMyLjUlIiBjeT0iNDclIiByeD0iNTYiIHJ5PSI1NiIgZmlsbD0iI2FjNWYxNiI+PGFuaW1hdGUgaWQ9ImNsb3NlRXllSW5uZXJMZWZ0IiBhdHRyaWJ1dGVOYW1lPSJyeSIgZnJvbT0iNTYiIHRvPSIwIiBkdXI9IjAuMDVzIi8+PGFuaW1hdGUgaWQ9Im9wZW5FeWVJbm5lckxlZnQiIGF0dHJpYnV0ZU5hbWU9InJ5IiBmcm9tPSIwIiB0bz0iNTYiIGR1cj0iMC4xcyIgYmVnaW49ImNsb3NlRXllSW5uZXJMZWZ0LmVuZCIvPjwvZWxsaXBzZT48ZWxsaXBzZSBpZD0iUHVwaWxMZWZ0IiBjeD0iMzIuNSUiIGN5PSI0NyUiIHJ4PSI0OSIgcnk9IjQ5IiBmaWxsPSIjMDAwMDAwIj48YW5pbWF0ZSBpZD0iY2xvc2VFeWVQdXBpbExlZnQiIGF0dHJpYnV0ZU5hbWU9InJ5IiBmcm9tPSI0OSIgdG89IjAiIGR1cj0iMC4wNXMiLz48YW5pbWF0ZSBpZD0ib3BlbkV5ZVB1cGlsTGVmdCIgYXR0cmlidXRlTmFtZT0icnkiIGZyb209IjAiIHRvPSI0OSIgZHVyPSIwLjFzIiBiZWdpbj0iY2xvc2VFeWVQdXBpbExlZnQuZW5kIi8+PC9lbGxpcHNlPjxlbGxpcHNlIGlkPSJSZWZsZWN0aW9uTGVmdCIgY3g9IjM2LjUlIiBjeT0iMzkuMTc3Nzc3Nzc3Nzc3NzglIiByeD0iNyIgcnk9IjciIGZpbGw9IiNjY2MiPjxhbmltYXRlIGlkPSJjbG9zZUV5ZVJlZmxlY3Rpb25MZWZ0IiBhdHRyaWJ1dGVOYW1lPSJyeSIgZnJvbT0iNyIgdG89IjAiIGR1cj0iMC4wNXMiLz48YW5pbWF0ZSBpZD0ib3BlbkV5ZVJlZmxlY3Rpb25MZWZ0IiBhdHRyaWJ1dGVOYW1lPSJyeSIgZnJvbT0iMCIgdG89IjciIGR1cj0iMC4xcyIgYmVnaW49ImNsb3NlRXllUmVmbGVjdGlvbkxlZnQuZW5kIi8+PC9lbGxpcHNlPjxlbGxpcHNlIGlkPSJFeWVsaWRMZWZ0IiBjeD0iMzIuNSUiIGN5PSI4NyUiIHJ4PSIxMzciIHJ5PSI2OSIgZmlsbD0iI0ZGRkZGRiIvPjxlbGxpcHNlIGlkPSJSaWdodCIgY3g9IjY3LjUlIiBjeT0iNDclIiByeD0iOTMuOTUiIHJ5PSIxMDMiIGZpbGw9IiMwMDAwMDAiPjxhbmltYXRlIGlkPSJjbG9zZUV5ZVJpZ2h0IiBhdHRyaWJ1dGVOYW1lPSJyeSIgZnJvbT0iMTAzIiB0bz0iMCIgZHVyPSIwLjA1cyIvPjxhbmltYXRlIGlkPSJvcGVuRXllUmlnaHQiIGF0dHJpYnV0ZU5hbWU9InJ5IiBmcm9tPSIwIiB0bz0iMTAzIiBkdXI9IjAuMXMiIGJlZ2luPSJjbG9zZUV5ZVJpZ2h0LmVuZCIvPjwvZWxsaXBzZT48bGluZSB4MT0iMzgzIiB5MT0iOTQiIHgyPSI1NjciIHkyPSIyNzgiIHN0eWxlPSJzdHJva2U6IHJnYigyNTUsIDI1NSwgMjU1KTsgc3Ryb2tlLXdpZHRoOiAxOTsiLz48bGluZSB4MT0iMzgzIiB5MT0iMTg2IiB4Mj0iNTY3IiB5Mj0iMTg2IiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjU1LCAyNTUsIDI1NSk7IHN0cm9rZS13aWR0aDogMTk7Ii8+PGxpbmUgeDE9IjU2NyIgeTE9Ijk0IiB4Mj0iMzgzIiB5Mj0iMjc4IiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjU1LCAyNTUsIDI1NSk7IHN0cm9rZS13aWR0aDogMTk7Ii8+PGxpbmUgeDE9IjQ3NSIgeTE9Ijk0IiB4Mj0iNDc1IiB5Mj0iMjc4IiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjU1LCAyNTUsIDI1NSk7IHN0cm9rZS13aWR0aDogMTk7Ii8+PGVsbGlwc2UgaWQ9Ik91dGVyUmlnaHQiIGN4PSI2Ny41JSIgY3k9IjQ3JSIgcng9IjkyIiByeT0iMTAxIiBmaWxsPSIjZmZmZmZmIj48YW5pbWF0ZSBpZD0iY2xvc2VFeWVPdXRlclJpZ2h0IiBhdHRyaWJ1dGVOYW1lPSJyeSIgZnJvbT0iMTAxIiB0bz0iMCIgZHVyPSIwLjA1cyIvPjxhbmltYXRlIGlkPSJvcGVuRXllT3V0ZXJSaWdodCIgYXR0cmlidXRlTmFtZT0icnkiIGZyb209IjAiIHRvPSIxMDEiIGR1cj0iMC4xcyIgYmVnaW49ImNsb3NlRXllT3V0ZXJSaWdodC5lbmQiLz48L2VsbGlwc2U+PGVsbGlwc2UgaWQ9IklubmVyUmlnaHQiIGN4PSI2Ny41JSIgY3k9IjQ3JSIgcng9IjU2IiByeT0iNTYiIGZpbGw9IiNhYzVmMTYiPjxhbmltYXRlIGlkPSJjbG9zZUV5ZUlubmVyUmlnaHQiIGF0dHJpYnV0ZU5hbWU9InJ5IiBmcm9tPSI1NiIgdG89IjAiIGR1cj0iMC4wNXMiLz48YW5pbWF0ZSBpZD0ib3BlbkV5ZUlubmVyUmlnaHQiIGF0dHJpYnV0ZU5hbWU9InJ5IiBmcm9tPSIwIiB0bz0iNTYiIGR1cj0iMC4xcyIgYmVnaW49ImNsb3NlRXllSW5uZXJSaWdodC5lbmQiLz48L2VsbGlwc2U+PGVsbGlwc2UgaWQ9IlB1cGlsUmlnaHQiIGN4PSI2Ny41JSIgY3k9IjQ3JSIgcng9IjQ5IiByeT0iNDkiIGZpbGw9IiMwMDAwMDAiPjxhbmltYXRlIGlkPSJjbG9zZUV5ZVB1cGlsUmlnaHQiIGF0dHJpYnV0ZU5hbWU9InJ5IiBmcm9tPSI0OSIgdG89IjAiIGR1cj0iMC4wNXMiLz48YW5pbWF0ZSBpZD0ib3BlbkV5ZVB1cGlsUmlnaHQiIGF0dHJpYnV0ZU5hbWU9InJ5IiBmcm9tPSIwIiB0bz0iNDkiIGR1cj0iMC4xcyIgYmVnaW49ImNsb3NlRXllUHVwaWxSaWdodC5lbmQiLz48L2VsbGlwc2U+PGVsbGlwc2UgaWQ9IlJlZmxlY3Rpb25SaWdodCIgY3g9IjcxLjUlIiBjeT0iMzkuMTc3Nzc3Nzc3Nzc3NzglIiByeD0iNyIgcnk9IjciIGZpbGw9IiNjY2MiPjxhbmltYXRlIGlkPSJjbG9zZUV5ZVJlZmxlY3Rpb25SaWdodCIgYXR0cmlidXRlTmFtZT0icnkiIGZyb209IjciIHRvPSIwIiBkdXI9IjAuMDVzIi8+PGFuaW1hdGUgaWQ9Im9wZW5FeWVSZWZsZWN0aW9uUmlnaHQiIGF0dHJpYnV0ZU5hbWU9InJ5IiBmcm9tPSIwIiB0bz0iNyIgZHVyPSIwLjFzIiBiZWdpbj0iY2xvc2VFeWVSZWZsZWN0aW9uUmlnaHQuZW5kIi8+PC9lbGxpcHNlPjxlbGxpcHNlIGlkPSJFeWVsaWRSaWdodCIgY3g9IjY3LjUlIiBjeT0iODclIiByeD0iMTM3IiByeT0iNjkiIGZpbGw9IiNGRkZGRkYiLz48cGF0aCBkPSJNMzA3LjY0OCAzMzMuNiBDIDM0OC42NDggMzM5LjYsIDM1NS4zNTIgMzM5LjYsIDM5Ni4zNTIgMzMzLjYiIHN0cm9rZS13aWR0aD0iMi45NSIgc3Ryb2tlPSIjMDAwMDAwIiBmaWxsPSJ0cmFuc3BhcmVudCIgaWQ9Im1vdXRoIi8+PC9zdmc+",
+  "voicePitch": {
+    "current": 0.65,
+    "max": 1,
+    "min": 0,
+    "name": "Voice pitch",
+    "type": "number"
+  },
+  "voiceRate": {
+    "current": 7.525,
+    "max": 10,
+    "min": 0.1,
+    "name": "Voice rate",
+    "type": "number"
+  },
+  "voiceVolume": {
+    "current": 0.65,
+    "max": 1,
+    "min": 0,
+    "name": "Voice volume",
+    "type": "number"
+  },
+  "public": false
+}

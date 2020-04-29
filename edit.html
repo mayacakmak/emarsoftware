@@ -13,35 +13,40 @@
 <body>
   <div class="topbar">
     <div class="topbar-left" id="topLeft"><button class="btn btn-info" onclick="backToIndexPage()"><<</button></div>
-    <div class="topbar-right" id="top"></div>
+    <div class="topbar-right" id="top"><span id="uid" style="color:white"></span></div>
   </div>
   <div class="container-fluid px-sm-5 pb-4">
     <div class="row">
       <div class="col text-center">
         <h1 class="display-4">Face Editing Panel</h1>
+        <div>
+        </div>
       </div>
     </div>
     <div class="row">
       <div class="col py-3">
         <div class="card">
           <div class="card-header bg-light">
-            <h2>All faces</h2>
+            <h2>All Faces</h2>
           </div>
           <div class="card-body h-scrollable green-scroll">
             <div class="btn-group mr-2" id="otherFaceList"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
           </div>
         </div>
-        <div class="p-1"><button class="btn btn-success" type="button" onclick="createNewFace()">Add selected face to my faces</button></div>
+        <div class="p-1"><button class="btn btn-success" type="button" onclick="createNewFace()">Add selected face to my robot</button></div>
       </div>
     </div>
     <div class="row pb-3">
       <div class="col">
         <div class="card">
           <div class="card-header bg-light">
-            <h2>My faces</h2>
+            <h2>My Faces</h2>
           </div>
           <div class="card-body h-scrollable green-scroll">
-            <div class="btn-group mr-2" id="myFaceList"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+            <div class="btn-group mr-2" id="myFaceList">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            </div>
+            <button class="btn btn-secondary" onclick="createDefaultFace()" id="createDefaultFace">+</button>
           </div>
         </div>
       </div>
@@ -50,7 +55,7 @@
       <div class="col-sm-7">
         <div class="card">
           <div class="card-header bg-light">
-            <h2>Face Parameters</h2>
+            <h2>Edit Face</h2>
           </div>
           <div class="card-body scrollable green-scroll">
             <div id="faceParameters"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
@@ -65,6 +70,9 @@
           <div class="card-body">
             <div id="robotFace"><svg id="faceSVG"></svg></div>
             <div class="d-flex justify-content-center mt-2"><input class="centered" type="text" onblur="faceRenamed()" id="faceName"></div>
+            <div class="d-flex justify-content-center mt-2">
+              <button class="btn btn-warning" onclick="shareFace()" disabled id="shareFace">Share Face!</button>
+            </div>
           </div>
         </div>
       </div>
@@ -74,7 +82,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/config.js"></script>
-  <script src="https://mayacakmak.github.io/databasejs/scripts/database.js"></script>
+  <script src="scripts/database.js"></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/eyes.js"></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/face.js"></script>
   <script src="scripts/facedata.js"></script>

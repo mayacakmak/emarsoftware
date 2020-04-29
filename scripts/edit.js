@@ -8,23 +8,53 @@ function initializeEdit() {
   var dbUserRef = firebase.database().ref('/users/');
   dbUserRef.on("value", updateAllUsersFaceList);
   
-  var dbUserRef = firebase.database().ref('/users/' + Database.uid + "/");
+  var dbUserRef = firebase.database().ref('/users/' + Database.uid + "/robot/");
   dbUserRef.on("value", currentUserDataChanged);
 
+  var dbUserRef = firebase.database().ref('/users/' + Database.uid + '/public/');
+  dbUserRef.on('value', currentUserPublicDataChanged);  
+
   window.onresize = Face.draw;
+  var uid = firebase.auth().currentUser.uid;
+  var uidDiv = document.getElementById('uid');
+  uidDiv.innerHTML = Database.displayName;
 }
 
 function currentUserDataChanged(snapshot) {
-  currentUserData = snapshot.val();
+  let robotData = snapshot.val();
+  if (
+    robotData['customAPI'] &&
+    robotData['customAPI']['states'] &&
+    robotData['customAPI']['states']['faces']
+  ) {
+    currentUserData = robotData['customAPI']['states']; // Right now gets contents of user/uid/public, so object with key 'faces'
+  } else {
+    currentUserData = {
+      faces: [],
+    }
+  }
   updateUserFaceList();
   updateFace();
   updateFaceEditor();
 }
 
+function currentUserPublicDataChanged(snapshot) {
+  currentUserPublicData = snapshot.val();
+  if (!currentUserPublicData['faces']) {
+    currentUserPublicData.faces = [];
+  }
+}
+
 function updateFaceEditor() {
   if (allUserData != null && selectedUser != null && selectedFace != null) {
     if (selectedUser == Database.uid){
-      newParameters = currentUserData.faces[selectedFace];
+      if (selectedUser == Database.uid && !isSetup) {
+        if (selectedFaceList === 'user') {
+          newParameters = currentUserData.faces[selectedFace];
+        } else if (selectedFaceList === 'all') {
+          newParameters = allUserData[selectedUser].faces[selectedFace];
+        }
+      }
     }
     else {
       var selectedUserData = allUserData[selectedUser];
@@ -33,7 +63,7 @@ function updateFaceEditor() {
   
       var mainDiv = document.getElementById("faceParameters");
 
-      if (selectedUser == Database.uid) {
+      if (selectedUser == Database.uid && selectedFaceList === 'user') {
 
         /* Check if the scales are created already */
         var scaleExample = document.getElementById("eyeCenterDistPercent");
@@ -95,6 +125,16 @@ function updateFaceEditor() {
           faceName.value = "";
           faceName.placeholder = "face name";
         }
+
+        // Enable share face button
+        var shareButton = document.getElementById("shareFace");
+        if (newParameters.public) {
+          shareButton.innerHTML = 'Shared!';
+          disableButton('shareFace');
+        } else {
+          shareButton.innerHTML = 'Share Face!';
+          enableButton('shareFace');
+        }
       }
     else {
         mainDiv.innerHTML =
@@ -107,6 +147,8 @@ function updateFaceEditor() {
           faceName.value = "";
           faceName.placeholder = "face name";
         }
+        document.getElementById('shareFace').innerHTML = 'Share Face!';
+        disableButton('shareFace');
       }
 
       Face.draw();
@@ -272,7 +314,7 @@ function getDataList(name, min, max, nIncrements) {
 function newParameterValue(target, param) {
   if (Database.uid !== null) {
     var dir = "users/" + Database.uid;
-    var dbRef = firebase.database().ref(dir + "/faces/" + selectedFace + "/");
+    var dbRef = firebase.database().ref(dir + "/robot/customAPI/states/faces/" + selectedFace + "/");
     var updates = {};
     
     var key = target.name;
@@ -310,5 +352,15 @@ function newParameterValue(target, param) {
     dbRef.update(newParamObj);
     hasNewParams = true;
   }
+}
+
+function disableButton(buttonID) {
+  var button = document.getElementById(buttonID);
+  button.disabled = true;
+}
+
+function enableButton(buttonID) {
+  var button = document.getElementById(buttonID);
+  button.disabled = false;
 }
 

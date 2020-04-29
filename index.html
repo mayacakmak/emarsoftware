@@ -16,31 +16,36 @@
     <div class="topbar-right" id="top"></div>
   </div>
   <div class="container-fluid px-sm-5">
-    <div class="row py-3">
+    <div class="row py-3 h-20">
       <div class="col-sm-10">
         <h1 class="display-4">Robot Frontend Tools</h1>
       </div>
-      <div class="col-sm-2 text-center align-self-left justify-content-center">
-        <div class="btn-group"><button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span id="selectedRobot"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="pl-2">Loading robots...</span></span><div class="dropdown-menu" id="robots"></div></button></div>
+      <div class="col-sm-1">
+        <span id="uid"></span>
+        <button class="btn btn-warning" onclick="logout()">Logout</button>
+      </div>
+      <div class="col-sm-1 text-center align-self-left justify-content-center">
+        <!-- <div class="btn-group"><button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span id="selectedRobot"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="pl-2">Loading robots...</span></span><div class="dropdown-menu" id="robots"></div></button></div> -->
+          <!-- <p>Name</p> -->
+          <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="profilePic" class="face-thumb" id="profilePic" width="40" height="40">
+      </div>
+    </div>
+    <div class="py-3">
+      <div>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-4">
         <div class="card bg-light mb-3">
           <div class="card-header">
-            <h2>Robot Setup</h2>
+            <h2>Face Gallery</h2>
           </div>
           <div class="card-body">
-            <p class="card-text">Select a robot above and press the button to set up its face and other parameters, before starting to control it.</p><button class="btn btn-warning" onclick="startSetup()" id="setupButton">Start Robot Setup</button></div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="card bg-light mb-3">
-          <div class="card-header">
-            <h2>Robot Control (WoZ)</h2>
+            <p class="card-text">View all faces made by members of your group.</p>
           </div>
-          <div class="card-body">
-            <p class="card-text">Select a robot above and press the button to start controlling the robot's actions (Wizard of Oz) from your browser.</p><button class="btn btn-warning" onclick="startController()" id="controlButton">Start Robot Controller</button></div>
+          <div class="card-footer bg-transparent border-transparent">
+            <button class="btn btn-warning flex-end" type="button" onclick="startGallery()" id="galleryButton">Start Gallery</button>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
@@ -49,20 +54,29 @@
             <h2>Face Editing</h2>
           </div>
           <div class="card-body">
-            <p class="card-text">Press button to start the face editor to customize your faces or create new faces.</p><button class="btn btn-warning" type="button" onclick="startEditor()" id="editButton">Start Face Editor</button></div>
+            <p class="card-text">Press button to start the face editor to customize your faces or create new faces.</p>
+          </div>
+          <div class="card-footer bg-transparent border-transparent">
+            <button class="btn btn-warning" type="button" onclick="startEditor()" id="editButton">Start Face Editor</button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="row">
       <div class="col-sm-4">
         <div class="card bg-light mb-3">
           <div class="card-header">
-            <h2>Robot Administration</h2>
+            <h2>Robot Control (WoZ)</h2>
           </div>
           <div class="card-body">
-            <p class="card-text">Add new robots and manage permissions by pressing the button below. If you are not an administrator you can contact another administrator.</p><button class="btn btn-warning" type="button" onclick="startAdmin()" id="adminButton">Start Admin Interface</button></div>
+            <p class="card-text">Select a robot above and press the button to start controlling the robot's actions (Wizard of
+              Oz) from your browser.</p>
+          </div>
+          <div class="card-footer bg-transparent border-transparent">
+            <button class="btn btn-warning" onclick="startController()" disabled id="controlButton">Start Robot Controller</button>
+          </div>
         </div>
-      </div>
+    </div>
+      
+      
     </div>
     <div class="footer"></div>
   </div>
@@ -70,6 +84,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/config.js"></script>
-  <script src="https://mayacakmak.github.io/databasejs/scripts/database.js"></script>
+  <script src="scripts/database.js"></script>
   <script src="scripts/index.js"></script>
 </body>

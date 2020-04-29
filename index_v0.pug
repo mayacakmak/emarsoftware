@@ -1,0 +1,57 @@
+extends structure/_layout.pug
+
+block content
+  .topbar
+    .topbar-left#topLeft
+    .topbar-right#top
+
+  .container-fluid.px-sm-5
+    .row.py-3
+      .col-sm-10
+        h1.display-4 Robot Frontend Tools
+      .col-sm-2.text-center.align-self-left.justify-content-center
+        .btn-group
+          button(type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") 
+            span#selectedRobot
+              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+              span.pl-2 Loading robots...
+            .dropdown-menu#robots
+
+    .row
+      .col-sm-4
+        .card.bg-light.mb-3
+          .card-header
+            h2 Robot Setup
+          .card-body
+            p.card-text Select a robot above and press the button to set up its face and other parameters, before starting to control it.
+            button.btn.btn-warning(onclick="startSetup()")#setupButton Start Robot Setup
+      
+      .col-sm-4
+        .card.bg-light.mb-3
+          .card-header 
+            h2 Robot Control (WoZ)
+          .card-body
+            p.card-text Select a robot above and press the button to start controlling the robot's actions (Wizard of Oz) from your browser.
+            button.btn.btn-warning(onclick="startController()")#controlButton Start Robot Controller
+
+      .col-sm-4
+        .card.bg-light.mb-3
+          .card-header
+            h2 Face Editing
+          .card-body
+            p.card-text Press button to start the face editor to customize your faces or create new faces.
+            button.btn.btn-warning(type="button" onclick="startEditor()")#editButton Start Face Editor
+
+    .row
+      .col-sm-4
+        .card.bg-light.mb-3
+          .card-header
+            h2 Robot Administration
+          .card-body
+            p.card-text Add new robots and manage permissions by pressing the button below. If you are not an administrator you can contact another administrator.
+            button.btn.btn-warning(type="button" onclick="startAdmin()")#adminButton Start Admin Interface
+        
+    .footer
+
+block append scripts
+  script(src="scripts/index_v0.js")
