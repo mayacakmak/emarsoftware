@@ -64,6 +64,10 @@ img.face-thumb-selected {
   height: 70px;
 }
 
+.googleIMG {
+  border: 0px;
+}
+
 div.thumb-and-name {
   display: flex;
   flex-direction: column;

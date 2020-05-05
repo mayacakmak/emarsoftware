@@ -30,50 +30,16 @@
       <div class="col-sm-4">
         <div class="card bg-light mb-3">
           <div class="card-header">
-            <ul class="nav nav-pills" id="myTab" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-                  aria-selected="true">Sign In</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                  aria-selected="false">Sign Up</a>
-              </li>
-            </ul>
+              <h2>Sign In</h2>
           </div>
           <div class="card-body">
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                 <form>
-                  <!-- <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="signInEmail" placeholder="Enter email">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="signInPassword" placeholder="Password">
-                  </div> -->
-                  <button class="btn btn-warning" type="button" onclick="signInGoogle()" id="googleSignIn">Sign In With Google</button>
-                  <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
+                  <button class="btn btn-link" type="button" onclick="signInGoogle()" id="googleSignIn"><img class="googleIMG" src="assets/web/1x/btn_google_signin_dark_normal_web.png" id="googleIMG"/></button>
+                  <!-- <input type="image" src="assets/web/1x/btn_google_signin_light_normal_web.png" onclick="signInGoogle()" id="googleSignIn"/> -->
                 </form>
               </div>
-              <!-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <form>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Name</label>
-                    <input type="name" class="form-control" id="signUpName" placeholder="Name">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="signUpEmail" placeholder="Enter email">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="signUpPassword" placeholder="Password">
-                  </div>
-                  <button class="btn btn-warning" type="button" onclick="signUp(document.forms[1].signUpName.value, document.forms[1].signUpEmail.value, document.forms[1].signUpPassword.value)" id="signUpButton">Sign Up</button>
-                </form>
-              </div> -->
             </div>
             </div>
         </div>

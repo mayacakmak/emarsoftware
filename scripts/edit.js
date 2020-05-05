@@ -12,7 +12,7 @@ function initializeEdit() {
   dbUserRef.on("value", currentUserDataChanged);
 
   var dbUserRef = firebase.database().ref('/users/' + Database.uid + '/public/');
-  dbUserRef.on('value', currentUserPublicDataChanged);  
+  dbUserRef.on('value', currentUserPublicDataChanged);
 
   window.onresize = Face.draw;
   var uid = firebase.auth().currentUser.uid;
@@ -42,6 +42,9 @@ function currentUserPublicDataChanged(snapshot) {
   currentUserPublicData = snapshot.val();
   if (!currentUserPublicData['faces']) {
     currentUserPublicData.faces = [];
+  }
+  if (!currentUserPublicData['viewedFaces']) {
+    currentUserPublicData.viewedFaces = {};
   }
 }
 
@@ -126,6 +129,15 @@ function updateFaceEditor() {
           faceName.placeholder = "face name";
         }
 
+        var faceDescription = document.getElementById('faceDescription');
+        faceDescription.disabled = '';
+        if (newParameters.description !== undefined) {
+          faceDescription.value = newParameters.description;
+        } else {
+          faceDescription.value = '';
+          faceDescription.placeholder = 'description';
+        }
+
         // Enable share face button
         var shareButton = document.getElementById("shareFace");
         if (newParameters.public) {
@@ -141,11 +153,19 @@ function updateFaceEditor() {
           "You cannot edit this face. Click the 'Add new' button above to copy this face and edit it.";
         faceName = document.getElementById("faceName");
         faceName.disabled="disabled";
+        faceDescription = document.getElementById('faceDescription');
+        faceDescription.disabled = 'disabled';
         if (newParameters.name !== undefined) {
           faceName.value = newParameters.name;
         } else {
           faceName.value = "";
           faceName.placeholder = "face name";
+        }
+        if (newParameters.description !== undefined) {
+          faceDescription.value = newParameters.description;
+        } else {
+          faceDescription.value = '';
+          faceDescription.placeholder = 'description';
         }
         document.getElementById('shareFace').innerHTML = 'Share Face!';
         disableButton('shareFace');

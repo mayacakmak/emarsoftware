@@ -125,6 +125,17 @@ function updateAllUsersFaceList(snapshot) {
             thumbHTML +=
               'onclick=\'selectedFaceChanged(this, "' + id + '",' + i + ", \"all\")'>";
             thumbHTML += '<p>' + name + ' </p></div>';
+            if (
+              !currentUserPublicData.viewedFaces ||
+              !currentUserPublicData.viewedFaces[id] ||
+              !currentUserPublicData.viewedFaces[id].includes(i)
+            ) {
+              thumbHTML +=
+                "<div class='delete-x-button'><button type='button' ";
+              thumbHTML +=
+                " class='btn btn-success btn-circle-sm'>!</button></div>";
+              thumbHTML += '</div>';
+            }
 
             if (otherFaceList != undefined) otherFaceList.innerHTML += thumbHTML;
             else myFaceList.innerHTML += thumbHTML;
@@ -289,6 +300,9 @@ function selectedFaceChanged(target, user, index, selector) {
     updateFace();
     updateFaceEditor();
   }
+  if (selector === "all") {
+    faceViewed(user, index);
+  }
 }
 
 /* Callback function for when the current face is renamed, to update the database accordingly*/
@@ -304,6 +318,58 @@ function faceRenamed() {
   else {
     console.log("You cannot rename other users' faces.")
   }
+}
+
+/* Callback function for when the current face description is renamed, to update the database accordingly*/
+function descriptionChanged() {
+  if (selectedUser == Database.uid) {
+    var dir = "users/" + selectedUser;
+    var dbRef = firebase.database().ref(dir + "/robot/customAPI/states/faces/" + selectedFace + "/");
+    var newParamObj = {};
+    var faceDescription = document.getElementById('faceDescription');
+    newParamObj.description = faceDescription.value
+    console.log(newParamObj);
+    dbRef.update(newParamObj);
+  }
+  else {
+    console.log("You cannot change other users' faces.")
+  }
+}
+
+/* Mark face as viewed in the database */
+function faceViewed(user, index) {
+  if (!currentUserPublicData.viewedFaces) {
+    // Logged in user does not have the viewedFaces field yet
+    forceUpdateAll = true;
+    var dir = 'users/' + Database.uid;
+    var dbRef = firebase
+      .database()
+      .ref(dir + '/public/viewedFaces/' + user);
+    dbRef.update({ 0: index });
+  } else if (!currentUserPublicData.viewedFaces[user]) {
+    // Logged in user has not viewed any other user
+    forceUpdateAll = true;
+    var dir = 'users/' + Database.uid;
+    var dbRef = firebase
+      .database()
+      .ref(dir + '/public/viewedFaces/' + user);
+    dbRef.update({0 : index});
+  } else if (!currentUserPublicData.viewedFaces[user].includes(index)) {
+    // Logged in user has viewed other faces by this user, but not this face
+    forceUpdateAll = true;
+    var dir = 'users/' + Database.uid;
+    var dbRef = firebase
+      .database()
+      .ref(dir + '/public/viewedFaces/' + user);
+    var upd = {};
+    upd[currentUserPublicData.viewedFaces[user].length] = index;
+    dbRef.update(upd);
+  }
+  // var obj = {};
+  // obj.val = function() {
+  //   return allUserData;
+  // };
+  // updateAllUsersFaceList(obj);
 }
 
 /* Function to update the thumb corresponding to face parameters in the database */
