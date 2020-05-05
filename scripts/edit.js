@@ -143,9 +143,12 @@ function updateFaceEditor() {
         if (newParameters.public) {
           shareButton.innerHTML = 'Shared!';
           disableButton('shareFace');
+          disableButton('setCurrentFace');
         } else {
           shareButton.innerHTML = 'Share Face!';
           enableButton('shareFace');
+          enableButton('setCurrentFace');
+          console.log('enable');
         }
       }
     else {
@@ -169,6 +172,7 @@ function updateFaceEditor() {
         }
         document.getElementById('shareFace').innerHTML = 'Share Face!';
         disableButton('shareFace');
+        disableButton('setCurrentFace');
       }
 
       Face.draw();

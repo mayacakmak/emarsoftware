@@ -432,6 +432,18 @@ function shareFace() {
 }
 
 /* 
+ * Function to set the currently selected face as the robot face in the database
+ */
+function setCurrentFace() {
+  var dbRef = firebase
+    .database()
+    .ref('/users/' + Database.uid + '/robot/state/');
+  dbRef.set({ 'currentFace': selectedFace }, function (error) {
+    console.log(error);
+  });
+}
+
+/* 
  * Function to add a copy of the currently displayed face to the current user's face list on the database
  */
 function createNewFace() {

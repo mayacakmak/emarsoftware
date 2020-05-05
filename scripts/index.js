@@ -86,6 +86,11 @@ function startGallery() {
     window.location.href = 'gallery.html';
 }
 
+function startWebRobot() {
+  window.location.href =
+    'https://kaimihata.github.io/robotbackend/render-face.html';
+}
+
 function logout() {
   Database.signOut();
   window.location.href = 'signin.html';
