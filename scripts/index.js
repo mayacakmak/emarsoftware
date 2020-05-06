@@ -78,8 +78,8 @@ function startEditor() {
   window.location.href = "edit.html";
 }
 
-function startWebRobot() {
-  window.location.href = 'web-robot.html';
+function startDiary() {
+  window.location.href = 'diary.html';
 }
 
 function startGallery() {
