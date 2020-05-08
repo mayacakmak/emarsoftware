@@ -284,7 +284,8 @@ function selectedRobotFaceChanged(target, index) {
 
 
 /* Callback function for when a different face is selected by the user through clicking a thumb*/
-function selectedFaceChanged(target, user, index, selector) {
+function selectedFaceChanged(target, user, index, selector, ignore = false) {
+  console.log(target, user, index, selector, ignore);
   hasNewParams = true;
   
   var allFaceImgs = document.getElementsByClassName("face-thumb");
@@ -300,8 +301,8 @@ function selectedFaceChanged(target, user, index, selector) {
     updateFace();
     updateFaceEditor();
   }
-  if (selector === "all") {
-    faceViewed(user, index);
+  if (selector === "all" && !ignore) {
+    faceViewed(target, user, index, selector);
   }
 }
 
@@ -337,7 +338,7 @@ function descriptionChanged() {
 }
 
 /* Mark face as viewed in the database */
-function faceViewed(user, index) {
+function faceViewed(target, user, index, selector) {
   if (!currentUserPublicData.viewedFaces) {
     // Logged in user does not have the viewedFaces field yet
     forceUpdateAll = true;
@@ -345,7 +346,9 @@ function faceViewed(user, index) {
     var dbRef = firebase
       .database()
       .ref(dir + '/public/viewedFaces/' + user);
-    dbRef.update({ 0: index });
+    dbRef.update({ 0: index }).then(() => {
+      selectedFaceChanged(target, user, index, selector, true);
+    });
   } else if (!currentUserPublicData.viewedFaces[user]) {
     // Logged in user has not viewed any other user
     forceUpdateAll = true;
@@ -353,7 +356,9 @@ function faceViewed(user, index) {
     var dbRef = firebase
       .database()
       .ref(dir + '/public/viewedFaces/' + user);
-    dbRef.update({0 : index});
+    dbRef.update({ 0: index }).then(() => {
+      selectedFaceChanged(target, user, index, selector, true);
+    });
   } else if (!currentUserPublicData.viewedFaces[user].includes(index)) {
     // Logged in user has viewed other faces by this user, but not this face
     forceUpdateAll = true;
@@ -363,7 +368,9 @@ function faceViewed(user, index) {
       .ref(dir + '/public/viewedFaces/' + user);
     var upd = {};
     upd[currentUserPublicData.viewedFaces[user].length] = index;
-    dbRef.update(upd);
+    dbRef.update(upd).then(() => {
+      selectedFaceChanged(target, user, index, selector, true);
+    });
   }
   // var obj = {};
   // obj.val = function() {
