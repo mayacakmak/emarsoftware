@@ -16,7 +16,3 @@ function initializeRenderFace() {
   window.onresize = Face.draw;
 }
 
-function goBack() {
-  console.log('goback');
-  window.history.back();
-}

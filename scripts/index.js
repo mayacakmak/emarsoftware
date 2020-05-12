@@ -4,6 +4,8 @@ var currentRobot = -1;
 var robotNames = [];
 var startDiaryTime;
 var endDiaryTime;
+var startFaceRenderTime;
+var endFaceRenderTime;
 
 function databaseReadyCallback() {
   var dbRef = firebase.database().ref('/');
@@ -22,6 +24,7 @@ function databaseReadyCallback() {
         (snapshot.val() && snapshot.val().SessionStarted.date) || 'other';
       console.log(username);
     });
+  newFaceNotification();
 }
 
 function updateUserRobotInfo(snapshot) {
@@ -51,6 +54,33 @@ function updateUserRobotInfo(snapshot) {
   } 
 }
 
+async function newFaceNotification() {
+  var dbUserRef = firebase.database().ref('/users/');
+  let total = 0;
+  const snapshot = await dbUserRef.once('value');
+  const userData = snapshot.val();
+  Object.keys(userData).forEach((element) => {
+    if (userData[element].public && userData[element].public.faces) {
+      total += Object.keys(userData[element].public.faces).length;
+    }
+  });
+  let count = 0;
+  if (
+    userData[Database.displayName] &&
+    userData[Database.displayName].public &&
+    userData[Database.displayName].public.viewedFaces
+  ) {
+    Object.keys(userData[Database.displayName].public.viewedFaces).forEach((elem) => {
+      count += userData[Database.displayName].public.viewedFaces[elem].length;
+    });
+  }
+  console.log('count', count, 'total', total);
+  if (count !== total) {
+    notification = document.getElementById('newFaceNotifContainer');
+    notification.setAttribute('style', 'display: block;');
+  }
+}
+
 function setRobot(robotId) {
   console.log("Setting robot: " + robotId);
   var dir = '/users/'+ (Database.uid) + "/";
@@ -72,9 +102,9 @@ function startEditor() {
   window.location.href = "edit.html";
 }
 
-function startDiary() {
-  window.location.href = 'diary.html';
-}
+// function startDiary() {
+//   window.location.href = 'diary.html';
+// }
 
 function startGallery() {
     window.location.href = 'gallery.html';
@@ -93,11 +123,18 @@ function doneTyping() {
   window.location.href = "index.html";
 }
 
+function closeRobot() {
+  endFaceRenderTime = new Date().getTime();
+  calculateTime(sessionStorage.getItem(startFaceRenderTime), endFaceRenderTime, 'faceRender');
+  window.location.href = 'index.html';
+}
+
 function startVAS() {
   window.location.href = "datain_stress.html";
 }
 
 function startWebRobot() {
+  sessionStorage.setItem(startFaceRenderTime, new Date().getTime());
   window.location.href = 'render-face.html';
 }
 

@@ -5,7 +5,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>EMAR Robot Frontend Tools</title>
+  <title>Robot Frontend Tools</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/style.processed.css">
 </head>
@@ -64,11 +64,11 @@
               <div class='col'>
                 <h2>Face Editing</h2>
               </div>
-              <!-- <div class='col-sm col-sm-auto'>
-                <div class="alert alert-success" role="alert" visibility="aria-hidden">
-                  <span id='newFaces'></span>
+              <div class='col-sm col-sm-auto' style="display: none;" id="newFaceNotifContainer">
+                <div class="alert alert-success" role="alert">
+                  New Faces for You!
                 </div>
-              </div> -->
+              </div>
             </div>
 
           </div>
@@ -112,7 +112,7 @@
             <h2>Your Robot</h2>
           </div>
           <div class="card-body">
-            <p class="card-text">Start your Robot!</p>
+            <p class="card-text">Start your Robot on your smartphone!</p>
           </div>
           <div class="card-footer bg-transparent border-transparent">
             <button class="btn btn-warning" type="button" onclick="startWebRobot()" id="editButton">Start Robot</button>
@@ -141,8 +141,9 @@
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-   <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/config.js"></script>
   <script src="scripts/database.js"></script>
   <script src="scripts/index.js"></script>
+  <script src="scripts/facedata.js"></script>
 </body>

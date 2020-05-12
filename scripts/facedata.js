@@ -436,6 +436,7 @@ function shareFace() {
   dbRef.set(newParameters, function (error) {
     console.log(error);
   });
+  recordData('sharedFace', { name: newParameters.name, description: newParameters.description });
 }
 
 /* 
@@ -494,3 +495,17 @@ function backToIndexPage() {
   window.location.href = "index.html";
 }
 
+function recordData(category, data = {}) {
+  dir =
+    'users/' +
+    firebase.auth().currentUser.displayName +
+    '/faceEdit/' +
+    date.toDateString() +
+    '/' + category;
+  dbRef = firebase.database().ref(dir);
+  dbRef.push().set({
+    timestamp: date.toLocaleString(),
+    ...data,
+  });
+  console.log('Logging data: ----------');
+}

@@ -20,6 +20,8 @@ function signIn() {
       }).catch((error) => {
         console.log("Error: ", error);
       });
+    } else {
+      window.location.href = 'index.html';
     }
   }  
   else {
