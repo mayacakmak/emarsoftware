@@ -11,7 +11,9 @@ function databaseReadyCallback() {
 
   var displayName = firebase.auth().currentUser.displayName;
   var uidDiv = document.getElementById('loginID');
-  uidDiv.value = displayName;
+  if (uidDiv) {
+    uidDiv.innerHTML = displayName;
+  }
   firebase
     .database()
     .ref('/users/' + displayName + '/analytics/' + Database.session)
@@ -106,11 +108,15 @@ function logout() {
 
 function calculateTime(start, end, event) {
   var dur = (end - start) / 1000;
-  var currDate = new Date().toLocaleDateString();
+  var currDate = (new Date()).toDateString();
   console.log(dur);
-  var dir = "users/" +
-      firebase.auth().currentUser.displayName +
-      "/" + event + "/" + Database.session;
+  var dir =
+    'users/' +
+    firebase.auth().currentUser.displayName +
+    '/' +
+    event +
+    '/' +
+    currDate;
   var dbRef = firebase.database().ref(dir);
   dbRef.push().set({
       date: currDate,
@@ -118,5 +124,5 @@ function calculateTime(start, end, event) {
       time_end: end,
       duration_sec: dur
     });
-    console.log("Logging diary time: ----------");
+  console.log("Logging diary time: ----------");
 }

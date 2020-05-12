@@ -6,7 +6,7 @@ var date = new Date();
 var dir_stress;
 var dbRefStress;
 function databaseReadyCallback() {
-  dir_stress = "users/" + firebase.auth().currentUser.uid + "/VAS/" + date.toDateString() + "/stress"
+  dir_stress = "users/" + firebase.auth().currentUser.displayName + "/VAS/" + date.toDateString() + "/stress"
   dbRefStress = firebase.database().ref(dir_stress);
 }
 // Slider input events
@@ -19,7 +19,7 @@ function recordStress() {
     alert("Please move the slider to indicate your stress levels.");
     return;
   } else {
-    dir_stress = "users/" + firebase.auth().currentUser.uid + "/VAS/" + date.toDateString() + "/stress";
+    dir_stress = "users/" + firebase.auth().currentUser.displayName + "/VAS/" + date.toDateString() + "/stress";
     dbRefStress = firebase.database().ref(dir_stress);
     dbRefStress.push().set({
       timestamp: date.toLocaleString(),
