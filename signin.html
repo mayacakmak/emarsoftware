@@ -30,16 +30,14 @@
       <div class="col-sm-4">
         <div class="card bg-light mb-3">
           <div class="card-header">
-              <h2>Sign In</h2>
+              <h2> Enter your Login ID (Example @janeD)</h2>
           </div>
           <div class="card-body">
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <form>
-                  <button class="btn btn-link" type="button" onclick="signInGoogle()" id="googleSignIn"><img class="googleIMG" src="assets/web/1x/btn_google_signin_dark_normal_web.png" id="googleIMG"/></button>
-                  <!-- <input type="image" src="assets/web/1x/btn_google_signin_light_normal_web.png" onclick="signInGoogle()" id="googleSignIn"/> -->
-                </form>
-              </div>
+            <div class="d-flex justify-content-center mt-2" id="myTabContent">
+              <input class="form-control input-lg centered" type="text" id="loginID">
+            </div>
+            <div class="d-flex justify-content-center mt-2">
+              <button class="btn btn-warning" onclick="signIn()" id="loginDone">Continue</button>
             </div>
             </div>
         </div>
@@ -53,6 +51,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
+   <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
