@@ -12,6 +12,8 @@ function databaseReadyCallback() {
   uidDiv.innerHTML = Database.displayName;
   var profilePic = document.getElementById('profilePic');
   profilePic.src = Database.profilePic;
+  var newFaces = document.getElementById('newFaces');
+  // newFaces.innerHTML = "New Faces For You!";
   firebase
     .database()
     .ref('/users/' + uid + '/analytics/' + Database.session)

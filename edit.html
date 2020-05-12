@@ -5,7 +5,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>EMAR Robot Frontend Tools</title>
+  <title>Robot Frontend Tools</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/style.processed.css">
 </head>
@@ -27,7 +27,7 @@
       <div class="col py-3">
         <div class="card">
           <div class="card-header bg-light">
-            <h2>All Faces</h2>
+            <h2>Public Gallery</h2>
           </div>
           <div class="card-body h-scrollable green-scroll">
             <div class="btn-group mr-2" id="otherFaceList"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
@@ -40,7 +40,7 @@
       <div class="col">
         <div class="card">
           <div class="card-header bg-light">
-            <h2>My Faces</h2>
+            <h2>Private Gallery</h2>
           </div>
           <div class="card-body h-scrollable green-scroll">
             <div class="btn-group mr-2" id="myFaceList">
@@ -71,14 +71,14 @@
             <div id="robotFace"><svg id="faceSVG"></svg></div>
               <form>
                 <div class="form-group row">
-                  <label for="inputName" class="col-sm-2 col-form-label">Face Name:</label>
-                  <div class="col-sm-10">
+                  <label for="inputName" class="col-sm col-sm-auto col-form-label">Face Name:</label>
+                  <div class="col">
                     <input type="text" onblur="faceRenamed()" id="faceName">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="inputDesc" class="col-sm-2 col-form-label">Description:</label>
-                  <div class="col-sm-10">
+                  <label for="inputDesc" class="col-sm col-sm-auto col-form-label">Description:</label>
+                  <div class="col">
                     <input type="text" onblur="descriptionChanged()" id="faceDescription">
                   </div>
                 </div>

@@ -277,9 +277,9 @@ function selectedRobotFaceChanged(target, index) {
   }
   target.style.border = "5px #007bff solid";
   
-  var dir = "robots/" + currentRobot + "/state/";
-  var dbRef = firebase.database().ref(dir);
-  dbRef.update({ currentFace: index });
+  // var dir = "robots/" + currentRobot + "/state/";
+  // var dbRef = firebase.database().ref(dir);
+  // dbRef.update({ currentFace: index });
 }
 
 
@@ -445,7 +445,7 @@ function setCurrentFace() {
   var dbRef = firebase
     .database()
     .ref('/users/' + Database.uid + '/robot/state/');
-  dbRef.set({ 'currentFace': selectedFace }, function (error) {
+  dbRef.update({ 'currentFace': selectedFace }, function (error) {
     console.log(error);
   });
 }
