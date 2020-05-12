@@ -8,10 +8,10 @@ function initializeEdit() {
   var dbUserRef = firebase.database().ref('/users/');
   dbUserRef.on("value", updateAllUsersFaceList);
   
-  var dbUserRef = firebase.database().ref('/users/' + Database.uid + "/robot/");
+  var dbUserRef = firebase.database().ref('/users/' + Database.displayName + "/robot/");
   dbUserRef.on("value", currentUserDataChanged);
 
-  var dbUserRef = firebase.database().ref('/users/' + Database.uid + '/public/');
+  var dbUserRef = firebase.database().ref('/users/' + Database.displayName + '/public/');
   dbUserRef.on('value', currentUserPublicDataChanged);
 
   window.onresize = Face.draw;
@@ -50,8 +50,8 @@ function currentUserPublicDataChanged(snapshot) {
 
 function updateFaceEditor() {
   if (allUserData != null && selectedUser != null && selectedFace != null) {
-    if (selectedUser == Database.uid){
-      if (selectedUser == Database.uid && !isSetup) {
+    if (selectedUser == Database.displayName){
+      if (selectedUser == Database.displayName && !isSetup) {
         if (selectedFaceList === 'user') {
           newParameters = currentUserData.faces[selectedFace];
         } else if (selectedFaceList === 'all') {
@@ -66,7 +66,7 @@ function updateFaceEditor() {
   
       var mainDiv = document.getElementById("faceParameters");
 
-      if (selectedUser == Database.uid && selectedFaceList === 'user') {
+      if (selectedUser == Database.displayName && selectedFaceList === 'user') {
 
         /* Check if the scales are created already */
         var scaleExample = document.getElementById("eyeCenterDistPercent");
@@ -336,8 +336,8 @@ function getDataList(name, min, max, nIncrements) {
 
 // Update the database in response to a UI event
 function newParameterValue(target, param) {
-  if (Database.uid !== null) {
-    var dir = "users/" + Database.uid;
+  if (Database.displayName !== null) {
+    var dir = "users/" + Database.displayName;
     var dbRef = firebase.database().ref(dir + "/robot/customAPI/states/faces/" + selectedFace + "/");
     var updates = {};
     

@@ -4,8 +4,8 @@
 function Database(config, readyCallback) {
   Database.isAnonymous = false;
   Database.uid = null;
+  Database.displayName = null;
   Database.isLogging = true;
-  Database.session = new Date().getTime();
 
   /*
    * If somethings need to be initialized only after the database connection
@@ -26,9 +26,7 @@ function Database(config, readyCallback) {
   Database.initialize = function () {
     Database.app = firebase.initializeApp(Database.config);
     firebase.auth().onAuthStateChanged(Database.handleAuthStateChange);
-    // Database.signInAnonymously();
-    // DON'T SIGN IN ANONYMOUSLY
-    // SIGN IN WITH GOOGLE
+    Database.signInAnonymously();
   };
 
   /*
@@ -64,61 +62,41 @@ function Database(config, readyCallback) {
   );
 
   Database.signInAnonymously = function () {
-    console.log("?????");
-    // if (Database.uid == null) {
-    //   firebase.auth().signInAnonymously().catch(Database.handleError);
-    // }
+    if (Database.uid == null) {
+      firebase.auth().signInAnonymously().then(() => {
+        const name = firebase.auth().currentUser.displayName;
+        if (name === null && !window.location.href.includes('signin.html')) {
+          window.location.href = 'signin.html';
+        } else {
+          Database.displayName = name;
+        }
+      }).catch(Database.handleError);
+    }
   };
 
-  Database.signInWithGoogle = function () {
-    console.log('sign in with google');
-    if (Database.uid == null) {
-      console.log('uid null')
-      var provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().useDeviceLanguage();
-      firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then(function (result) {
-          // This gives you a Google Access Token. You can use it to access the Google API.
-          var token = result.credential.accessToken;
-          // The signed-in user info.
-          var user = result.user;
-        })
-        .catch(function (error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // The email of the user's account used.
-          var email = error.email;
-          // The firebase.auth.AuthCredential type that was used.
-          var credential = error.credential;
-          // ...
-          console.log(error);
-        });
-    }
-  }
-
-  Database.initializeUserData = function(user) {
-    const { uid, displayName } = user;
-    var dir = 'users/' + uid;
+  Database.handleSignIn = function () {
+    const displayName = Database.displayName;
+    console.log('handleSignIn', displayName);
+    var dir = 'users/' + displayName;
     var dbRef = firebase.database().ref(dir);
     dbRef.once('value').then(function (snapshot) {
       var robot = snapshot.child('robot').val(); // If robot exists
       console.log('robot', robot);
-      if (robot == null) { // Need to add new user information to the database
+      if (robot == null) {
+        // Need to add new user information to the database
         var upd = {
           name: displayName,
           robot: {
             customAPI: {
               actions: {
                 presetSpeak: {
-                  0: "Hello",
+                  0: 'Hello',
                 },
                 sounds: {
                   0: {
-                    name: "beep0",
-                    path: "https://firebasestorage.googleapis.com/v0/b/emar-database.appspot.com/o/sounds%2FALL_POSES_DELETED.wav?alt=media&token=f3b26b7a-8780-4a29-9257-fde528636df4",
+                    name: 'beep0',
+                    path:
+                      'https://firebasestorage.googleapis.com/v0/b/emar-database.appspot.com/o/sounds%2FALL_POSES_DELETED.wav?alt=media&token=f3b26b7a-8780-4a29-9257-fde528636df4',
                   },
                 },
               },
@@ -135,7 +113,7 @@ function Database(config, readyCallback) {
               },
               speak: {
                 text: '',
-              }
+              },
             },
             inputs: {
               tactile: {
@@ -147,24 +125,27 @@ function Database(config, readyCallback) {
             name: '',
             state: {
               currentBellyScreen: '0',
-              currentEyes: "random",
+              currentEyes: 'random',
               currentFace: 1,
-              currendLEDR: 128,
-              currendLEDG: 0,
-              currendLEDB: 128,
+              currentLEDR: 128,
+              currentLEDG: 0,
+              currentLEDB: 128,
               currentText: '',
-            }
+            },
           },
           public: {
             public: true,
-          }
+          },
         };
-        dbRef.update(upd, function(error) {
-          console.log(error);
+        dbRef.set(upd, function (error) {
+          if (error) {
+            console.log('error', error);
+          } else {
+            console.log('set user data successfully');
+          }
         });
       }
     });
-    
   }
 
   Database.handleError = function (error) {
@@ -175,54 +156,42 @@ function Database(config, readyCallback) {
 
   Database.handleAuthStateChange = function (user) {
     if (user) {
-      Database.initializeUserData(user);
       Database.isAnonymous = user.isAnonymous;
       Database.uid = user.uid;
-      Database.displayName = user.displayName;
-      Database.profilePic = user.photoURL;
 
       if (!Database.isAnonymous) {
         console.log('Signed in as ' + user.displayName);
       } else {
-        console.log('Signed in anonymously as ' + user.uid);
+        console.log('Signed in anonymously as ' + user.displayName);
+        console.log('UID:', user.uid);  
       }
 
       // Create directory in database to save this user's data
       Database.logEvent('SessionStarted');
 
-      if (Database.readyCallback != null || Database.readyCallback != undefined) {
+      if (Database.readyCallback != null || Database.readyCallback != undefined)
         Database.readyCallback();
-        if (window.location.href.includes('signin')) {
-          window.location.href = 'index.html';
-        }
-      }
     } else {
       console.log('User is signed out.');
-      if (!window.location.href.includes('signin')) {
-        window.location.href = 'signin.html';
-      }
     }
   };
 
   Database.signOut = function () {
-    firebase.auth().signOut().then(function() {
-      console.log("Sign out successful");
-    }).catch(Database.handleError);
+    firebase.auth().signOut().catch(Database.handleError);
     Database.uid = null;
   };
 
   Database.logEvent = function (eventName, eventLog) {
     if (Database.isLogging) {
       if (eventLog == undefined) eventLog = {};
-      var date = new Date();
-      var dir = 'users/' + Database.uid + '/analytics/' + Database.session;
+      var dir = 'users/' + Database.uid;
       var dbRef = firebase.database().ref(dir);
+      var date = new Date();
       eventLog['timeStamp'] = date.getTime();
       eventLog['date'] = date.toDateString();
       eventLog['time'] = date.toTimeString();
-      eventLog['screen'] = window.location.href;
       var newEventLog = {};
-      newEventLog['SessionStarted'] = eventLog;
+      newEventLog[eventName] = eventLog;
       dbRef.update(newEventLog);
       console.log('Logging event: ----------');
       console.log(newEventLog);

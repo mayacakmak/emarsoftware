@@ -2,21 +2,19 @@ var config = new Config();
 var db = new Database(config.config, databaseReadyCallback);
 var currentRobot = -1;
 var robotNames = [];
+var startDiaryTime;
+var endDiaryTime;
 
 function databaseReadyCallback() {
   var dbRef = firebase.database().ref('/');
   // dbRef.on("value", updateUserRobotInfo);
 
-  var uid = firebase.auth().currentUser.uid;
-  var uidDiv = document.getElementById('uid');
-  uidDiv.innerHTML = Database.displayName;
-  var profilePic = document.getElementById('profilePic');
-  profilePic.src = Database.profilePic;
-  var newFaces = document.getElementById('newFaces');
-  // newFaces.innerHTML = "New Faces For You!";
+  var displayName = firebase.auth().currentUser.displayName;
+  var uidDiv = document.getElementById('loginID');
+  uidDiv.value = displayName;
   firebase
     .database()
-    .ref('/users/' + uid + '/analytics/' + Database.session)
+    .ref('/users/' + displayName + '/analytics/' + Database.session)
     .on('value', function (snapshot) {
       var username =
         (snapshot.val() && snapshot.val().SessionStarted.date) || 'other';
@@ -27,8 +25,8 @@ function databaseReadyCallback() {
 function updateUserRobotInfo(snapshot) {
   var database = snapshot.val();
   var robotListHTML = "";
-  if (Database.uid != null) {
-    var userData = database.users[Database.uid];
+  if (Database.displayName != null) {
+    var userData = database.users[Database.displayName];
     if (userData != undefined)
       if (userData.currentRobot != undefined)
         currentRobot = userData.currentRobot;
@@ -48,15 +46,7 @@ function updateUserRobotInfo(snapshot) {
       selectedRobotDiv.innerHTML = "Select robot";
     else
       selectedRobotDiv.innerHTML = robotNames[currentRobot];
-  }
-  
-    // if (Database.isAnonymous){
-    //   disableButton("adminButton");
-    //   //TODO: Ultimtely most things should not be available anonymously.
-    // } else {
-    //   enableButton("adminButton");
-    //   //TODO: Re-enable anything disabled above
-    // }  
+  } 
 }
 
 function setRobot(robotId) {
@@ -88,12 +78,45 @@ function startGallery() {
     window.location.href = 'gallery.html';
 }
 
+function startDiary() {
+  sessionStorage.setItem(startDiaryTime, new Date().getTime());
+  //console.log(startDiaryTime)
+  window.location.href = "diary.html";
+}
+
+
+function doneTyping() {
+  endDiaryTime = new Date().getTime() ; 
+  calculateTime(sessionStorage.getItem(startDiaryTime), endDiaryTime, "diary");
+  window.location.href = "index.html";
+}
+
+function startVAS() {
+  window.location.href = "datain_stress.html";
+}
+
 function startWebRobot() {
-  window.location.href =
-    'https://kaimihata.github.io/robotbackend/render-face.html';
+  window.location.href = 'render-face.html';
 }
 
 function logout() {
   Database.signOut();
   window.location.href = 'signin.html';
+}
+
+function calculateTime(start, end, event) {
+  var dur = (end - start) / 1000;
+  var currDate = new Date().toLocaleDateString();
+  console.log(dur);
+  var dir = "users/" +
+      firebase.auth().currentUser.displayName +
+      "/" + event + "/" + Database.session;
+  var dbRef = firebase.database().ref(dir);
+  dbRef.push().set({
+      date: currDate,
+      time_start: start,
+      time_end: end,
+      duration_sec: dur
+    });
+    console.log("Logging diary time: ----------");
 }

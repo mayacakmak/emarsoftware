@@ -13,7 +13,7 @@ var forceUpdateAll = false;
 /* Function that needs to be called whenever the face preview needs to be renewed */
 function updateFace() {
   if (allUserData != null && selectedUser != null && selectedFace != null) {
-    if (selectedUser == Database.uid && !isSetup){
+    if (selectedUser == Database.displayName && !isSetup){
       if (selectedFaceList === 'all') {
         newParameters = allUserData[selectedUser].faces[selectedFace];
       } else {
@@ -51,7 +51,7 @@ function updateUserFaceList() {
       thumbHTML += "src='" + imgSrc + "' ";
       thumbHTML +=
         'onclick=\'selectedFaceChanged(this, "' +
-        Database.uid +
+        Database.displayName +
         '",' +
         i +
         ", \"user\")'";
@@ -72,7 +72,7 @@ function updateUserFaceList() {
 function removeUserFace(index) {
   var newRobotFaces = currentUserData.faces;
   newRobotFaces.splice(index, 1);
-  var dir = '/users/' + Database.uid + "/robot/customAPI/states/";
+  var dir = '/users/' + Database.displayName + "/robot/customAPI/states/";
   var dbRef = firebase.database().ref(dir);
   var updates = {faces: newRobotFaces};
   dbRef.update(updates);
@@ -93,9 +93,9 @@ function updateAllUsersFaceList(snapshot) {
     }
 
     var allUserKeys = Object.keys(allUserData);
-    var currentUserIndex = allUserKeys.indexOf(Database.uid);
+    var currentUserIndex = allUserKeys.indexOf(Database.displayName);
     // allUserKeys.splice(currentUserIndex, 1);
-    // allUserKeys.unshift(Database.uid);
+    // allUserKeys.unshift(Database.displayName);
 
     var updAllUserData = {};
 
@@ -103,7 +103,7 @@ function updateAllUsersFaceList(snapshot) {
       var id = allUserKeys[j];
 
       // If setup, include the current user's faces at the beginning
-      // if (id != Database.uid || isSetup) {
+      // if (id != Database.displayName || isSetup) {
         var userData = allUserData[id];
 
         if (userData.public) {
@@ -159,15 +159,15 @@ function updateAllUsersFaceList(snapshot) {
 //     }
     
 //     var allUserKeys = Object.keys(allUserData);
-//     var currentUserIndex = allUserKeys.indexOf(Database.uid);
+//     var currentUserIndex = allUserKeys.indexOf(Database.displayName);
 //     allUserKeys.splice(currentUserIndex,1);
-//     allUserKeys.unshift(Database.uid);
+//     allUserKeys.unshift(Database.displayName);
 
 //     for (var j = 0; j < allUserKeys.length; j++) {
 //       var id = allUserKeys[j];
            
 //       // If setup, include the current user's faces at the beginning
-//       if (id != Database.uid || isSetup) {
+//       if (id != Database.displayName || isSetup) {
 
 //         var userData = allUserData[id];
 
@@ -308,7 +308,7 @@ function selectedFaceChanged(target, user, index, selector, ignore = false) {
 
 /* Callback function for when the current face is renamed, to update the database accordingly*/
 function faceRenamed() {
-  if (selectedUser == Database.uid) {
+  if (selectedUser == Database.displayName) {
     var dir = "users/" + selectedUser;
     var dbRef = firebase.database().ref(dir + "/robot/customAPI/states/faces/" + selectedFace + "/");
     var newParamObj = {};
@@ -323,7 +323,7 @@ function faceRenamed() {
 
 /* Callback function for when the current face description is renamed, to update the database accordingly*/
 function descriptionChanged() {
-  if (selectedUser == Database.uid) {
+  if (selectedUser == Database.displayName) {
     var dir = "users/" + selectedUser;
     var dbRef = firebase.database().ref(dir + "/robot/customAPI/states/faces/" + selectedFace + "/");
     var newParamObj = {};
@@ -342,7 +342,7 @@ function faceViewed(target, user, index, selector) {
   if (!currentUserPublicData.viewedFaces) {
     // Logged in user does not have the viewedFaces field yet
     forceUpdateAll = true;
-    var dir = 'users/' + Database.uid;
+    var dir = 'users/' + Database.displayName;
     var dbRef = firebase
       .database()
       .ref(dir + '/public/viewedFaces/' + user);
@@ -352,7 +352,7 @@ function faceViewed(target, user, index, selector) {
   } else if (!currentUserPublicData.viewedFaces[user]) {
     // Logged in user has not viewed any other user
     forceUpdateAll = true;
-    var dir = 'users/' + Database.uid;
+    var dir = 'users/' + Database.displayName;
     var dbRef = firebase
       .database()
       .ref(dir + '/public/viewedFaces/' + user);
@@ -362,7 +362,7 @@ function faceViewed(target, user, index, selector) {
   } else if (!currentUserPublicData.viewedFaces[user].includes(index)) {
     // Logged in user has viewed other faces by this user, but not this face
     forceUpdateAll = true;
-    var dir = 'users/' + Database.uid;
+    var dir = 'users/' + Database.displayName;
     var dbRef = firebase
       .database()
       .ref(dir + '/public/viewedFaces/' + user);
@@ -381,7 +381,7 @@ function faceViewed(target, user, index, selector) {
 
 /* Function to update the thumb corresponding to face parameters in the database */
 function updateFaceThumb(user, id) {
-  if (user === Database.uid && selectedFaceList !== 'all') {
+  if (user === Database.displayName && selectedFaceList !== 'all') {
     var svg = document.getElementById('faceSVG');
     var imgsrc = svg2img(svg);
     var dbRef =
@@ -428,7 +428,7 @@ function shareFace() {
   var newFaceIndex = 0;
   if (currentUserPublicData != null && currentUserPublicData.faces != undefined)
     newFaceIndex = currentUserPublicData.faces.length;
-  var dir = 'users/' + Database.uid;
+  var dir = 'users/' + Database.displayName;
   var dbRef = firebase
     .database()
     .ref(dir + '/public/faces/' + newFaceIndex + '/');
@@ -444,7 +444,7 @@ function shareFace() {
 function setCurrentFace() {
   var dbRef = firebase
     .database()
-    .ref('/users/' + Database.uid + '/robot/state/');
+    .ref('/users/' + Database.displayName + '/robot/state/');
   dbRef.update({ 'currentFace': selectedFace }, function (error) {
     console.log(error);
   });
@@ -481,7 +481,7 @@ function storeUserFace(faceParameters) {
   var newFaceIndex = 0;
   if (currentUserData != null && currentUserData.faces != undefined)
     newFaceIndex = currentUserData.faces.length;
-  var dir = 'users/' + Database.uid;
+  var dir = 'users/' + Database.displayName;
   var dbRef = firebase
     .database()
     .ref(dir + '/robot/customAPI/states/faces/' + newFaceIndex + '/');
