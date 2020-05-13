@@ -74,7 +74,7 @@ function Database(config, readyCallback) {
     }
   };
 
-  Database.handleSignIn = function () {
+  Database.handleSignIn = function (callback) {
     const displayName = Database.displayName;
     console.log('handleSignIn', displayName);
     var dir = 'users/' + displayName;
@@ -145,6 +145,7 @@ function Database(config, readyCallback) {
           }
         });
       }
+      callback();
     });
   }
 
@@ -167,7 +168,7 @@ function Database(config, readyCallback) {
       }
 
       // Create directory in database to save this user's data
-      Database.logEvent('SessionStarted');
+      // Database.logEvent('SessionStarted');
 
       if (Database.readyCallback != null || Database.readyCallback != undefined)
         Database.readyCallback();

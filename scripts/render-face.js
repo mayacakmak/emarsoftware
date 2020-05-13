@@ -14,5 +14,41 @@ function initializeRenderFace() {
   RobotBackend.initializeFace();
   
   window.onresize = Face.draw;
+  var svg = document.getElementById('faceSVG');
+  if (currentState.listening === true) {
+    svg.setAttribute('style', 'transform: rotate(5deg);');
+  } else {
+    svg.setAttribute('style', 'transform: rotate(0deg);');
+  }
 }
 
+function closeRobot() {
+  endFaceRenderTime = (new Date()).getTime();
+  calculateTime(
+    sessionStorage.getItem('startFaceRenderTime'),
+    endFaceRenderTime,
+    'faceRender'
+  );
+  window.location.href = 'index.html';
+}
+
+function calculateTime(start, end, event) {
+  var dur = (end - start) / 1000;
+  var currDate = new Date().toDateString();
+  console.log(dur);
+  var dir =
+    'users/' +
+    firebase.auth().currentUser.displayName +
+    '/' +
+    event +
+    '/' +
+    currDate;
+  var dbRef = firebase.database().ref(dir);
+  dbRef.push().set({
+    date: currDate,
+    time_start: start,
+    time_end: end,
+    duration_sec: dur,
+  });
+  console.log('Logging diary time: ----------');
+}

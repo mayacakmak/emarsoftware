@@ -15,8 +15,7 @@ function signIn() {
         console.log(login);
         console.log(firebase.auth().currentUser.displayName);
         Database.displayName = login;
-        Database.handleSignIn();
-        window.location.href = 'index.html';
+        Database.handleSignIn(() => { window.location.href = 'index.html'; });
       }).catch((error) => {
         console.log("Error: ", error);
       });

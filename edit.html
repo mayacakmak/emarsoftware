@@ -30,7 +30,7 @@
             <h2>Public Gallery</h2>
           </div>
           <div class="card-body h-scrollable green-scroll">
-            <div class="btn-group mr-2" id="otherFaceList"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+            <div class="btn-group mr-2" id="publicFaces"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
           </div>
         </div>
         <div class="p-1"><button class="btn btn-success" type="button" onclick="createNewFace()">Add selected face to my robot</button></div>
@@ -43,7 +43,7 @@
             <h2>Private Gallery</h2>
           </div>
           <div class="card-body h-scrollable green-scroll">
-            <div class="btn-group mr-2" id="myFaceList">
+            <div class="btn-group mr-2" id="privateFaces">
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             </div>
             <button class="btn btn-secondary" onclick="createDefaultFace()" id="createDefaultFace">+</button>
@@ -88,7 +88,7 @@
                 <button class="btn btn-warning" onclick="shareFace()" disabled id="shareFace">Share Face!</button>
               </div>
               <div class='col text-center'>
-                <button class="btn btn-warning" onclick="setCurrentFace()" disabled id="setCurrentFace">Set Current Face</button>
+                <button class="btn btn-warning" onclick="setCurrentFace()" id="setCurrentFace">Set Current Face</button>
               </div>
             </div>
           </div>

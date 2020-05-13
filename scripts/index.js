@@ -4,8 +4,6 @@ var currentRobot = -1;
 var robotNames = [];
 var startDiaryTime;
 var endDiaryTime;
-var startFaceRenderTime;
-var endFaceRenderTime;
 
 function databaseReadyCallback() {
   var dbRef = firebase.database().ref('/');
@@ -74,8 +72,7 @@ async function newFaceNotification() {
       count += userData[Database.displayName].public.viewedFaces[elem].length;
     });
   }
-  console.log('count', count, 'total', total);
-  if (count !== total) {
+  if (count < total) {
     notification = document.getElementById('newFaceNotifContainer');
     notification.setAttribute('style', 'display: block;');
   }
@@ -111,22 +108,22 @@ function startGallery() {
 }
 
 function startDiary() {
+  var dir = 'users/' + firebase.auth().currentUser.displayName + '/robot/state';
+  var dbRef = firebase.database().ref(dir);
+  dbRef.update({ listening: true });
   sessionStorage.setItem(startDiaryTime, new Date().getTime());
-  //console.log(startDiaryTime)
   window.location.href = "diary.html";
 }
 
 
 function doneTyping() {
+    var dir =
+      'users/' + firebase.auth().currentUser.displayName + '/robot/state';
+    var dbRef = firebase.database().ref(dir);
+    dbRef.update({ listening: false });
   endDiaryTime = new Date().getTime() ; 
   calculateTime(sessionStorage.getItem(startDiaryTime), endDiaryTime, "diary");
   window.location.href = "index.html";
-}
-
-function closeRobot() {
-  endFaceRenderTime = new Date().getTime();
-  calculateTime(sessionStorage.getItem(startFaceRenderTime), endFaceRenderTime, 'faceRender');
-  window.location.href = 'index.html';
 }
 
 function startVAS() {
@@ -134,7 +131,7 @@ function startVAS() {
 }
 
 function startWebRobot() {
-  sessionStorage.setItem(startFaceRenderTime, new Date().getTime());
+  sessionStorage.setItem('startFaceRenderTime', (new Date()).getTime());
   window.location.href = 'render-face.html';
 }
 
