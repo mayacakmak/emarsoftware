@@ -22,6 +22,7 @@ function databaseReadyCallback() {
         (snapshot.val() && snapshot.val().SessionStarted.date) || 'other';
       console.log(username);
     });
+  newFaceNotification();
 }
 
 function updateUserRobotInfo(snapshot) {
@@ -51,6 +52,32 @@ function updateUserRobotInfo(snapshot) {
   } 
 }
 
+async function newFaceNotification() {
+  var dbUserRef = firebase.database().ref('/users/');
+  let total = 0;
+  const snapshot = await dbUserRef.once('value');
+  const userData = snapshot.val();
+  Object.keys(userData).forEach((element) => {
+    if (userData[element].public && userData[element].public.faces) {
+      total += Object.keys(userData[element].public.faces).length;
+    }
+  });
+  let count = 0;
+  if (
+    userData[Database.displayName] &&
+    userData[Database.displayName].public &&
+    userData[Database.displayName].public.viewedFaces
+  ) {
+    Object.keys(userData[Database.displayName].public.viewedFaces).forEach((elem) => {
+      count += userData[Database.displayName].public.viewedFaces[elem].length;
+    });
+  }
+  if (count < total) {
+    notification = document.getElementById('newFaceNotifContainer');
+    notification.setAttribute('style', 'display: block;');
+  }
+}
+
 function setRobot(robotId) {
   console.log("Setting robot: " + robotId);
   var dir = '/users/'+ (Database.uid) + "/";
@@ -72,22 +99,28 @@ function startEditor() {
   window.location.href = "edit.html";
 }
 
-function startDiary() {
-  window.location.href = 'diary.html';
-}
+// function startDiary() {
+//   window.location.href = 'diary.html';
+// }
 
 function startGallery() {
     window.location.href = 'gallery.html';
 }
 
 function startDiary() {
+  var dir = 'users/' + firebase.auth().currentUser.displayName + '/robot/state';
+  var dbRef = firebase.database().ref(dir);
+  dbRef.update({ listening: true });
   sessionStorage.setItem(startDiaryTime, new Date().getTime());
-  //console.log(startDiaryTime)
   window.location.href = "diary.html";
 }
 
 
 function doneTyping() {
+    var dir =
+      'users/' + firebase.auth().currentUser.displayName + '/robot/state';
+    var dbRef = firebase.database().ref(dir);
+    dbRef.update({ listening: false });
   endDiaryTime = new Date().getTime() ; 
   calculateTime(sessionStorage.getItem(startDiaryTime), endDiaryTime, "diary");
   window.location.href = "index.html";
@@ -98,6 +131,7 @@ function startVAS() {
 }
 
 function startWebRobot() {
+  sessionStorage.setItem('startFaceRenderTime', (new Date()).getTime());
   window.location.href = 'render-face.html';
 }
 

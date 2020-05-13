@@ -6,8 +6,9 @@ function initializeEdit() {
   isEdit = true;
 
   var dbUserRef = firebase.database().ref('/users/');
-  dbUserRef.on("value", updateAllUsersFaceList);
-  
+  // dbUserRef.on("value", updateAllUsersFaceList);
+  dbUserRef.on('value', renderPublicFaces);
+
   var dbUserRef = firebase.database().ref('/users/' + Database.displayName + "/robot/");
   dbUserRef.on("value", currentUserDataChanged);
 
@@ -27,13 +28,15 @@ function currentUserDataChanged(snapshot) {
     robotData['customAPI']['states'] &&
     robotData['customAPI']['states']['faces']
   ) {
-    currentUserData = robotData['customAPI']['states']; // Right now gets contents of user/uid/public, so object with key 'faces'
+    // currentUserData = robotData['customAPI']['states']; // Right now gets contents of user/uid/public, so object with key 'faces'
+    renderPrivateFaces(robotData['customAPI']['states']);
   } else {
     currentUserData = {
       faces: [],
     }
   }
-  updateUserFaceList();
+
+  // updateUserFaceList();
   updateFace();
   updateFaceEditor();
 }
@@ -52,21 +55,24 @@ function updateFaceEditor() {
   if (allUserData != null && selectedUser != null && selectedFace != null) {
     if (selectedUser == Database.displayName){
       if (selectedUser == Database.displayName && !isSetup) {
-        if (selectedFaceList === 'user') {
+        if (selectedFaceList === 'privateFaces') {
           newParameters = currentUserData.faces[selectedFace];
         } else if (selectedFaceList === 'all') {
-          newParameters = allUserData[selectedUser].faces[selectedFace];
+          newParameters = allUserData.find((element) => element.user === selectedUser && element.index === selectedFace);
+          // newParameters = allUserData[selectedUser].faces[selectedFace];
         }
       }
     }
     else {
-      var selectedUserData = allUserData[selectedUser];
-      newParameters = selectedUserData.faces[selectedFace];
+      newParameters = allUserData.find(
+        (element) =>
+          element.user === selectedUser && element.index === selectedFace
+      );
     }
   
       var mainDiv = document.getElementById("faceParameters");
 
-      if (selectedUser == Database.displayName && selectedFaceList === 'user') {
+      if (selectedUser == Database.displayName && selectedFaceList === 'privateFaces') {
 
         /* Check if the scales are created already */
         var scaleExample = document.getElementById("eyeCenterDistPercent");
@@ -143,12 +149,9 @@ function updateFaceEditor() {
         if (newParameters.public) {
           shareButton.innerHTML = 'Shared!';
           disableButton('shareFace');
-          disableButton('setCurrentFace');
         } else {
           shareButton.innerHTML = 'Share Face!';
           enableButton('shareFace');
-          enableButton('setCurrentFace');
-          console.log('enable');
         }
       }
     else {
@@ -172,7 +175,6 @@ function updateFaceEditor() {
         }
         document.getElementById('shareFace').innerHTML = 'Share Face!';
         disableButton('shareFace');
-        disableButton('setCurrentFace');
       }
 
       Face.draw();
