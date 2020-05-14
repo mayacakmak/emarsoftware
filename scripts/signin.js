@@ -1,13 +1,14 @@
 var config = new Config();
 var db = new Database(config.config, databaseReadyCallback);
-
+var participants = ['simran_bhatia', 'emar_uw', 'emar_hcde', 'emar_cse', 
+                    'kai_mihata', 'patricia_oliveira', 'elin_bjorling']
 function databaseReadyCallback() {
   console.log('currUser:', firebase.auth().currentUser.uid);
 }
 
 function signIn() {
   var login = document.getElementById("loginID").value
-  if (login.length != 0) {
+  if (login.length != 0 && participants.includes(login)) {
     if (firebase.auth().currentUser.displayName != login) {
       firebase.auth().currentUser.updateProfile({
         displayName: login

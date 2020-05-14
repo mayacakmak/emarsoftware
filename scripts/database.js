@@ -137,7 +137,7 @@ function Database(config, readyCallback) {
             public: true,
           },
         };
-        dbRef.set(upd, function (error) {
+        dbRef.push().set(upd, function (error) {
           if (error) {
             console.log('error', error);
           } else {

@@ -99,9 +99,13 @@ function startEditor() {
   window.location.href = "edit.html";
 }
 
-// function startDiary() {
-//   window.location.href = 'diary.html';
-// }
+function startInstructions() {
+   window.location.href = "instructions.html";
+}
+
+function startContact() {
+  window.location.href = "contact.html";
+}
 
 function startGallery() {
     window.location.href = 'gallery.html';
@@ -123,7 +127,7 @@ function doneTyping() {
     dbRef.update({ listening: false });
   endDiaryTime = new Date().getTime() ; 
   calculateTime(sessionStorage.getItem(startDiaryTime), endDiaryTime, "diary");
-  window.location.href = "index.html";
+  window.location.href = "render-face.html";
 }
 
 function startVAS() {
