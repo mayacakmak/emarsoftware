@@ -1,7 +1,23 @@
 var config = new Config();
 var db = new Database(config.config, databaseReadyCallback);
-var participants = ['simran_bhatia', 'emar_uw', 'emar_hcde', 'emar_cse', 
-                    'kai_mihata', 'patricia_oliveira', 'elin_bjorling','kai_mihata_test']
+var participants = [
+  'simran_bhatia',
+  'emar_uw',
+  'emar_hcde',
+  'emar_cse',
+  'kai_mihata',
+  'patricia_oliveira',
+  'elin_bjorling',
+  'kai_mihata_test',
+  'simran_b',
+  'emar_uw',
+  'emar_hcde',
+  'emar_cse',
+  'kai_m',
+  'patricia_o',
+  'elin_b',
+  'kai_m_test',
+];
 function databaseReadyCallback() {
   console.log('currUser:', firebase.auth().currentUser.uid);
 }
