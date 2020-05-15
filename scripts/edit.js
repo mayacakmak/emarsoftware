@@ -46,9 +46,9 @@ function currentUserPublicDataChanged(snapshot) {
   if (!currentUserPublicData['faces']) {
     currentUserPublicData.faces = [];
   }
-  if (!currentUserPublicData['viewedFaces']) {
-    currentUserPublicData.viewedFaces = {};
-  }
+  // if (!currentUserPublicData['viewedFaces']) {
+  //   currentUserPublicData.viewedFaces = {};
+  // }
 }
 
 function updateFaceEditor() {
@@ -155,8 +155,10 @@ function updateFaceEditor() {
         }
       }
     else {
+        // mainDiv.innerHTML =
+        //   "You cannot edit this face. Click the 'Add new' button above to copy this face and edit it.";
         mainDiv.innerHTML =
-          "You cannot edit this face. Click the 'Add new' button above to copy this face and edit it.";
+          '<div class="alert alert-success" role="alert">To edit a face, Select and Add from the Public Gallery</div>';
         faceName = document.getElementById("faceName");
         faceName.disabled="disabled";
         faceDescription = document.getElementById('faceDescription');
@@ -207,6 +209,10 @@ function updateFaceEditor() {
 }
 
 function createBooleanInput(id, name, current, optionNames) {
+  // TEMPORARY FOR CEMAR
+  if (id === 'hasText') {
+    return;
+  }
   var radio1 =
     ' Yes <input type="radio" onchange="newParameterValue(this, \'current\')" ' +
     " name = " +

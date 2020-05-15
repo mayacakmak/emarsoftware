@@ -137,17 +137,29 @@ function Database(config, readyCallback) {
             public: true,
           },
         };
-        dbRef.push().set(upd, function (error) {
-          if (error) {
-            console.log('error', error);
-          } else {
-            console.log('set user data successfully');
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            var defaultFace = JSON.parse(this.responseText);
+            upd.robot.customAPI.states = { faces: [ defaultFace ]};
+            dbRef.update(upd, function (error) {
+              if (error) {
+                console.log('error', error);
+              } else {
+                console.log('set user data successfully');
+              }
+              callback();
+            });
           }
-        });
+        };
+        xmlhttp.open('GET', './default_face.json', true);
+        xmlhttp.send();
+      } else {
+        callback();
       }
-      callback();
     });
   }
+
 
   Database.handleError = function (error) {
     var errorCode = error.code;

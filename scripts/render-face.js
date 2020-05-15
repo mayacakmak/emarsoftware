@@ -23,6 +23,10 @@ function initializeRenderFace() {
 }
 
 function closeRobot() {
+  var dir =
+    'users/' + firebase.auth().currentUser.displayName + '/robot/state';
+  var dbRef = firebase.database().ref(dir);
+  dbRef.update({ listening: false });
   endFaceRenderTime = (new Date()).getTime();
   calculateTime(
     sessionStorage.getItem('startFaceRenderTime'),

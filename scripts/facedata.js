@@ -12,7 +12,9 @@ var forceUpdateAll = false;
 
 /* Function that needs to be called whenever the face preview needs to be renewed */
 function updateFace() {
+  console.log('???', allUserData, selectedUser, selectedFace);
   if (allUserData != null && selectedUser != null && selectedFace != null) {
+    console.log('!!');
     if (selectedUser == Database.displayName && !isSetup){
       if (selectedFaceList === 'publicFaces') {
         newParameters = allUserData.find((element) => element.user === selectedUser && element.index === selectedFace);
@@ -178,19 +180,39 @@ function updateAllUsersFaceList(snapshot) {
 }
 
 function renderPublicFaces(snapshot) {
+  console.log(snapshot.val());
   const updated = sortPublicFaces(snapshot.val());
   if (allUserData == null || updated.length !== allUserData.length)  {
+    allUserData = updated;
+    console.log(updated);
     renderUserFaceList(updated, 'publicFaces');
   } else {
+    allUserData = updated;
     updselectedFaceChanged(document.getElementById(selectedUser + selectedFace + selectedFaceList), selectedUser, selectedFace, selectedFaceList);
   }
-  allUserData = updated;
   updateFace();
   updateFaceEditor();
 }
 
+// function TEMPsortPublicFaces(snapshot) {
+//   const keys = Object.keys(snapshot);
+//   const faces = [];
+//   keys.forEach((element) => {
+//     element = snapshot[element];
+//     if (element.customAPI && element.customAPI.states && element.customAPI.states.faces) {
+//       element.customAPI.states.faces.forEach((face, index) => {
+//         console.log(face);
+//         faces.push({ ...face, user: element.name, index });
+//       })
+//     }
+//   });
+//   console.log(faces);
+//   return faces;
+// }
+
 function renderPrivateFaces(faceData) {
   const updated = sortPrivateFaces(faceData.faces);
+  updated.forEach((elem) => console.log(elem));
   if (currentUserData == null || currentUserData.faces == null || updated !== currentUserData.faces)  {
     if (currentUserData === null) {
       currentUserData = {};
@@ -222,14 +244,14 @@ function sortPublicFaces(allUserData) {
   const newFaces = [];
   const viewedFaces = [];
   const allUserKeys = Object.keys(allUserData);
+  const group_id = allUserData[Database.displayName]['group_id'];
   for (var j = 0; j < allUserKeys.length; j++) {
     var id = allUserKeys[j];
 
     // If setup, include the current user's faces at the beginning
     // if (id != Database.displayName || isSetup) {
     var userData = allUserData[id];
-
-    if (userData.public) {
+    if (userData.public && userData['group_id'] && userData['group_id'] === group_id) {
       var nUserConfigs = 0;
       var faces = userData.public.faces;
       if (faces != null && faces != undefined) nUserConfigs = faces.length;
@@ -239,6 +261,7 @@ function sortPublicFaces(allUserData) {
       // updAllUserData[id]['faces'] = faces;
       for (i = 0; i < nUserConfigs; i++) {
         if (
+          !currentUserPublicData ||
           !currentUserPublicData.viewedFaces ||
           !currentUserPublicData.viewedFaces[id] ||
           !currentUserPublicData.viewedFaces[id].includes(i)
@@ -285,7 +308,8 @@ function renderUserFaceList(faceData, faceList) {
     thumbHTML += '<p>' + name + ' </p></div>';
     if (
       faceList === "publicFaces" &&
-      (!currentUserPublicData.viewedFaces ||
+      (!currentUserPublicData ||
+      !currentUserPublicData.viewedFaces ||
       !currentUserPublicData.viewedFaces[element.user] ||
       !currentUserPublicData.viewedFaces[element.user].includes(element.index))
     ) {
@@ -589,7 +613,7 @@ function createNewFace() {
   var newIndex = currentUserData.faces.length;
   newParameters['public'] = false;
   storeUserFace(newParameters);
-  recordData('createdNewFace', {});
+  recordData('copiedFaceFromPublic', {});
   updselectedFaceChanged(document.getElementById(Database.displayName + newIndex + 'privateFaces'), Database.displayName, newIndex, 'privateFaces');
 }
 
@@ -626,6 +650,11 @@ function storeUserFace(faceParameters) {
 }
 
 function backToIndexPage() {
+  calculateTime(
+    sessionStorage.getItem('startEditTime'),
+    new Date().getTime(),
+    'faceEdit'
+  );
   window.location.href = "index.html";
 }
 
@@ -643,4 +672,25 @@ function recordData(category, data = {}) {
     ...data,
   });
   console.log('Logging data: ----------');
+}
+
+function calculateTime(start, end, event) {
+  var dur = (end - start) / 1000;
+  var currDate = new Date().toDateString();
+  console.log(dur);
+  var dir =
+    'users/' +
+    firebase.auth().currentUser.displayName +
+    '/' +
+    event + '/' +
+    currDate +
+    '/duration/';
+  var dbRef = firebase.database().ref(dir);
+  dbRef.push().set({
+    date: currDate,
+    time_start: start,
+    time_end: end,
+    duration_sec: dur,
+  });
+  console.log('Logging diary time: ----------');
 }

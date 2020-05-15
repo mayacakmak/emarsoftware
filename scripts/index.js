@@ -57,8 +57,14 @@ async function newFaceNotification() {
   let total = 0;
   const snapshot = await dbUserRef.once('value');
   const userData = snapshot.val();
+  const group_id = userData[Database.displayName]['group_id']
   Object.keys(userData).forEach((element) => {
-    if (userData[element].public && userData[element].public.faces) {
+    if (
+      userData[element].public &&
+      userData[element].public.faces &&
+      userData[element]['group_id'] &&
+      userData[element]['group_id'] === group_id
+    ) {
       total += Object.keys(userData[element].public.faces).length;
     }
   });
@@ -96,6 +102,7 @@ function enableButton(buttonID) {
 }
 
 function startEditor() {
+  sessionStorage.setItem('startEditTime', new Date().getTime());
   window.location.href = "edit.html";
 }
 
@@ -121,10 +128,6 @@ function startDiary() {
 
 
 function doneTyping() {
-    var dir =
-      'users/' + firebase.auth().currentUser.displayName + '/robot/state';
-    var dbRef = firebase.database().ref(dir);
-    dbRef.update({ listening: false });
   endDiaryTime = new Date().getTime() ; 
   calculateTime(sessionStorage.getItem(startDiaryTime), endDiaryTime, "diary");
   window.location.href = "render-face.html";
