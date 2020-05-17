@@ -6,20 +6,20 @@ var startDiaryTime;
 var endDiaryTime;
 
 function databaseReadyCallback() {
-  var dbRef = firebase.database().ref('/');
+  var dbRef = firebase.database().ref("/");
   // dbRef.on("value", updateUserRobotInfo);
 
   var displayName = firebase.auth().currentUser.displayName;
-  var uidDiv = document.getElementById('loginID');
+  var uidDiv = document.getElementById("loginID");
   if (uidDiv) {
     uidDiv.innerHTML = displayName;
   }
   firebase
     .database()
-    .ref('/users/' + displayName + '/analytics/' + Database.session)
-    .on('value', function (snapshot) {
+    .ref("/users/" + displayName + "/analytics/" + Database.session)
+    .on("value", function(snapshot) {
       var username =
-        (snapshot.val() && snapshot.val().SessionStarted.date) || 'other';
+        (snapshot.val() && snapshot.val().SessionStarted.date) || "other";
       console.log(username);
     });
   newFaceNotification();
@@ -36,34 +36,37 @@ function updateUserRobotInfo(snapshot) {
     var robots = database.robots;
 
     robotNames = [];
-    for (var i=0; i<robots.length; i++) {
+    for (var i = 0; i < robots.length; i++) {
       robotNames.push(robots[i].name);
-      robotListHTML += "<a class='dropdown-item' href='#' onclick='setRobot(" + i + ")'>" + robots[i].name + "</a>";
+      robotListHTML +=
+        "<a class='dropdown-item' href='#' onclick='setRobot(" +
+        i +
+        ")'>" +
+        robots[i].name +
+        "</a>";
     }
-    
+
     var robotsDiv = document.getElementById("robots");
     robotsDiv.innerHTML = robotListHTML;
-    
+
     var selectedRobotDiv = document.getElementById("selectedRobot");
-    if (currentRobot == -1)
-      selectedRobotDiv.innerHTML = "Select robot";
-    else
-      selectedRobotDiv.innerHTML = robotNames[currentRobot];
-  } 
+    if (currentRobot == -1) selectedRobotDiv.innerHTML = "Select robot";
+    else selectedRobotDiv.innerHTML = robotNames[currentRobot];
+  }
 }
 
 async function newFaceNotification() {
-  var dbUserRef = firebase.database().ref('/users/');
+  var dbUserRef = firebase.database().ref("/users/");
   let total = 0;
-  const snapshot = await dbUserRef.once('value');
+  const snapshot = await dbUserRef.once("value");
   const userData = snapshot.val();
-  const group_id = userData[Database.displayName]['group_id']
-  Object.keys(userData).forEach((element) => {
+  const group_id = userData[Database.displayName]["group_id"];
+  Object.keys(userData).forEach(element => {
     if (
       userData[element].public &&
       userData[element].public.faces &&
-      userData[element]['group_id'] &&
-      userData[element]['group_id'] === group_id
+      userData[element]["group_id"] &&
+      userData[element]["group_id"] === group_id
     ) {
       total += Object.keys(userData[element].public.faces).length;
     }
@@ -74,21 +77,23 @@ async function newFaceNotification() {
     userData[Database.displayName].public &&
     userData[Database.displayName].public.viewedFaces
   ) {
-    Object.keys(userData[Database.displayName].public.viewedFaces).forEach((elem) => {
+    Object.keys(
+      userData[Database.displayName].public.viewedFaces
+    ).forEach(elem => {
       count += userData[Database.displayName].public.viewedFaces[elem].length;
     });
   }
   if (count < total) {
-    notification = document.getElementById('newFaceNotifContainer');
-    notification.setAttribute('style', 'display: block;');
+    notification = document.getElementById("newFaceNotifContainer");
+    notification.setAttribute("style", "display: block;");
   }
 }
 
 function setRobot(robotId) {
   console.log("Setting robot: " + robotId);
-  var dir = '/users/'+ (Database.uid) + "/";
+  var dir = "/users/" + Database.uid + "/";
   var dbRef = firebase.database().ref(dir);
-  dbRef.update({currentRobot:robotId});
+  dbRef.update({ currentRobot: robotId });
 }
 
 function disableButton(buttonID) {
@@ -102,12 +107,12 @@ function enableButton(buttonID) {
 }
 
 function startEditor() {
-  sessionStorage.setItem('startEditTime', new Date().getTime());
+  sessionStorage.setItem("startEditTime", new Date().getTime());
   window.location.href = "edit.html";
 }
 
 function startInstructions() {
-   window.location.href = "instructions.html";
+  window.location.href = "instructions.html";
 }
 
 function startContact() {
@@ -115,22 +120,31 @@ function startContact() {
 }
 
 function startGallery() {
-    window.location.href = 'gallery.html';
+  window.location.href = "gallery.html";
 }
 
 function startDiary() {
-  var dir = 'users/' + firebase.auth().currentUser.displayName + '/robot/state';
+  var dir = "users/" + firebase.auth().currentUser.displayName + "/robot/state";
   var dbRef = firebase.database().ref(dir);
   dbRef.update({ listening: true });
   sessionStorage.setItem(startDiaryTime, new Date().getTime());
   window.location.href = "diary.html";
 }
 
-
 function doneTyping() {
-  endDiaryTime = new Date().getTime() ; 
-  calculateTime(sessionStorage.getItem(startDiaryTime), endDiaryTime, "diary");
-  window.location.href = "render-face.html";
+  var diaryText = document.getElementById("diaryText").value;
+  if (diaryText.length != 0) {
+    endDiaryTime = new Date().getTime();
+    calculateTime(
+      sessionStorage.getItem(startDiaryTime),
+      endDiaryTime,
+      "diary"
+    );
+    window.location.href = "render-face.html";
+  } 
+  else {
+    alert("Please type your reflection, based on the Robot's prompt");
+  }
 }
 
 function startVAS() {
@@ -138,32 +152,32 @@ function startVAS() {
 }
 
 function startWebRobot() {
-  sessionStorage.setItem('startFaceRenderTime', (new Date()).getTime());
-  window.location.href = 'render-face.html';
+  sessionStorage.setItem("startFaceRenderTime", new Date().getTime());
+  window.location.href = "render-face.html";
 }
 
 function logout() {
   Database.signOut();
-  window.location.href = 'signin.html';
+  window.location.href = "signin.html";
 }
 
 function calculateTime(start, end, event) {
   var dur = (end - start) / 1000;
-  var currDate = (new Date()).toDateString();
+  var currDate = new Date().toDateString();
   console.log(dur);
   var dir =
-    'users/' +
+    "users/" +
     firebase.auth().currentUser.displayName +
-    '/' +
+    "/" +
     event +
-    '/' +
+    "/" +
     currDate;
   var dbRef = firebase.database().ref(dir);
   dbRef.push().set({
-      date: currDate,
-      time_start: start,
-      time_end: end,
-      duration_sec: dur
-    });
+    date: currDate,
+    time_start: start,
+    time_end: end,
+    duration_sec: dur
+  });
   console.log("Logging diary time: ----------");
 }
