@@ -24,7 +24,13 @@ function Database(config, readyCallback) {
    * Function to initialize firebase and sign in anonymously
    */
   Database.initialize = function () {
-    Database.app = firebase.initializeApp(Database.config);
+    console.log(firebase, firebase.apps);
+    // console.log('auth', firebase.auth());
+    if (!firebase.apps.length) {
+      Database.app = firebase.initializeApp(Database.config);
+    } else {
+      Database.app = firebase.apps[0];
+    }
     firebase.auth().onAuthStateChanged(Database.handleAuthStateChange);
     Database.signInAnonymously();
   };
@@ -62,26 +68,29 @@ function Database(config, readyCallback) {
   );
 
   Database.signInAnonymously = function () {
-    if (Database.uid == null) {
-      firebase.auth().signInAnonymously().then(() => {
-        const name = firebase.auth().currentUser.displayName;
+    console.log('anonymously');
+    console.log(Database.displayName);
+    if (Database.displayName == null) {
+      console.log('???', firebase.auth());
+      Database.app.auth().signInAnonymously().then((user) => {
+        console.log(user);
+        const name = Database.app.auth().currentUser.displayName;
         if (name === null && !window.location.href.includes('signin.html')) {
           window.location.href = 'signin.html';
         } else {
           Database.displayName = name;
         }
+        console.log(Database.displayName);
       }).catch(Database.handleError);
     }
   };
 
   Database.handleSignIn = function (callback) {
     const displayName = Database.displayName;
-    console.log('handleSignIn', displayName);
     var dir = 'users/' + displayName;
     var dbRef = firebase.database().ref(dir);
     dbRef.once('value').then(function (snapshot) {
       var robot = snapshot.child('robot').val(); // If robot exists
-      console.log('robot', robot);
       if (robot == null) {
         // Need to add new user information to the database
         var upd = {
@@ -168,6 +177,7 @@ function Database(config, readyCallback) {
   };
 
   Database.handleAuthStateChange = function (user) {
+    console.log('auth state changed');
     if (user) {
       Database.isAnonymous = user.isAnonymous;
       Database.uid = user.uid;

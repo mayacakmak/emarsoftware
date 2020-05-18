@@ -205,7 +205,7 @@
     "current": 2.95,
     "max": 40,
     "min": 1,
-    "name": "Mouth tickness",
+    "name": "Mouth thickness",
     "type": "number"
   },
   "mouthWPercent": {

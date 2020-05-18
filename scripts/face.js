@@ -41,7 +41,7 @@ function Face() {
       faceHeight = Math.round(faceWidth*0.5625);
 
     faceDiv.style.height = faceHeight + "px";  
-    faceDiv.style.backgroundColor = Face.parameters.backgroundColor;
+    // faceDiv.style.backgroundColor = Face.parameters.backgroundColor;
 
     var svg = document.getElementById("faceSVG");
     svg.innerHTML = "";
@@ -90,10 +90,10 @@ function Face() {
     background.setAttribute("cy", 0);
     background.setAttribute("fill", Face.parameters.backgroundColor);
     svg.appendChild(background);
-    document.documentElement.setAttribute(
-      'style',
-      'background-color: ' + Face.parameters.backgroundColor + ';'
-    );
+    // document.documentElement.setAttribute(
+    //   'style',
+    //   'background-color: ' + Face.parameters.backgroundColor + ';'
+    // );
   }
   
   Face.drawSpeechBubble = function(hasText) {

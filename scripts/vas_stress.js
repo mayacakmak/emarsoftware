@@ -14,6 +14,10 @@ stressSlider.oninput = function() {
   stress = this.value;
 };
 
+function backToIndexPage() {
+  window.location.href = "index.html";
+}
+
 function recordStress() {
   if (stress === "not changed") {
     alert("Please move the slider to indicate your stress levels.");

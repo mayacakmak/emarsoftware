@@ -23,6 +23,7 @@ function initializeRenderFace() {
 }
 
 function closeRobot() {
+  const backPage = currentState.listening;
   var dir =
     'users/' + firebase.auth().currentUser.displayName + '/robot/state';
   var dbRef = firebase.database().ref(dir);
@@ -33,7 +34,11 @@ function closeRobot() {
     endFaceRenderTime,
     'faceRender'
   );
-  window.location.href = 'index.html';
+  if (!backPage) {
+    window.history.back();
+  } else {
+    window.location.href = 'index.html';
+  }
 }
 
 function calculateTime(start, end, event) {

@@ -35,7 +35,8 @@
             <div class="btn-group mr-2" id="publicFaces"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
           </div>
         </div>
-        <div class="p-1"><button class="btn btn-success" type="button" onclick="createNewFace()">Add selected face to my robot</button></div>
+        <div class="p-1"><button class="btn btn-warning" onclick="setCurrentFace()" id="setCurrentFace">Set Face to my Robot!</button>
+</div>
       </div>
     </div>
     <div class="card-deck pb-3">
@@ -48,7 +49,7 @@
             <div class="btn-group mr-2" id="privateFaces">
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             </div>
-            <button class="btn btn-secondary" onclick="createDefaultFace()" id="createDefaultFace">+</button>
+            <button class="btn btn-secondary" onclick="createDefaultFace()" id="createDefaultFace">+ Create New Face</button>
           </div>
         </div>
       </div>
@@ -93,10 +94,7 @@
               </form>
             <div class="d-flex justify-content-center mt-2">
               <div class='col text-center'>
-                <button class="btn btn-warning" onclick="shareFace()" disabled id="shareFace">Share Face!</button>
-              </div>
-              <div class='col text-center'>
-                <button class="btn btn-warning" onclick="setCurrentFace()" id="setCurrentFace">Set Current Face</button>
+                <button class="btn btn-warning" onclick="shareFace()" disabled id="shareFace">Share Face in Public Gallery!</button>
               </div>
             </div>
           </div>

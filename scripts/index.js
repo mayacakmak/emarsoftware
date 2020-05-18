@@ -90,7 +90,6 @@ async function newFaceNotification() {
 }
 
 function setRobot(robotId) {
-  console.log("Setting robot: " + robotId);
   var dir = "/users/" + Database.uid + "/";
   var dbRef = firebase.database().ref(dir);
   dbRef.update({ currentRobot: robotId });
