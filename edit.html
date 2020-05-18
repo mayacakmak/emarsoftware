@@ -6,8 +6,10 @@
 <head>
   <meta charset="utf-8">
   <title>Robot Study</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/style.processed.css">
+  <link rel="stylesheet" href="styles/mobile.css">
 </head>
 
 <body>
@@ -16,14 +18,14 @@
     <div class="topbar-right" id="top"><span id="uid" style="color:white"></span></div>
   </div>
   <div class="container-fluid px-sm-5 pb-4">
-    <div class="row">
+    <div class="card-deck">
       <div class="col text-center">
         <h1 class="display-4">Face Editing Panel</h1>
         <div>
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="card-deck">
       <div class="col py-3">
         <div class="card">
           <div class="card-header bg-light">
@@ -36,7 +38,7 @@
         <div class="p-1"><button class="btn btn-success" type="button" onclick="createNewFace()">Add selected face to my robot</button></div>
       </div>
     </div>
-    <div class="row pb-3">
+    <div class="card-deck pb-3">
       <div class="col">
         <div class="card">
           <div class="card-header bg-light">
@@ -51,7 +53,7 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="card-deck">
       <div class="col-sm-7">
         <div class="card">
           <div class="card-header bg-light">

@@ -1,0 +1,74 @@
+@media only screen and (max-device-width: 480px) {
+    .card-deck > .card {
+        width: 350px;
+    }
+    img.face-thumb {
+        height:fit-content;
+    }
+    div.scale {
+        display: initial;
+    }
+    .sliderName {
+        float:left;
+    }
+    div.sliderValue {
+        display:contents;
+    }
+    div.min-value {
+        float:left;
+        width: 100%;
+    }
+    div.max-value {
+        float:left;
+        width: 100%;
+        margin-bottom: 10px;
+        margin-left: 0;
+    }
+    div.colorPicker{
+        display:inline-block;
+    
+    }
+    div.colorPicker > div {
+        padding: 5px;
+    }
+    div.bool-picker{
+        display:unset;
+    }
+    div.bool-picker > div {
+        font-size: large;
+    }
+    input[type=text].min {
+        text-align: center;
+    }
+    input[type=text].max {
+        text-align: center;
+    }
+}
+.card-deck > .card {
+    min-width: 300px;
+    min-height: 200px;
+}
+
+.card-title {
+    display:flex;
+}
+
+.profile-card {
+    width: fit-content;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.col-sm-5 {
+    min-width: max-content;
+}
+
+.col-sm-7 {
+    margin-bottom: 10px; 
+}
+
+@media only screen and (min-width: 560px) and (max-width: 1000px) { 
+    .col-sm-7 {
+        min-width: fit-content;
+    }
+}
