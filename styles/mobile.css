@@ -71,4 +71,9 @@
     .col-sm-7 {
         min-width: fit-content;
     }
+    #profilePic {
+        width: 100%;
+        max-width: 4px !important;
+        height: 'auto';
+    }
 }
