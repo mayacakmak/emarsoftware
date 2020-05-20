@@ -98,8 +98,6 @@ function RobotBackend(robotId, scale) {
       Belly.bellyScreens = apiData.inputs.bellyScreens;
 
     if (RobotBackend.face != null)
-      console.log('apiData');
-      console.log(apiData);
       Face.faces = apiData.states.faces;
 
     if (RobotBackend.sound != null) {

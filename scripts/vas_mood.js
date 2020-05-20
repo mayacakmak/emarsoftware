@@ -19,6 +19,10 @@ moodSlider.oninput = function() {
   mood = this.value;
 };
 
+function backToIndexPage() {
+  window.location.href = 'index.html';
+}
+
 function recordMood() {
   if (mood === "not changed") {
     alert("Please move the slider to indicate your mood levels.");

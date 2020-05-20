@@ -12,9 +12,7 @@ var forceUpdateAll = false;
 
 /* Function that needs to be called whenever the face preview needs to be renewed */
 function updateFace() {
-  console.log('???', allUserData, selectedUser, selectedFace);
   if (allUserData != null && selectedUser != null && selectedFace != null) {
-    console.log('!!');
     if (selectedUser == Database.displayName && !isSetup){
       if (selectedFaceList === 'publicFaces') {
         newParameters = allUserData.find((element) => element.user === selectedUser && element.index === selectedFace);
@@ -180,11 +178,9 @@ function updateAllUsersFaceList(snapshot) {
 }
 
 function renderPublicFaces(snapshot) {
-  console.log(snapshot.val());
   const updated = sortPublicFaces(snapshot.val());
   if (allUserData == null || updated.length !== allUserData.length)  {
     allUserData = updated;
-    console.log(updated);
     renderUserFaceList(updated, 'publicFaces');
   } else {
     allUserData = updated;
@@ -212,7 +208,6 @@ function renderPublicFaces(snapshot) {
 
 function renderPrivateFaces(faceData) {
   const updated = sortPrivateFaces(faceData.faces);
-  updated.forEach((elem) => console.log(elem));
   if (currentUserData == null || currentUserData.faces == null || updated !== currentUserData.faces)  {
     if (currentUserData === null) {
       currentUserData = {};
@@ -286,7 +281,6 @@ function sortPublicFaces(allUserData) {
 
 /* Single function render all of the lists of faces */
 function renderUserFaceList(faceData, faceList) {
-  console.log('renderUserFaceList');
   var otherFaceList = document.getElementById(faceList);
   otherFaceList.innerHTML = '';
   faceData.forEach((element) => {
@@ -336,7 +330,6 @@ function renderUserFaceList(faceData, faceList) {
       selectedFaceList = faceList;
     }
   }
-  console.log(selectedUser, selectedFace, selectedFaceList);
   updselectedFaceChanged(
     document.getElementById(selectedUser + selectedFace + selectedFaceList),
     selectedUser,
@@ -578,7 +571,6 @@ function shareFace() {
   recordData('sharedFace', { name: newParameters.name, description: newParameters.description ? newParameters.description : '' });
   var newIndex = 0;
   allUserData.forEach((element) => { if (element.user === selectedUser) { newIndex++ } } );
-  console.log(newIndex - 1);
   selectedFace = newIndex - 1;
   selectedFaceList = 'publicFaces';
   updselectedFaceChanged(null, selectedUser, selectedFace, selectedFaceList);
@@ -603,6 +595,12 @@ function setCurrentFace() {
     dbRef.update({ currentFace: selectedFace }, function (error) {
       console.log(error);
     });
+  }
+  const redirect = confirm('Would you like to check out your Robot\'s new Face?');
+  if (redirect) {
+    sessionStorage.setItem('startFaceRenderTime', new Date().getTime());
+    goTo('render-face.html');
+    // window.location.href = 'render-face.html';
   }
 }
 
@@ -677,7 +675,6 @@ function recordData(category, data = {}) {
 function calculateTime(start, end, event) {
   var dur = (end - start) / 1000;
   var currDate = new Date().toDateString();
-  console.log(dur);
   var dir =
     'users/' +
     firebase.auth().currentUser.displayName +
@@ -693,4 +690,17 @@ function calculateTime(start, end, event) {
     duration_sec: dur,
   });
   console.log('Logging diary time: ----------');
+}
+
+function goTo(url) {
+  var a = document.createElement('a');
+  if (!a.click) {
+    //for IE
+    window.location = url;
+    return;
+  }
+  a.setAttribute('href', url);
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
 }

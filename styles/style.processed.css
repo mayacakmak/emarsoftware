@@ -434,7 +434,7 @@ div.scale {
   height: auto;
   width: 100%;
   display: grid;
-  grid-template-columns: 160px 50px 40px auto 40px;
+  grid-template-columns: 160px auto ;
   align-items: center;
 }
 
@@ -803,14 +803,17 @@ input[type=text].large-text {
 input[type=button].large-button {
   background-color: #444;
   font-size: 20px;
+  z-index: 99;
 }
 
 input[type=button].smallButton {
   background-color: #4C50AF;
+  z-index: 99;
 }
 
 input[type=button].newButton {
   background-color: #AF4C50;
+  z-index: 99;
 }
 
 .full-button {
@@ -894,3 +897,14 @@ input[type=button].addButton {
   border-radius: 4px;
   cursor: pointer;
 }
+
+button {
+  z-index: 99;
+}
+
+@media screen and (min-width: 981px) {
+  .loginCard {
+    max-width: 350px;
+  }
+}
+

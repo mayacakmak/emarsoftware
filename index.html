@@ -5,10 +5,12 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Robot Studys</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/style.processed.css">
-</head>
+  <link rel='stylesheet' href="styles/mobile.css">
+  </head>
 
 <body>
   <div class="topbar">
@@ -22,19 +24,17 @@
       </div>
         <!-- <div class="btn-group"><button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span id="selectedRobot"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="pl-2">Loading robots...</span></span><div class="dropdown-menu" id="robots"></div></button></div> -->
           <!-- <p>Name</p> -->
-      <div class="col-sm col-sm-auto">
+      <div class="col-sm col-sm-auto profile-card">
         <div class="card mb-2">
-          <div class="card-body" style="padding: 1%;">
-            <div class="row">
-              <div class="col-md-5">
-                <img src="assets/EMAR.jpg"
-                  alt="profilePic" class="face-thumb" id="profilePic" width="40" height="40">
-              </div>
-              <div class="col-md-7">
-                <h5 class="card-title"><span id="loginID"></span></h5>
-                <button class="btn btn-warning" onclick="logout()">Logout</button>
-              </div>
+          <div class="card-body" style="padding: 3%;">
+            <div class="col-md-5">
+              <img src="assets/EMAR.jpg"
+                alt="profilePic" class="face-thumb" id="profilePic" style="width:40; max-width: 100px; height: auto;">
             </div>
+            <div class="col-md-7">
+              <h5 class="card-title"><span id="loginID"></span></h5>
+              <button class="btn btn-warning" onclick="logout()">Logout</button>
+            </div>  
           </div>
         </div>
       </div>
@@ -43,22 +43,23 @@
       <div>
       </div>
     </div>
-    <div class="row">
-      <!-- <div class="col-sm-4">
-        <div class="card bg-light mb-3">
-          <div class="card-header">
-            <h2>Face Gallery</h2>
-          </div>
-          <div class="card-body">
-            <p class="card-text">View all faces made by members of your group.</p>
-          </div>
-          <div class="card-footer bg-transparent border-transparent">
-            <button class="btn btn-warning flex-end" type="button" onclick="startGallery()" id="galleryButton">Start Gallery</button>
-          </div>
+
+    <!-- <div class="col-sm-4">
+      <div class="card bg-light mb-3">
+        <div class="card-header">
+          <h2>Face Gallery</h2>
         </div>
-      </div> -->
-      <div class="col-sm-4">
-        <div class="card bg-light mb-3">
+        <div class="card-body">
+          <p class="card-text">View all faces made by members of your group.</p>
+        </div>
+        <div class="card-footer bg-transparent border-transparent">
+          <button class="btn btn-warning flex-end" type="button" onclick="startGallery()" id="galleryButton">Start Gallery</button>
+        </div>
+      </div>
+    </div> -->
+    <div class ="card-deck">
+      
+        <div class="card bg-light mb-4">
           <div class="card-header">
             <div class='row'>
               <div class='col'>
@@ -66,7 +67,7 @@
               </div>
               <div class='col-sm col-sm-auto'>
                 <div class="alert alert-success" role="alert">
-                 Start Here
+                  Start Here
                 </div>
               </div>
             </div>
@@ -78,10 +79,8 @@
             <button class="btn btn-warning" type="button" onclick="startInstructions()" id="editButton"> Show Instructions</button>
           </div>
         </div>
-      </div>
-
-      <div class="col-sm-4">
-        <div class="card bg-light mb-3">
+      
+        <div class="card bg-light mb-4">
           <div class="card-header">
             <div class='row'>
               <div class='col'>
@@ -95,16 +94,14 @@
             </div>
           </div>
           <div class="card-body">
-            <p class="card-text">Press button to start the face editor to customize your faces or create new faces.</p>
+            <p class="card-text">Press button to start the face editor to customize your faces or create new faces. Note: Designing faces works better on your computer!</p>
           </div>
           <div class="card-footer bg-transparent border-transparent">
             <button class="btn btn-warning" type="button" onclick="startEditor()" id="editButton">Start Face Editor</button>
           </div>
         </div>
-      </div>
 
-      <div class="col-sm-4">
-        <div class="card bg-light mb-3">
+        <div class="card bg-light mb-4">
           <div class="card-header">
             <h2>Diary</h2>
           </div>
@@ -115,10 +112,10 @@
             <button class="btn btn-warning" type="button" onclick="startDiary()" id="diaryButton">Start Diary</button>
           </div>
         </div>
-      </div>
+     
 
-      <div class="col-sm-4">
-        <div class="card bg-light mb-3">
+      
+        <div class="card bg-light mb-4">
           <div class="card-header">
             <h2>Daily Report</h2>
           </div>
@@ -129,10 +126,8 @@
             <button class="btn btn-warning" type="button" onclick="startVAS()" id="vasButton">Start Report</button>
           </div>
         </div>
-      </div>
-
-      <div class="col-sm-4">
-        <div class="card bg-light mb-3">
+    
+        <div class="card bg-light mb-4">
           <div class="card-header">
             <h2>Your Robot</h2>
           </div>
@@ -143,10 +138,10 @@
             <button class="btn btn-warning" type="button" onclick="startWebRobot()" id="editButton">Start Robot</button>
           </div>
         </div>
-      </div>
+  
       
-      <div class="col-sm-4">
-        <div class="card bg-light mb-3">
+      
+        <div class="card bg-light mb-4">
           <div class="card-header">
             <h2>Contact</h2>
           </div>
@@ -157,7 +152,7 @@
             <button class="btn btn-warning" type="button" onclick="startContact()" id="editButton">Show Information</button>
           </div>
         </div>
-      </div>
+  
       <!-- <div class="col-sm-4">
         <div class="card bg-light mb-3">
           <div class="card-header">
@@ -172,9 +167,9 @@
           </div>
         </div>
       </div> -->
-      
-      
     </div>
+      
+
     <div class="footer"></div>
   </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

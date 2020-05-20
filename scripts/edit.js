@@ -76,14 +76,15 @@ function updateFaceEditor() {
 
         /* Check if the scales are created already */
         var scaleExample = document.getElementById("eyeCenterDistPercent");
-        if (scaleExample === null) {
+        if (scaleExample === null || true) {
           mainDiv.innerHTML = "";
           /* Number type parameters, selected with sliders*/
           for (var i = 0; i < Object.keys(newParameters).length; i++) {
             var key = Object.keys(newParameters)[i];
             var param = newParameters[key];
             if (param.v2eyes === undefined) {
-              if (param.type == "number") {
+              console.log(param);
+              if (param.type == "number" && !param.name.toLowerCase().includes('voice')) {
                 var nIncrements = 20;
                 if (param.nIncrements !== undefined)
                   nIncrements = param.nIncrements;
@@ -150,7 +151,7 @@ function updateFaceEditor() {
           shareButton.innerHTML = 'Shared!';
           disableButton('shareFace');
         } else {
-          shareButton.innerHTML = 'Share Face!';
+          shareButton.innerHTML = 'Share Face in Public Gallery!';
           enableButton('shareFace');
         }
       }
@@ -158,7 +159,7 @@ function updateFaceEditor() {
         // mainDiv.innerHTML =
         //   "You cannot edit this face. Click the 'Add new' button above to copy this face and edit it.";
         mainDiv.innerHTML =
-          '<div class="alert alert-success" role="alert">To edit a face, Select and Add from the Public Gallery</div>';
+          '<button class="btn btn-success" type="button" onclick="createNewFace()">Click me to add this face to your Private Gallery and edit!</button>';
         faceName = document.getElementById("faceName");
         faceName.disabled="disabled";
         faceDescription = document.getElementById('faceDescription');
@@ -175,7 +176,7 @@ function updateFaceEditor() {
           faceDescription.value = '';
           faceDescription.placeholder = 'description';
         }
-        document.getElementById('shareFace').innerHTML = 'Share Face!';
+        document.getElementById('shareFace').innerHTML = 'Share Face in Public Gallery!';
         disableButton('shareFace');
       }
 
@@ -310,24 +311,25 @@ function getRangeHTML(id, name, current, min, max, nIncrements) {
     '<div class="sliderName">' +
     name +
     ":</div>" +
-    '<div class="sliderValue" id= "' +
-    id +
-    'Value">' +
-    current +
-    "</div>" +
-    '<div class="min-value"> <input class="min" type="text" name=' + id 
-    + ' onblur="newParameterValue(this, \'min\')" value=' +
-    min +
-    "> </div>" +
+    // '<div class="sliderValue" id= "' +
+    // id +
+    // 'Value">' +
+    // current +
+    // "</div>" +
+    // '<div class="min-value"> <input class="min" type="text" name=' + id 
+    // + ' onblur="newParameterValue(this, \'min\')" value=' +
+    // min +
+    // "> </div>" +
     "<div>" +
     '<input type="range" class="slider" ' + //list="' + name + 'tickmarks" ' +
     " min=" + min + " max=" + max + " step =" + (max - min) / nIncrements +
     ' onchange="newParameterValue(this, \'current\')" id=' + id + "Scale" + " name=" + id +
-    " value=" +current + "> </div>" + //+getDataList(name, min, max, nIncrements)
-    '<div class="max-value"> <input class="max" type="text" name=' + id 
-    + ' onblur="newParameterValue(this, \'max\')" value=' +
-    max +
-    "> </div>");
+    " value=" +current + "> </div>" //+getDataList(name, min, max, nIncrements)
+    // '<div class="max-value"> <input class="max" type="text" name=' + id 
+    // + ' onblur="newParameterValue(this, \'max\')" value=' +
+    // max +
+    // "> </div>"
+    );
 }
 
 function getDataList(name, min, max, nIncrements) {
@@ -344,6 +346,7 @@ function getDataList(name, min, max, nIncrements) {
 
 // Update the database in response to a UI event
 function newParameterValue(target, param) {
+  console.log('!!!', target, param);
   if (Database.displayName !== null) {
     var dir = "users/" + Database.displayName;
     var dbRef = firebase.database().ref(dir + "/robot/customAPI/states/faces/" + selectedFace + "/");
@@ -351,8 +354,8 @@ function newParameterValue(target, param) {
     
     var key = target.name;
     var newParam = newParameters[key];
-
-    if (newParam.type == "number" || newParam.type == "boolean"){
+    
+    if (newParam.type && (newParam.type == "number" || newParam.type == "boolean")){
       if (param == "min" || param == "max")
         newParam[param] = Number(target.value);
       else
@@ -367,18 +370,19 @@ function newParameterValue(target, param) {
     newParamObj[key] = newParam;
 
     if (newParam.type == "number") {
-      var sliderDiv = document.getElementById(key);
-      if (param == "current") {
-        var sliderValueDiv = sliderDiv.getElementsByClassName("sliderValue")[0];
-        sliderValueDiv.innerHTML = target.value;
-      } 
-      else {
-        var slider = sliderDiv.getElementsByClassName("slider")[0];
-        if (param == "min")
-          slider.min = target.value;
-        if (param == "max")
-          slider.max = target.value;
-      }
+      // var sliderDiv = document.getElementById(key);
+      // console.log('newslideerinput', newParam);
+      // if (param == "current") {
+      //   var sliderValueDiv = sliderDiv.getElementsByClassName("sliderValue")[0];
+      //   sliderValueDiv.innerHTML = target.value;
+      // } 
+      // else {
+      //   var slider = sliderDiv.getElementsByClassName("slider")[0];
+      //   if (param == "min")
+      //     slider.min = target.value;
+      //   if (param == "max")
+      //     slider.max = target.value;
+      // }
     }
     
     dbRef.update(newParamObj);
@@ -395,4 +399,3 @@ function enableButton(buttonID) {
   var button = document.getElementById(buttonID);
   button.disabled = false;
 }
-

@@ -20,12 +20,16 @@ var participants = [
 ];
 function databaseReadyCallback() {
   console.log('currUser:', firebase.auth().currentUser.uid);
+  var dbRef = firebase.database().ref('/participants/');
+  dbRef.once('value').then(function (snapshot) {
+    participants = Object.keys(snapshot.val());
+  });
 }
 
 function signIn() {
   var login = document.getElementById("loginID").value
   if (login.length != 0 && participants.includes(login)) {
-    if (firebase.auth().currentUser.displayName != login) {
+    if (Database.app.auth().currentUser.displayName != login) {
       firebase.auth().currentUser.updateProfile({
         displayName: login
       }).then(() => {
