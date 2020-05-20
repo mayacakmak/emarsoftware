@@ -58,18 +58,17 @@
       </div>
     </div> -->
     <div class ="card-deck">
-      
         <div class="card bg-light mb-4">
           <div class="card-header">
             <div class='row'>
               <div class='col'>
                 <h2>Instructions </h2>
               </div>
-              <div class='col-sm col-sm-auto'>
-                <div class="alert alert-success" role="alert">
-                  Start Here
-                </div>
+             
+              <div class="alert alert-success" role="alert" onclick="startInstructions()">
+                Start Here
               </div>
+              
             </div>
           </div>
           <div class="card-body">
@@ -86,8 +85,8 @@
               <div class='col'>
                 <h2>Face Editing</h2>
               </div>
-              <div class='col-sm col-sm-auto' style="display: none;" id="newFaceNotifContainer">
-                <div class="alert alert-warning" role="alert">
+              <div class='alert-buttons' style="display: none;" id="newFaceNotifContainer">
+                <div class="alert alert-warning" role="alert" onclick="startEditor()">
                   New Faces for You!
                 </div>
               </div>

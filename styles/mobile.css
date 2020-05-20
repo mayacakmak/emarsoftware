@@ -67,6 +67,10 @@
     margin-bottom: 10px; 
 }
 
+.alert {
+    margin-right: 5%;
+}
+
 @media only screen and (min-width: 560px) and (max-width: 1000px) { 
     .col-sm-7 {
         min-width: fit-content;
