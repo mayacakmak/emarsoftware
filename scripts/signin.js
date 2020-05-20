@@ -45,6 +45,6 @@ function signIn() {
     }
   }  
   else {
-    alert("Please enter your login ID as specified in your instructional kit & try again.");
+    alert("Please enter your login ID as specified in your instructional kit & try again. Example: firstname_lastinitial");
   }
 }
