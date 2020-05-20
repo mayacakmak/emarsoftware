@@ -899,5 +899,12 @@ input[type=button].addButton {
 }
 
 button {
-  z-index: 99,
+  z-index: 99;
 }
+
+@media screen and (min-width: 981px) {
+  .loginCard {
+    max-width: 350px;
+  }
+}
+

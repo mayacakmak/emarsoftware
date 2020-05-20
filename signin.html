@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/style.processed.css">
+  <link rel='stylesheet' href="styles/mobile.css">
 </head>
 
 <body>
@@ -26,23 +27,21 @@
     <div class="py-3">
 
     </div>
-    <div class="row justify-content-center">
-      <div class="col-sm-4">
-        <div class="card bg-light mb-3">
-          <div class="card-header">
-              <h2> Enter your Login ID </h2>
-              <h4> (Example: firstname_lastinitial)</h4>
-              <p> Your log-in info is in the checklist that was mailed to you </p>
-          </div>
-          <div class="card-body">
-            <div class="d-flex justify-content-center mt-2" id="myTabContent">
-              <input class="form-control input-lg centered" type="text" id="loginID" autocapitalize="off">
-            </div>
-            <div class="d-flex justify-content-center mt-2">
-              <button class="btn btn-warning" onclick="signIn()" id="loginDone">Continue</button>
-            </div>
-            </div>
+    <div class="card-deck justify-content-center">
+      <div class="card bg-light mb-3 loginCard">
+        <div class="card-header">
+            <h2> Enter your Login ID </h2>
+            <h4> (Example: firstname_lastinitial)</h4>
+            <p> Your log-in info is in the checklist that was mailed to you </p>
         </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-center mt-2" id="myTabContent">
+            <input class="form-control input-lg centered" type="text" id="loginID" autocapitalize="off">
+          </div>
+          <div class="d-flex justify-content-center mt-2">
+            <button class="btn btn-warning" onclick="signIn()" id="loginDone">Continue</button>
+          </div>
+          </div>
       </div>
     </div>
     <div class="footer"></div>

@@ -20,6 +20,10 @@ var participants = [
 ];
 function databaseReadyCallback() {
   console.log('currUser:', firebase.auth().currentUser.uid);
+  var dbRef = firebase.database().ref('/participants/');
+  dbRef.once('value').then(function (snapshot) {
+    participants = Object.keys(snapshot.val());
+  });
 }
 
 function signIn() {
