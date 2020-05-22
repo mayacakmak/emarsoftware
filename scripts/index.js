@@ -130,6 +130,13 @@ function startDiary() {
   window.location.href = "diary.html";
 }
 
+function backToIndexPage() {
+  var dir = 'users/' + firebase.auth().currentUser.displayName + '/robot/state';
+  var dbRef = firebase.database().ref(dir);
+  dbRef.update({ listening: false });
+  window.location.href = 'index.html';
+}
+
 function doneTyping() {
   var diaryText = document.getElementById("diaryText").value;
   if (diaryText.length != 0) {

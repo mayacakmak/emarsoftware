@@ -20,6 +20,7 @@ function initializeRenderFace() {
   } else {
     svg.setAttribute('style', 'transform: rotate(0deg);');
   }
+  screen.orientation.lock('landscape');
 }
 
 function closeRobot() {

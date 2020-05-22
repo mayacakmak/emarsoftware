@@ -3,7 +3,7 @@
         width: 350px;
     }
     img.face-thumb {
-        height:fit-content;
+        height: 75px;
     }
     div.scale {
         display: initial;
@@ -43,8 +43,13 @@
     input[type=text].max {
         text-align: center;
     }
+<<<<<<< Updated upstream
     div.scale-labels > h4{
         font-size: 1em;
+=======
+    #faceEditWarningBanner {
+        display: block !important;
+>>>>>>> Stashed changes
     }
 }
 .card-deck > .card {
@@ -82,5 +87,8 @@
         width: 100%;
         max-width: 4px !important;
         height: 'auto';
+    }
+    #faceEditWarningBanner {
+        display: block !important;
     }
 }

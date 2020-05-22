@@ -431,6 +431,23 @@ function updselectedFaceChanged(target, user, index, selector) {
   selectedFace = index;
   selectedFaceList = selector;
 
+  if (selectedFaceList === 'publicFaces') {
+    document
+      .getElementById('setCurrentFacePublic')
+      .setAttribute('style', 'display: block');
+    document
+       .getElementById('setCurrentFacePrivate')
+       .setAttribute('style', 'display: none');
+  } else {
+    document
+      .getElementById('setCurrentFacePublic')
+      .setAttribute('style', 'display: none');
+    document
+      .getElementById('setCurrentFacePrivate')
+      .setAttribute('style', 'display: block');
+
+  }
+
   updateFace();
   updateFaceEditor();
   if (selector === 'publicFaces') faceViewed(target, user, index, selector);
@@ -596,12 +613,18 @@ function setCurrentFace() {
       console.log(error);
     });
   }
-  const redirect = confirm('Would you like to check out your Robot\'s new Face?');
-  if (redirect) {
-    sessionStorage.setItem('startFaceRenderTime', new Date().getTime());
-    goTo('render-face.html');
-    // window.location.href = 'render-face.html';
-  }
+  // const redirect = confirm('Would you like to check out your Robot\'s new Face? You should try it out on your phone!');
+  // if (redirect) {
+  //   sessionStorage.setItem('startFaceRenderTime', new Date().getTime());
+  //   goTo('render-face.html');
+  //   // window.location.href = 'render-face.html';
+  // }
+}
+
+function goToFaceRender() {
+  sessionStorage.setItem('startFaceRenderTime', new Date().getTime());
+  goTo('render-face.html');
+  // window.location.href = 'render-face.html';
 }
 
 /* 

@@ -18,6 +18,9 @@
     <div class="topbar-right" id="top"><span id="uid" style="color:white"></span></div>
   </div>
   <div class="container-fluid px-sm-5 pb-4">
+    <div class="alert alert-warning" role="alert" style="display: none;" id="faceEditWarningBanner">
+      We reccomend using the Face Editor on your Laptop
+    </div>
     <div class="card-deck">
       <div class="col text-center">
         <h1 class="display-4">Face Editing Panel</h1>
@@ -35,8 +38,9 @@
             <div class="btn-group mr-2" id="publicFaces"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
           </div>
         </div>
-        <div class="p-1"><button class="btn btn-warning" onclick="setCurrentFace()" id="setCurrentFace">Set Face to my Robot!</button>
-</div>
+        <div class="p-1">
+          <button class="btn btn-warning" onclick="setCurrentFace()" id="setCurrentFacePublic" data-toggle="modal" data-target="#modalDone">Display face on your robot!</button>
+        </div>
       </div>
     </div>
     <div class="card-deck pb-3">
@@ -51,6 +55,9 @@
             </div>
             <button class="btn btn-secondary" onclick="createDefaultFace()" id="createDefaultFace">+ Create New Face</button>
           </div>
+        </div>
+        <div class="p-1">
+          <button class="btn btn-warning" onclick="setCurrentFace()" id="setCurrentFacePrivate" data-toggle="modal" data-target="#modalDone">Display face on your robot!</button>
         </div>
       </div>
     </div>
@@ -96,6 +103,25 @@
               <div class='col text-center'>
                 <button class="btn btn-warning" onclick="shareFace()" disabled id="shareFace">Share Face in Public Gallery!</button>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="modalDone" tabindex="-1" role="dialog" aria-labelledby="modalDone" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Would you like to check out your Robot's new Face? You should try it out on your phone!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body centered">
+              <button type="button" class="btn btn-success" onclick="goToFaceRender()" data-dismiss="modal">Yes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                No, I want to keep editing.
+                <span aria-hidden="true"></span>
+              </button>
             </div>
           </div>
         </div>
