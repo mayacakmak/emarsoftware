@@ -28,6 +28,7 @@ function databaseReadyCallback() {
 
 function signIn() {
   var login = document.getElementById("loginID").value
+  login = login.toLowerCase();
   if (login.length != 0 && participants.includes(login)) {
     if (Database.app.auth().currentUser.displayName != login) {
       firebase.auth().currentUser.updateProfile({
@@ -45,6 +46,6 @@ function signIn() {
     }
   }  
   else {
-    alert("Please enter your login ID as specified in your instructional kit & try again.");
+    alert("Please enter your login ID as specified in your instructional kit & try again. Example: firstname_lastinitial");
   }
 }
