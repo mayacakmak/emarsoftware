@@ -24,26 +24,22 @@
       </div>
         <!-- <div class="btn-group"><button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span id="selectedRobot"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="pl-2">Loading robots...</span></span><div class="dropdown-menu" id="robots"></div></button></div> -->
           <!-- <p>Name</p> -->
-      <div class="col-sm col-sm-auto profile-card">
-        <div class="card mb-2">
+      <div style = "width:100px; margin-right: 20px; margin-top:10px">
+        <div class="card text-center">
           <div class="card-body" style="padding: 3%;">
-            <div class="col-md-5">
-              <img src="assets/EMAR.jpg"
-                alt="profilePic" class="face-thumb" id="profilePic" style="width:40; max-width: 100px; height: auto;">
-            </div>
-            <div class="col-md-7">
-              <h5 class="card-title"><span id="loginID"></span></h5>
-              <button class="btn btn-warning" onclick="logout()">Logout</button>
+            <img src="assets/EMAR.jpg"
+              alt="profilePic" class="face-thumb" id="profilePic" style="width:40px; max-width: 100px; height: auto;" />
+          
+            <div style="text-align: center;"> 
+              <h5 class="card-title"><span id="loginID" style="margin-left:7%"></span></h5>
+              <button class="btn btn-warning" onclick="logout()" style="margin-bottom: 5%;">Logout</button>
             </div>  
+        
           </div>
         </div>
       </div>
     </div>
-    <div class="py-3">
-      <div>
-      </div>
-    </div>
-
+   
     <!-- <div class="col-sm-4">
       <div class="card bg-light mb-3">
         <div class="card-header">
@@ -58,13 +54,13 @@
       </div>
     </div> -->
     <div class ="card-deck">
-      
         <div class="card bg-light mb-4">
           <div class="card-header">
             <div class='row'>
               <div class='col'>
                 <h2>Instructions </h2>
               </div>
+<<<<<<< HEAD
 <<<<<<< HEAD
               <div class='col-sm col-sm-auto'>
                 <div class="alert alert-success" role="alert">
@@ -76,6 +72,10 @@
                   Start Here
                 </button>
 >>>>>>> 8e4f61b2541b7ff16b8b400c899999ec8f03323b
+=======
+              <div class="alert alert-success" role="alert" onclick="startInstructions()">
+                Start Here
+>>>>>>> 3c942b4cada86626a139ccc92d83fd4f5c467634
               </div>
             </div>
           </div>
@@ -93,8 +93,13 @@
               <div class='col'>
                 <h2>Robot Faces</h2>
               </div>
+<<<<<<< HEAD
              <div style="display: none;" id="newFaceNotifContainer">
                 <button class="alert alert-warning" role="alert" type="button" onclick="startEditor()">
+=======
+              <div class='alert-buttons' style="display: none;" id="newFaceNotifContainer">
+                <div class="alert alert-warning" role="alert" onclick="startEditor()">
+>>>>>>> 3c942b4cada86626a139ccc92d83fd4f5c467634
                   New Faces for You!
                 </button>
               </div>
