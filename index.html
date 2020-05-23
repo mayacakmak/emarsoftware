@@ -24,23 +24,17 @@
       </div>
         <!-- <div class="btn-group"><button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span id="selectedRobot"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="pl-2">Loading robots...</span></span><div class="dropdown-menu" id="robots"></div></button></div> -->
           <!-- <p>Name</p> -->
-      <div class="col-sm col-sm-auto profile-card">
-        <div class="card mb-2">
+        <div style = "width:100px; margin-right: 20px; margin-top:10px">
+          <div class="card text-center">
           <div class="card-body" style="padding: 3%;">
-            <div class="col-md-5">
-              <img src="assets/EMAR.jpg"
-                alt="profilePic" class="face-thumb" id="profilePic" style="width:40; max-width: 100px; height: auto;">
-            </div>
-            <div class="col-md-7">
-              <h5 class="card-title"><span id="loginID"></span></h5>
-              <button class="btn btn-warning" onclick="logout()">Logout</button>
+            <img src="assets/EMAR.jpg" alt="profilePic" class="face-thumb" 
+                id="profilePic" style="width:40px; max-width: 100px; height: auto;" />
+                <div style="text-align: center;"> 
+                    <h5 class="card-title"><span id="loginID"></span></h5>	             
+                  <button class="btn btn-warning" onclick="logout()" style="margin-bottom: 5%;">Logout</button>
             </div>  
           </div>
         </div>
-      </div>
-    </div>
-    <div class="py-3">
-      <div>
       </div>
     </div>
 
@@ -65,7 +59,7 @@
               <div class='col'>
                 <h2>Instructions </h2>
               </div>
-              <div>
+              <div style="width: max-content; margin-right:5%">
                 <button class="alert alert-success" role="alert" type="button" onclick="startInstructions()">
                   Start Here
                 </button>
@@ -86,7 +80,7 @@
               <div class='col'>
                 <h2>Robot Faces</h2>
               </div>
-             <div style="display: none;" id="newFaceNotifContainer">
+             <div style="display: none; width: max-content; margin-right:5%" id="newFaceNotifContainer" >
                 <button class="alert alert-warning" role="alert" type="button" onclick="startEditor()">
                   New Faces for You!
                 </button>
@@ -96,7 +90,7 @@
           <div class="card-body">
             <p class="card-text"> You can edit the face (works better on your computer) & set it to your robot (works better on your phone).</p>
           </div>
-          <div class="card-footer bg-transparent border-transparent">
+          <div class="card-footer bg-transparent border-transparent startButtons">
             <button class="btn btn-warning" type="button" onclick="startEditor()" id="editButton">Start Face Editor</button>
             <button class="btn btn-warning" type="button" onclick="startWebRobot()" id="editButton">Start Robot</button>
           </div>

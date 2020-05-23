@@ -1,7 +1,4 @@
 @media only screen and (max-device-width: 480px) {
-    .card-deck > .card {
-        width: 350px;
-    }
     img.face-thumb {
         height:fit-content;
     }
@@ -48,7 +45,7 @@
     }
 }
 .card-deck > .card {
-    min-width: 300px;
+    min-width: 280px;
     min-height: 200px;
 }
 
@@ -70,9 +67,11 @@
     margin-bottom: 10px; 
 }
 
-.alert {
-    margin-right: 5%;
+.startButtons {
+    display:  flex;
+    justify-content: space-between;
 }
+
 
 @media only screen and (min-width: 560px) and (max-width: 1000px) { 
     .col-sm-7 {
@@ -84,3 +83,5 @@
         height: 'auto';
     }
 }
+
+

@@ -8,3 +8,29 @@
   }
 }
 
+@media screen and (orientation:portrait) {
+  .wrapper {
+    transform: rotate(-90deg);
+    width: 100vh;
+    transform-origin: left top;
+    top: 100%;
+    left: 0px;
+  }
+}
+
+/* @media screen and (orientation: portrait) {
+  body {
+      transform: rotate(-90deg);
+      transform-origin: left top;
+      width: 100vh;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      position: absolute;
+      top: 100%;
+      left: 0;
+  }
+
+  #wrapper {
+    height: 100vw;
+  }
+} */
