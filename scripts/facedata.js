@@ -136,21 +136,21 @@ function renderPublicFaces(snapshot) {
 /*
  * Function to sort the face data when pulling all old robot data
  */
-// function TEMPsortPublicFaces(snapshot) {
-//   const keys = Object.keys(snapshot);
-//   const faces = [];
-//   keys.forEach((element) => {
-//     element = snapshot[element];
-//     if (element.customAPI && element.customAPI.states && element.customAPI.states.faces) {
-//       element.customAPI.states.faces.forEach((face, index) => {
-//         console.log(face);
-//         faces.push({ ...face, user: element.name, index });
-//       })
-//     }
-//   });
-//   console.log(faces);
-//   return faces;
-// }
+function TEMPsortPublicFaces(snapshot) {
+  const keys = Object.keys(snapshot);
+  const faces = [];
+  keys.forEach((element) => {
+    element = snapshot[element];
+    if (element.customAPI && element.customAPI.states && element.customAPI.states.faces) {
+      element.customAPI.states.faces.forEach((face, index) => {
+        console.log(face);
+        faces.push({ ...face, user: element.name, index });
+      })
+    }
+  });
+  console.log(faces);
+  return faces;
+}
 
 function renderPrivateFaces(faceData) {
   console.log('renderPrivateFaces');
@@ -580,6 +580,8 @@ function createNewFace(parameters = newParameters) {
     newIndex,
     'privateFaces'
   );
+  var gallery = document.getElementById('privateGallery')
+  gallery.scrollLeft = gallery.scrollWidth;
 }
 
 /*

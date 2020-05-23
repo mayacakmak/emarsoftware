@@ -271,7 +271,7 @@ function createColorInput(id, name, current) {
       '<div class="sliderName"> ' +
       name +
       ":</div>" +
-      '<div> <input type="color" onchange="newParameterValue(this, \'current\')" ' +
+      '<div> <input type="color" style="z-index: 99;" onchange="newParameterValue(this, \'current\')" ' +
       " name = " +
       id +
       " id = " +

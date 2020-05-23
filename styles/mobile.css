@@ -1,9 +1,6 @@
 @media only screen and (max-device-width: 480px) {
-    .card-deck > .card {
-        width: 350px;
-    }
     img.face-thumb {
-        height:fit-content;
+        height: 75px;
     }
     div.scale {
         display: initial;
@@ -46,9 +43,12 @@
     div.scale-labels > h4{
         font-size: 1em;
     }
+    div.face-parameters {
+        height: 200px;
+    }
 }
 .card-deck > .card {
-    min-width: 300px;
+    min-width: 280px;
     min-height: 200px;
 }
 
@@ -70,9 +70,11 @@
     margin-bottom: 10px; 
 }
 
-.alert {
-    margin-right: 5%;
+.startButtons {
+    display:  flex;
+    justify-content: space-between;
 }
+
 
 @media only screen and (min-width: 560px) and (max-width: 1000px) { 
     .col-sm-7 {
@@ -84,3 +86,19 @@
         height: 'auto';
     }
 }
+
+<<<<<<< Updated upstream
+
+=======
+/* @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {
+  html {
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    width: 100vh;
+    overflow-x: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
+} */
+>>>>>>> Stashed changes

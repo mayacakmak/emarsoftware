@@ -133,7 +133,7 @@ function Database(config, readyCallback) {
             state: {
               currentBellyScreen: '0',
               currentEyes: 'random',
-              currentFace: 1,
+              currentFace: 0,
               currentLEDR: 128,
               currentLEDG: 0,
               currentLEDB: 128,

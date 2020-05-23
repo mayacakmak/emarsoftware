@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-</html>
-
 <head>
   <meta charset="utf-8">
   <title>Robot Study</title>
@@ -10,6 +8,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/style.processed.css">
   <link rel="stylesheet" href="styles/mobile.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
@@ -49,7 +48,7 @@
           <div class="card-header bg-light">
             <h2>Private Gallery</h2>
           </div>
-          <div class="card-body h-scrollable green-scroll">
+          <div class="card-body h-scrollable green-scroll" id="privateGallery">
             <div class="btn-group mr-2" id="privateFaces">
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             </div>
@@ -67,7 +66,7 @@
           <div class="card-header bg-light">
             <h2>Edit Face</h2>
           </div>
-          <div class="card-body scrollable green-scroll">
+          <div class="card-body scrollable green-scroll face-parameters">
             <div id="faceParameters"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
           </div>
         </div>
@@ -139,3 +138,4 @@
   <script src="scripts/facedata.js"></script>
   <script src="scripts/edit.js"></script>
 </body>
+</html>
