@@ -1,6 +1,6 @@
 @media only screen and (max-device-width: 480px) {
     img.face-thumb {
-        height:fit-content;
+        height: 75px;
     }
     div.scale {
         display: initial;
@@ -43,6 +43,9 @@
     div.scale-labels > h4{
         font-size: 1em;
     }
+    div.face-parameters {
+        height: 200px;
+    }
 }
 .card-deck > .card {
     min-width: 280px;
@@ -84,4 +87,18 @@
     }
 }
 
+<<<<<<< Updated upstream
 
+=======
+/* @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {
+  html {
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    width: 100vh;
+    overflow-x: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
+} */
+>>>>>>> Stashed changes

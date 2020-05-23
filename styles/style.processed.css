@@ -908,3 +908,9 @@ button {
   }
 }
 
+.btn-xl {
+    padding: 15px 25px;
+    font-size: 25px;
+    border-radius: 15px;
+}
+

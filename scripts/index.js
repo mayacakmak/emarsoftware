@@ -63,6 +63,7 @@ async function newFaceNotification() {
   const group_id = userData[Database.displayName]["group_id"];
   Object.keys(userData).forEach(element => {
     if (
+      element !== Database.displayName && 
       userData[element].public &&
       userData[element].public.faces &&
       userData[element]["group_id"] &&
@@ -80,7 +81,9 @@ async function newFaceNotification() {
     Object.keys(
       userData[Database.displayName].public.viewedFaces
     ).forEach(elem => {
-      count += userData[Database.displayName].public.viewedFaces[elem].length;
+      if (elem !== Database.displayName) {
+        count += userData[Database.displayName].public.viewedFaces[elem].length;
+      }
     });
   }
   if (count < total) {

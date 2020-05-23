@@ -1,0 +1,32 @@
+{
+  "short_name": "Robot",
+  "name": "Robot Study",
+  "description": "Robot Study",
+  "icons": [
+    {
+      "src": "./assets/EMAR_512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "./assets/EMAR_256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "./assets/EMAR_128.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "./assets/EMAR_64.png",
+      "type": "image/png",
+      "sizes": "64x64"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#fafafa",
+  "theme_color": "#fafafa",
+  "display": "fullscreen",
+  "orientation": "landscape"
+}

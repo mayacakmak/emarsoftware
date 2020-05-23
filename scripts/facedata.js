@@ -9,26 +9,28 @@ var hasNewParams = true;
 var isSetup = false;
 var robotFaces = null;
 var forceUpdateAll = false;
+var forceSelectedFaceTimestamp = null;
 
 /* Function that needs to be called whenever the face preview needs to be renewed */
 function updateFace() {
   if (allUserData != null && selectedUser != null && selectedFace != null) {
-    if (selectedUser == Database.displayName && !isSetup){
+    if (selectedUser == Database.displayName && !isSetup) {
       if (selectedFaceList === 'publicFaces') {
-        newParameters = allUserData.find((element) => element.user === selectedUser && element.index === selectedFace);
+        newParameters = allUserData.find(
+          (element) =>
+            element.user === selectedUser && element.index === selectedFace
+        );
       } else {
         newParameters = currentUserData.faces[selectedFace];
       }
-    }
-    else {
+    } else {
       newParameters = allUserData.find(
         (element) =>
           element.user === selectedUser && element.index === selectedFace
       );
     }
-    if (!isSetup)
-      Face.updateParameters(newParameters);
-    
+    if (!isSetup) Face.updateParameters(newParameters);
+
     if (hasNewParams) {
       updateFaceThumb(selectedUser, selectedFace);
       hasNewParams = false;
@@ -36,58 +38,36 @@ function updateFace() {
   }
 }
 
-/* Callback function for when a current users' face parameter is changed */
-function updateUserFaceList() {
-  var myFaceList = document.getElementById("privateFaces");
-  myFaceList.innerHTML = "";
-
-  if (currentUserData != null && currentUserData.faces != undefined) {
-    for (var i = 0; i < currentUserData.faces.length; i++) {
-      var name = currentUserData.faces[i].name;
-      if (name == undefined || name == '') name = '...';
-      var thumbHTML =
-        "<div class='deletable-thumb'> <div class='thumb-and-name'>";
-      var imgSrc = getThumbImage(currentUserData.faces[i]);
-      thumbHTML += "<img  class='face-thumb' ";
-      thumbHTML += "src='" + imgSrc + "' ";
-      thumbHTML +=
-        'onclick=\'selectedFaceChanged(this, "' +
-        Database.displayName +
-        '",' +
-        i +
-        ", \"privateFaces\")'";
-      thumbHTML += '><p>' + name + ' </p></div>';
-      thumbHTML += "<div class='delete-x-button'><button type='button' ";
-      thumbHTML +=
-        "onclick='removeUserFace(" +
-        i +
-        ")' class='btn btn-secondary btn-circle-sm'>X</button></div>";
-      thumbHTML += '</div>';
-
-      myFaceList.innerHTML += thumbHTML;
-    }
-  }
-}
-  
 /* Callback function to remove current user's face when the X button is clicked */
 function removeFace(user, index, selector) {
+  console.log('removing user', user, 'index', index, 'selector', selector);
+  console.log(allUserData);
   if (selector === 'privateFaces') {
+    if (currentUserData.faces.length === 1) {
+      alert("You can't delete this face, otherwise your robot will have no faces!");
+      return;
+    }
     var newRobotFaces = currentUserData.faces;
     newRobotFaces.splice(index, 1);
-    var dir = '/users/' + Database.displayName + "/robot/customAPI/states/";
+    var dir = '/users/' + Database.displayName + '/robot/customAPI/states/';
     var dbRef = firebase.database().ref(dir);
     var updates = { faces: newRobotFaces };
-    dbRef.update(updates);
-    if (newRobotFaces.length > 0) {
+    if (newRobotFaces.length > 0 && selectedFaceList === 'privateFaces') {
       selectedUser = user;
       if (index === selectedFace) {
         selectedFace = index === 0 ? 0 : index - 1;
-      } else if (selectedFace > index) {        
+      } else if (selectedFace > index) {
         selectedFace = selectedFace === 0 ? 0 : selectedFace - 1;
       }
       selectedFaceList = selector;
-      updselectedFaceChanged(null, selectedUser, selectedFace, selectedFaceList);
+      updselectedFaceChanged(
+        document.getElementById(selectedUser + selectedFace + selectedFaceList),
+        selectedUser,
+        selectedFace,
+        selectedFaceList
+      );
     }
+    dbRef.update(updates);
   } else if (selector === 'publicFaces') {
     var newPublicFaces = {};
     var count = 0;
@@ -97,128 +77,103 @@ function removeFace(user, index, selector) {
         count++;
       }
     });
+    Object.keys(newPublicFaces).forEach((element) => {
+      newPublicFaces[element]['index'] = parseInt(element);
+    })
     var dir = '/users/' + Database.displayName + '/public/faces/';
     var dbRef = firebase.database().ref(dir);
-    dbRef.set(newPublicFaces, function(error) {
+    if (selectedFaceList === 'publicFaces') {
+      if (Object.keys(newPublicFaces).length > 0) {
+        console.log('selecting a public face');
+        console.log(newPublicFaces);
+        selectedUser = newPublicFaces[0].user;
+        selectedFace = newPublicFaces[0].index;
+        selectedFaceList = 'publicFaces';
+      } else if (currentUserData.faces.length > 0) {
+        console.log('selecting a private face');
+        selectedUser = Database.displayName;
+        selectedFace = 0;
+        selectedFaceList = 'privateFaces';
+      } else {
+        console.log('setting all to null');
+        selectedUser = null;
+        selectedFace = null;
+        selectedFaceList = null;
+      }
+    }
+    dbRef.set(newPublicFaces, function (error) {
       console.log('error', error);
     });
-    selectedUser = null;
-    selectedFace = null;
-    selectedFaceList = null;
-  }
-}
-
-/* Function to load all face data from the database UPDATED SO ONLY USERS/UID/PUBLIC*/
-function updateAllUsersFaceList(snapshot) {
-  // Load data only once in the beginning of each session
-  if (allUserData == null || forceUpdateAll) {
-    forceUpdateAll = false;
-    allUserData = snapshot.val();
-    var otherFaceList = document.getElementById('publicFaces');
-    if (otherFaceList != undefined) {
-      otherFaceList.innerHTML = '';
-    }
-
-    // allUserKeys.splice(currentUserIndex, 1);
-    // allUserKeys.unshift(Database.displayName);
-    var allUserKeys = Object.keys(allUserData);
-    var currentUserIndex = allUserKeys.indexOf(Database.displayName);
-    var updAllUserData = {};
-    for (var j = 0; j < allUserKeys.length; j++) {
-      var id = allUserKeys[j];
-
-      // If setup, include the current user's faces at the beginning
-      // if (id != Database.displayName || isSetup) {
-      var userData = allUserData[id];
-
-      if (userData.public) {
-        var nUserConfigs = 0;
-        var faces = userData.public.faces;
-        if (faces != null && faces != undefined) nUserConfigs = faces.length;
-
-        if (selectedUser == null && nUserConfigs > 0) selectedUser = id;
-        updAllUserData[id] = {};
-        updAllUserData[id]['faces'] = faces;
-        for (i = 0; i < nUserConfigs; i++) {
-          var name = faces[i].name;
-          if (name == undefined || name == '') name = '...';
-          var thumbHTML = "<div class='thumb-and-name'>";
-          imgSrc = getThumbImage(faces[i]);
-          thumbHTML += "<img  class='face-thumb' ";
-          thumbHTML += "src='" + imgSrc + "' ";
-          thumbHTML +=
-            'onclick=\'selectedFaceChanged(this, "' +
-            id +
-            '",' +
-            i +
-            ', "publicFaces")\'>';
-          thumbHTML += '<p>' + name + ' </p></div>';
-          if (
-            !currentUserPublicData.viewedFaces ||
-            !currentUserPublicData.viewedFaces[id] ||
-            !currentUserPublicData.viewedFaces[id].includes(i)
-          ) {
-            thumbHTML += "<div class='delete-x-button'><button type='button' "; 
-            thumbHTML +=
-              " class='btn btn-success btn-circle-sm'>!</button></div>";
-            thumbHTML += '</div>';
-          }
-
-          if (otherFaceList != undefined) otherFaceList.innerHTML += thumbHTML;
-          else myFaceList.innerHTML += thumbHTML;
-        }
-      }
-      // }
-    }
-    allUserData = updAllUserData;
-    var allFaceImgs = document.getElementsByClassName('face-thumb');
-    selectedFaceChanged(allFaceImgs[0], selectedUser, 0, 'publicFaces');
-    // renderAllUserFaceList(allUserData);
   }
 }
 
 function renderPublicFaces(snapshot) {
+  console.log('renderPublicFaces');
   const updated = sortPublicFaces(snapshot.val());
-  if (allUserData == null || updated.length !== allUserData.length)  {
+  // const updated = TEMPsortPublicFaces(snapshot.val()); // Sort old ROBOT data
+  if (allUserData == null || updated.length !== allUserData.length) {
     allUserData = updated;
     renderUserFaceList(updated, 'publicFaces');
   } else {
     allUserData = updated;
-    updselectedFaceChanged(document.getElementById(selectedUser + selectedFace + selectedFaceList), selectedUser, selectedFace, selectedFaceList);
+    if (
+      selectedUser !== null &&
+      selectedFace !== null &&
+      selectedFaceList !== null
+    ) {
+      updselectedFaceChanged(
+        document.getElementById(selectedUser + selectedFace + selectedFaceList),
+        selectedUser,
+        selectedFace,
+        selectedFaceList
+      );
+    }
   }
   updateFace();
   updateFaceEditor();
 }
 
-// function TEMPsortPublicFaces(snapshot) {
-//   const keys = Object.keys(snapshot);
-//   const faces = [];
-//   keys.forEach((element) => {
-//     element = snapshot[element];
-//     if (element.customAPI && element.customAPI.states && element.customAPI.states.faces) {
-//       element.customAPI.states.faces.forEach((face, index) => {
-//         console.log(face);
-//         faces.push({ ...face, user: element.name, index });
-//       })
-//     }
-//   });
-//   console.log(faces);
-//   return faces;
-// }
+/*
+ * Function to sort the face data when pulling all old robot data
+ */
+function TEMPsortPublicFaces(snapshot) {
+  const keys = Object.keys(snapshot);
+  const faces = [];
+  keys.forEach((element) => {
+    element = snapshot[element];
+    if (element.customAPI && element.customAPI.states && element.customAPI.states.faces) {
+      element.customAPI.states.faces.forEach((face, index) => {
+        console.log(face);
+        faces.push({ ...face, user: element.name, index });
+      })
+    }
+  });
+  console.log(faces);
+  return faces;
+}
 
 function renderPrivateFaces(faceData) {
+  console.log('renderPrivateFaces');
   const updated = sortPrivateFaces(faceData.faces);
-  if (currentUserData == null || currentUserData.faces == null || updated !== currentUserData.faces)  {
+  if (
+    currentUserData == null ||
+    currentUserData.faces == null ||
+    updated !== currentUserData.faces
+  ) {
     if (currentUserData === null) {
       currentUserData = {};
     }
-    currentUserData.faces = updated;  
+    currentUserData.faces = updated;
     renderUserFaceList(updated, 'privateFaces');
   } else {
-    currentUserData.faces = updated;  
-    updselectedFaceChanged(document.getElementById(selectedUser + selectedFace + selectedFaceList), selectedUser, selectedFace, selectedFaceList);
+    currentUserData.faces = updated;
+    updselectedFaceChanged(
+      document.getElementById(selectedUser + selectedFace + selectedFaceList),
+      selectedUser,
+      selectedFace,
+      selectedFaceList
+    );
   }
-
 }
 
 function sortPrivateFaces(faceData) {
@@ -246,7 +201,11 @@ function sortPublicFaces(allUserData) {
     // If setup, include the current user's faces at the beginning
     // if (id != Database.displayName || isSetup) {
     var userData = allUserData[id];
-    if (userData.public && userData['group_id'] && userData['group_id'] === group_id) {
+    if (
+      userData.public &&
+      userData['group_id'] &&
+      userData['group_id'] === group_id
+    ) {
       var nUserConfigs = 0;
       var faces = userData.public.faces;
       if (faces != null && faces != undefined) nUserConfigs = faces.length;
@@ -254,33 +213,37 @@ function sortPublicFaces(allUserData) {
       // if (selectedUser == null && nUserConfigs > 0) selectedUser = id;
       // updAllUserData[id] = {};
       // updAllUserData[id]['faces'] = faces;
-      for (i = 0; i < nUserConfigs; i++) {
+      for (i = 0; i < nUserConfigs; i++) {;
         if (
           !currentUserPublicData ||
           !currentUserPublicData.viewedFaces ||
           !currentUserPublicData.viewedFaces[id] ||
-          !currentUserPublicData.viewedFaces[id].includes(i)
+          !currentUserPublicData.viewedFaces[id].includes(faces[i].timestamp)
         ) {
-          newFaces.push({ ...faces[i], user: id, index: i });
+          newFaces.push({ ...faces[i], user: id });
         } else {
-          viewedFaces.push({ ...faces[i], user: id, index: i });
+          viewedFaces.push({ ...faces[i], user: id });
         }
       }
     }
   }
-  viewedFaces.sort((a,b) => {
+  viewedFaces.sort((a, b) => {
     if (a.timestamp && b.timestamp) {
-      return a.timestamp - b.timestamp;
+      return new Date(b.timestamp) - new Date(a.timestamp);
     } else {
       return 1;
     }
-  });;
+  });
   allUserData = [...newFaces, ...viewedFaces];
+  allUserData.forEach((element, index) => {
+    allUserData[index]['index'] = index;
+  })
   return [...newFaces, ...viewedFaces];
 }
 
 /* Single function render all of the lists of faces */
 function renderUserFaceList(faceData, faceList) {
+  console.log('renderUserFaceList');
   var otherFaceList = document.getElementById(faceList);
   otherFaceList.innerHTML = '';
   faceData.forEach((element) => {
@@ -298,37 +261,63 @@ function renderUserFaceList(faceData, faceList) {
       element.user +
       '",' +
       element.index +
-      ', "' + faceList + '")\'>';
+      ', "' +
+      faceList +
+      '")\'>';
     thumbHTML += '<p>' + name + ' </p></div>';
     if (
-      faceList === "publicFaces" &&
+      faceList === 'publicFaces' &&
       (!currentUserPublicData ||
-      !currentUserPublicData.viewedFaces ||
-      !currentUserPublicData.viewedFaces[element.user] ||
-      !currentUserPublicData.viewedFaces[element.user].includes(element.index))
+        !currentUserPublicData.viewedFaces ||
+        !currentUserPublicData.viewedFaces[element.user] ||
+        !currentUserPublicData.viewedFaces[element.user].includes(
+          element.timestamp
+        ))
     ) {
       thumbHTML += "<div class='delete-x-button'><button type='button' ";
       thumbHTML += "id='notif" + element.user + element.index + "' ";
-      thumbHTML +=
-        " class='btn btn-success btn-circle-sm'>!</button></div>";
+      thumbHTML += " class='btn btn-success btn-circle-sm'>!</button></div>";
       thumbHTML += '</div>';
     }
     if (faceList === 'privateFaces' || element.user === Database.displayName) {
-        thumbHTML += "<div class='delete-x-button'><button type='button' ";
-        thumbHTML +=
-          "onclick='removeFace(\"" +
-          element.user + "\", " + element.index + " ,\"" + faceList + 
-          "\")' class='btn btn-secondary btn-circle-sm'>X</button></div>";
-        thumbHTML += '</div>';
+      thumbHTML += "<div class='delete-x-button'><button type='button' ";
+      thumbHTML +=
+        'onclick=\'removeFace("' +
+        element.user +
+        '", ' +
+        element.index +
+        ' ,"' +
+        faceList +
+        "\")' class='btn btn-secondary btn-circle-sm'>X</button></div>";
+      thumbHTML += '</div>';
     }
     otherFaceList.innerHTML += thumbHTML;
   });
-  if (selectedUser === null || selectedFace === null || selectedFaceList === null) {
+  if (
+    selectedUser === null ||
+    selectedFace === null ||
+    selectedFaceList === null
+  ) {
     if (faceData.length > 0) {
       selectedUser = faceData[0].user;
       selectedFace = faceData[0].index;
       selectedFaceList = faceList;
     }
+  }
+  if (forceSelectedFaceTimestamp !== null) {
+    console.log('forceSelectedUpdating');
+    console.log(allUserData);
+    if (Array.isArray(allUserData)) {
+      allUserData.forEach((element, index) => {
+        if (element.timestamp === forceSelectedFaceTimestamp) {
+          selectedUser = element.user;
+          selectedFace = index; 
+          selectedFaceList = 'publicFaces';
+        }
+      });
+      console.log('selectedUser', selectedUser, 'selectedFace', selectedFace);
+    }
+    forceSelectedFaceTimestamp = null;
   }
   updselectedFaceChanged(
     document.getElementById(selectedUser + selectedFace + selectedFaceList),
@@ -338,95 +327,28 @@ function renderUserFaceList(faceData, faceList) {
   );
 }
 
-// TODO: Update for Woz
-function updateRobotFaceList(snapshot) {
-  var robotFaceList = document.getElementById("robotFaceList");
-  if (robotFaceList != undefined)
-    robotFaceList.innerHTML = "";
-
-  robotFaces = snapshot.val();
-
-  if (robotFaces != undefined) {
-    
-    for (var i = 0; i < robotFaces.length; i++) {
-
-      var name = robotFaces[i].name;
-      if (name == undefined || name == "")
-        name = "..."
-      var thumbHTML = "";
-      if (isSetup)
-        thumbHTML += "<div class='deletable-thumb'>";
-      thumbHTML += "<div class='thumb-and-name'>";
-      thumbHTML += "<img  class='face-thumb' ";
-      thumbHTML += "src='" + robotFaces[i].thumb + "' ";
-      if (!isSetup)
-        thumbHTML += "onclick='selectedRobotFaceChanged(this, "+ i + ")'";
-      thumbHTML += "><p>" + name + " </p></div>";
-      if (isSetup) {
-        thumbHTML += "<div class='delete-x-button'><button type='button' ";
-        thumbHTML += "onclick='removeRobotFace(" + i + ")' class='btn btn-secondary btn-circle-sm'>X</button></div>"
-        thumbHTML += "</div>";
-      }
-      
-      robotFaceList.innerHTML += thumbHTML;
-    }
-  }
-}
-
-function selectedRobotFaceChanged(target, index) {
-  var allFaceImgs = document.getElementsByClassName("face-thumb");
-  for (var i=0; i<allFaceImgs.length; i++) {
-    allFaceImgs[i].style.border = "5px transparent solid";
-  }
-  target.style.border = "5px #007bff solid";
-  
-  // var dir = "robots/" + currentRobot + "/state/";
-  // var dbRef = firebase.database().ref(dir);
-  // dbRef.update({ currentFace: index });
-}
-
-
-/* Callback function for when a different face is selected by the user through clicking a thumb*/
-function selectedFaceChanged(target, user, index, selector, ignore = false) {
-  hasNewParams = true;
-  
-  var allFaceImgs = document.getElementsByClassName("face-thumb");
-  for (var i=0; i<allFaceImgs.length; i++) {
-    allFaceImgs[i].style.border = "5px transparent solid";
-  }
-  target.style.border = "5px #007bff solid";
-  
-  selectedUser = user;
-  selectedFace = index;
-  selectedFaceList = selector;
-  if (!isSetup){
-    updateFace();
-    updateFaceEditor();
-  }
-  if (selector === 'publicFaces' && !ignore) {
-    faceViewed(target, user, index, selector);
-  }
-}
-
 /* Updated callback for when a different face is selected by the user through clicking a thumb */
 function updselectedFaceChanged(target, user, index, selector) {
-  console.log('selectedChanged', user, index, selector, target);
+  console.log(user, index, selector);
   hasNewParams = true;
-
-  var allFaceImgs = document.getElementsByClassName("face-thumb");
-  for (var i=0; i<allFaceImgs.length; i++) {
-    allFaceImgs[i].style.border = "5px transparent solid";
+  var allFaceImgs = document.getElementsByClassName('face-thumb');
+  for (var i = 0; i < allFaceImgs.length; i++) {
+    allFaceImgs[i].style.border = '5px transparent solid';
   }
   if (target === null || target === undefined) {
-    document.getElementById(user + index + selector).style.border = '5px #007bff solid';
+    console.log('user', user, 'index', index, 'selector', selector)
+    document.getElementById(user + index + selector).style.border =
+      '5px #007bff solid';
   } else {
-    target.style.border = "5px #007bff solid";
+    target.style.border = '5px #007bff solid';
   }
-  var notif = document.getElementById('notif' + user + index);
-  if (notif) {
-    notif.setAttribute('style', 'display: none;');
+  if (selector === 'publicFaces') {
+    var notif = document.getElementById('notif' + user + index);
+    if (notif) {
+      notif.setAttribute('style', 'display: none;');
+    }
   }
-  
+
   selectedUser = user;
   selectedFace = index;
   selectedFaceList = selector;
@@ -436,8 +358,8 @@ function updselectedFaceChanged(target, user, index, selector) {
       .getElementById('setCurrentFacePublic')
       .setAttribute('style', 'display: block');
     document
-       .getElementById('setCurrentFacePrivate')
-       .setAttribute('style', 'display: none');
+      .getElementById('setCurrentFacePrivate')
+      .setAttribute('style', 'display: none');
   } else {
     document
       .getElementById('setCurrentFacePublic')
@@ -445,78 +367,81 @@ function updselectedFaceChanged(target, user, index, selector) {
     document
       .getElementById('setCurrentFacePrivate')
       .setAttribute('style', 'display: block');
-
   }
 
   updateFace();
   updateFaceEditor();
-  if (selector === 'publicFaces') faceViewed(target, user, index, selector);
+  if (selector === 'publicFaces') {
+    faceViewed(target, user, index, selector);
+  }
 }
 
 /* Callback function for when the current face is renamed, to update the database accordingly*/
 function faceRenamed() {
   if (selectedUser == Database.displayName) {
-    var dir = "users/" + selectedUser;
-    var dbRef = firebase.database().ref(dir + "/robot/customAPI/states/faces/" + selectedFace + "/");
+    var dir = 'users/' + selectedUser;
+    var dbRef = firebase
+      .database()
+      .ref(dir + '/robot/customAPI/states/faces/' + selectedFace + '/');
     var newParamObj = {};
-    var faceName = document.getElementById("faceName");
+    var faceName = document.getElementById('faceName');
     newParamObj.name = faceName.value;
     dbRef.update(newParamObj);
-  }
-  else {
-    console.log("You cannot rename other users' faces.")
+  } else {
+    console.log("You cannot rename other users' faces.");
   }
 }
 
 /* Callback function for when the current face description is renamed, to update the database accordingly*/
 function descriptionChanged() {
   if (selectedUser == Database.displayName) {
-    var dir = "users/" + selectedUser;
-    var dbRef = firebase.database().ref(dir + "/robot/customAPI/states/faces/" + selectedFace + "/");
+    var dir = 'users/' + selectedUser;
+    var dbRef = firebase
+      .database()
+      .ref(dir + '/robot/customAPI/states/faces/' + selectedFace + '/');
     var newParamObj = {};
     var faceDescription = document.getElementById('faceDescription');
-    newParamObj.description = faceDescription.value
+    newParamObj.description = faceDescription.value;
     dbRef.update(newParamObj);
-  }
-  else {
-    console.log("You cannot change other users' faces.")
+  } else {
+    console.log("You cannot change other users' faces.");
   }
 }
 
 /* Mark face as viewed in the database */
 function faceViewed(target, user, index, selector) {
-  if (selector === 'publicFaces' && target !== null && user !== null && index !== null) {
+  if (
+    selector === 'publicFaces' &&
+    target !== null &&
+    user !== null &&
+    index !== null
+  ) {
+    const timestamp = allUserData[index].timestamp;
     if (!currentUserPublicData.viewedFaces) {
       // Logged in user does not have the viewedFaces field yet
       forceUpdateAll = true;
       var dir = 'users/' + Database.displayName;
-      var dbRef = firebase
-        .database()
-        .ref(dir + '/public/viewedFaces/' + user);
-      dbRef.update({ 0: index }).then(() => {
-        selectedFaceChanged(target, user, index, selector, true);
+      var dbRef = firebase.database().ref(dir + '/public/viewedFaces/' + user);
+      dbRef.update({ 0: timestamp }).then(() => {
+        updselectedFaceChanged(target, user, index, selector, true);
       });
     } else if (!currentUserPublicData.viewedFaces[user]) {
       // Logged in user has not viewed any other user
       forceUpdateAll = true;
       var dir = 'users/' + Database.displayName;
-      var dbRef = firebase
-        .database()
-        .ref(dir + '/public/viewedFaces/' + user);
-      dbRef.update({ 0: index }).then(() => {
-        selectedFaceChanged(target, user, index, selector, true);
+      var dbRef = firebase.database().ref(dir + '/public/viewedFaces/' + user);
+      dbRef.update({ 0: timestamp }).then(() => {
+        updselectedFaceChanged(target, user, index, selector, true);
       });
-    } else if (!currentUserPublicData.viewedFaces[user].includes(index)) {
+    } else if (!currentUserPublicData.viewedFaces[user].includes(timestamp)) {
       // Logged in user has viewed other faces by this user, but not this face
       forceUpdateAll = true;
       var dir = 'users/' + Database.displayName;
-      var dbRef = firebase
-        .database()
-        .ref(dir + '/public/viewedFaces/' + user);
+      var dbRef = firebase.database().ref(dir + '/public/viewedFaces/' + user);
       var upd = {};
-      upd[currentUserPublicData.viewedFaces[user].length] = index;
+      upd[currentUserPublicData.viewedFaces[user].length] = timestamp;
       dbRef.update(upd).then(() => {
-        selectedFaceChanged(target, user, index, selector, true);
+        updselectedFaceChanged(target, user, index, selector, true);
       });
     }
   }
@@ -533,24 +458,28 @@ function updateFaceThumb(user, id) {
     var svg = document.getElementById('faceSVG');
     var imgsrc = svg2img(svg);
     var dbRef =
-      (selectedFaceList !== 'publicFaces')
-      ? firebase.database().ref('users/' + user + '/robot/customAPI/states/faces/' + id + '/')
-      : firebase.database().ref('users/' + user + '/public/faces/' + id + '/');
-    var newThumb = {thumb:imgsrc};
+      selectedFaceList !== 'publicFaces'
+        ? firebase
+            .database()
+            .ref('users/' + user + '/robot/customAPI/states/faces/' + id + '/')
+        : firebase
+            .database()
+            .ref('users/' + user + '/public/faces/' + id + '/');
+    var newThumb = { thumb: imgsrc };
     dbRef.update(newThumb);
   }
 }
 
 /* Utility function */
 function getThumbImage(faceParameters) {
-  var thumbImg = ""; 
+  var thumbImg = '';
   if (faceParameters !== null && faceParameters !== undefined)
     thumbImg = faceParameters.thumb;
   return thumbImg;
 }
 
 /* Utility function to convert current SVG into a URL image*/
-function svg2img(svg){
+function svg2img(svg) {
   var xml = new XMLSerializer().serializeToString(svg);
   var svg64 = btoa(xml); //for utf8: btoa(unescape(encodeURIComponent(xml)))
   var b64start = 'data:image/svg+xml;base64,';
@@ -560,12 +489,12 @@ function svg2img(svg){
 
 // TODO
 function addPresetFace() {
-  var dir = 'robots/' + (currentRobot) + "/customAPI/state/";
+  var dir = 'robots/' + currentRobot + '/customAPI/state/';
   var user = allFaceIndexes[currentConfig].user;
   var index = allFaceIndexes[currentConfig].index;
-  faces.push({user:user, index:index});
+  faces.push({ user: user, index: index });
   var dbRef = firebase.database().ref(dir);
-  dbRef.update({presetFaces:faces});
+  dbRef.update({ presetFaces: faces });
 }
 
 function shareFace() {
@@ -581,19 +510,27 @@ function shareFace() {
     .database()
     .ref(dir + '/public/faces/' + newFaceIndex + '/');
   forceUpdateAll = true;
-  const timestamp = (new Date()).toLocaleString();
+  const timestamp = new Date().toLocaleString();
+  forceSelectedFaceTimestamp = timestamp;
   dbRef.set({ ...newParameters, timestamp }, function (error) {
     console.log(error);
   });
-  recordData('sharedFace', { name: newParameters.name, description: newParameters.description ? newParameters.description : '' });
+  recordData('sharedFace', {
+    name: newParameters.name,
+    description: newParameters.description ? newParameters.description : '',
+  });
   var newIndex = 0;
-  allUserData.forEach((element) => { if (element.user === selectedUser) { newIndex++ } } );
+  allUserData.forEach((element) => {
+    if (element.user === selectedUser) {
+      newIndex++;
+    }
+  });
   selectedFace = newIndex - 1;
   selectedFaceList = 'publicFaces';
   updselectedFaceChanged(null, selectedUser, selectedFace, selectedFaceList);
 }
 
-/* 
+/*
  * Function to set the currently selected face as the robot face in the database
  */
 function setCurrentFace() {
@@ -601,8 +538,10 @@ function setCurrentFace() {
     var dbRef = firebase
       .database()
       .ref('/users/' + Database.displayName + '/robot/state/');
-    dbRef.update({ 'currentFace': selectedFace }, function (error) {
-      console.log(error);
+    dbRef.update({ currentFace: selectedFace }, function (error) {
+      if (error) {
+        console.log(error);
+      }
     });
   } else if (selectedFaceList === 'publicFaces') {
     createNewFace();
@@ -627,19 +566,26 @@ function goToFaceRender() {
   // window.location.href = 'render-face.html';
 }
 
-/* 
+/*
  * Function to add a copy of the currently displayed face to the current user's face list on the database
  */
-function createNewFace() {
+function createNewFace(parameters = newParameters) {
   var newIndex = currentUserData.faces.length;
-  newParameters['public'] = false;
-  storeUserFace(newParameters);
+  parameters['public'] = false;
+  storeUserFace(parameters);
   recordData('copiedFaceFromPublic', {});
-  updselectedFaceChanged(document.getElementById(Database.displayName + newIndex + 'privateFaces'), Database.displayName, newIndex, 'privateFaces');
+  updselectedFaceChanged(
+    document.getElementById(Database.displayName + newIndex + 'privateFaces'),
+    Database.displayName,
+    newIndex,
+    'privateFaces'
+  );
+  var gallery = document.getElementById('privateGallery')
+  gallery.scrollLeft = gallery.scrollWidth;
 }
 
 /*
- * Function to create a new default face for the user to edit and share 
+ * Function to create a new default face for the user to edit and share
  */
 function createDefaultFace() {
   // Load Default Face
@@ -647,7 +593,7 @@ function createDefaultFace() {
   xmlhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       var defaultFace = JSON.parse(this.responseText);
-      storeUserFace(defaultFace);
+      createNewFace(defaultFace);
     }
   };
   xmlhttp.open('GET', './default_face.json', true);
@@ -655,7 +601,7 @@ function createDefaultFace() {
 }
 
 /*
- * Function to store a face object to the user's database: users/uid/robot/customapi/states/faces/index/faceParameters 
+ * Function to store a face object to the user's database: users/uid/robot/customapi/states/faces/index/faceParameters
  */
 function storeUserFace(faceParameters) {
   var newFaceIndex = 0;
@@ -665,7 +611,7 @@ function storeUserFace(faceParameters) {
   var dbRef = firebase
     .database()
     .ref(dir + '/robot/customAPI/states/faces/' + newFaceIndex + '/');
-  dbRef.set(faceParameters, function(error) {
+  dbRef.set(faceParameters, function (error) {
     console.log(error);
   });
 }
@@ -676,7 +622,7 @@ function backToIndexPage() {
     new Date().getTime(),
     'faceEdit'
   );
-  window.location.href = "index.html";
+  window.location.href = 'index.html';
 }
 
 function recordData(category, data = {}) {
@@ -686,7 +632,8 @@ function recordData(category, data = {}) {
     firebase.auth().currentUser.displayName +
     '/faceEdit/' +
     date.toDateString() +
-    '/' + category;
+    '/' +
+    category;
   dbRef = firebase.database().ref(dir);
   dbRef.push().set({
     timestamp: date.toLocaleString(),
@@ -702,7 +649,8 @@ function calculateTime(start, end, event) {
     'users/' +
     firebase.auth().currentUser.displayName +
     '/' +
-    event + '/' +
+    event +
+    '/' +
     currDate +
     '/duration/';
   var dbRef = firebase.database().ref(dir);
