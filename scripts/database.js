@@ -24,8 +24,6 @@ function Database(config, readyCallback) {
    * Function to initialize firebase and sign in anonymously
    */
   Database.initialize = function () {
-    console.log(firebase, firebase.apps);
-    // console.log('auth', firebase.auth());
     if (!firebase.apps.length) {
       Database.app = firebase.initializeApp(Database.config);
     } else {
@@ -68,19 +66,19 @@ function Database(config, readyCallback) {
   );
 
   Database.signInAnonymously = function () {
-    console.log('anonymously');
-    console.log(Database.displayName);
+    if (Database.app === null || Database.app.auth() === null) {
+      if (!window.location.href.includes('signin.html')) {
+        window.location.href = 'signin.html';
+      }
+    }
     if (Database.displayName == null) {
-      console.log('???', firebase.auth());
       Database.app.auth().signInAnonymously().then((user) => {
-        console.log(user);
         const name = Database.app.auth().currentUser.displayName;
         if (name === null && !window.location.href.includes('signin.html')) {
           window.location.href = 'signin.html';
         } else {
           Database.displayName = name;
         }
-        console.log(Database.displayName);
       }).catch(Database.handleError);
     }
   };
@@ -177,7 +175,6 @@ function Database(config, readyCallback) {
   };
 
   Database.handleAuthStateChange = function (user) {
-    console.log('auth state changed');
     if (user) {
       Database.isAnonymous = user.isAnonymous;
       Database.uid = user.uid;

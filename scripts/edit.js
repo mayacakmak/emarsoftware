@@ -6,7 +6,7 @@ function initializeEdit() {
   isEdit = true;
 
   var dbUserRef = firebase.database().ref('/users/');
-  // dbUserRef.on("value", updateAllUsersFaceList);
+  // var dbUserRef = firebase.database().ref('/robots/'); // Can use to get all old faces
   dbUserRef.on('value', renderPublicFaces);
 
   var dbUserRef = firebase.database().ref('/users/' + Database.displayName + "/robot/");
@@ -43,6 +43,9 @@ function currentUserDataChanged(snapshot) {
 
 function currentUserPublicDataChanged(snapshot) {
   currentUserPublicData = snapshot.val();
+  if (!currentUserPublicData) {
+    currentUserPublicData = {};
+  }
   if (!currentUserPublicData['faces']) {
     currentUserPublicData.faces = [];
   }
@@ -83,7 +86,6 @@ function updateFaceEditor() {
             var key = Object.keys(newParameters)[i];
             var param = newParameters[key];
             if (param.v2eyes === undefined) {
-              console.log(param);
               if (param.type == "number" && !param.name.toLowerCase().includes('voice')) {
                 var nIncrements = 20;
                 if (param.nIncrements !== undefined)
@@ -346,7 +348,6 @@ function getDataList(name, min, max, nIncrements) {
 
 // Update the database in response to a UI event
 function newParameterValue(target, param) {
-  console.log('!!!', target, param);
   if (Database.displayName !== null) {
     var dir = "users/" + Database.displayName;
     var dbRef = firebase.database().ref(dir + "/robot/customAPI/states/faces/" + selectedFace + "/");
@@ -368,22 +369,6 @@ function newParameterValue(target, param) {
 
     var newParamObj = {};
     newParamObj[key] = newParam;
-
-    if (newParam.type == "number") {
-      // var sliderDiv = document.getElementById(key);
-      // console.log('newslideerinput', newParam);
-      // if (param == "current") {
-      //   var sliderValueDiv = sliderDiv.getElementsByClassName("sliderValue")[0];
-      //   sliderValueDiv.innerHTML = target.value;
-      // } 
-      // else {
-      //   var slider = sliderDiv.getElementsByClassName("slider")[0];
-      //   if (param == "min")
-      //     slider.min = target.value;
-      //   if (param == "max")
-      //     slider.max = target.value;
-      // }
-    }
     
     dbRef.update(newParamObj);
     hasNewParams = true;

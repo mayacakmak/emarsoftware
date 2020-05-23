@@ -15,11 +15,6 @@ function initializeRenderFace() {
   
   window.onresize = Face.draw;
   var svg = document.getElementById('faceSVG');
-  if (currentState.listening === true) {
-    svg.setAttribute('style', 'transform: rotate(5deg);');
-  } else {
-    svg.setAttribute('style', 'transform: rotate(0deg);');
-  }
   screen.orientation.lock('landscape');
 }
 
