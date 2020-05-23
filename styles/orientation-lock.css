@@ -1,12 +1,10 @@
 @media screen and (orientation: portrait) {
-    html {
+    body {
         transform: rotate(-90deg);
         transform-origin: left top;
         width: 100vh;
-        overflow-x: hidden;
-        overflow-y: hidden;
         position: absolute;
-        top: 100%;
-        left: 0;
+        margin-top: 100vh;
+        margin-left: 0;
     }
 }
