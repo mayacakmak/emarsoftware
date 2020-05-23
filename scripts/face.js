@@ -46,11 +46,6 @@ function Face() {
     var svg = document.getElementById("faceSVG");
     svg.innerHTML = "";
     svg.setAttribute("viewBox", "0 0 " + faceWidth + " " + faceHeight);
-    if (listening === true) {
-      svg.setAttribute('style', 'transform: rotate(5deg);')
-    } else if (listening === false) {
-      svg.setAttribute('style', 'transform: rotate(0deg);');
-    }
 
     Face.drawBackground();
     Eyes.draw();

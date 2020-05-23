@@ -126,17 +126,11 @@ function startGallery() {
 }
 
 function startDiary() {
-  var dir = "users/" + firebase.auth().currentUser.displayName + "/robot/state";
-  var dbRef = firebase.database().ref(dir);
-  dbRef.update({ listening: true });
   sessionStorage.setItem(startDiaryTime, new Date().getTime());
   window.location.href = "diary.html";
 }
 
 function backToIndexPage() {
-  var dir = 'users/' + firebase.auth().currentUser.displayName + '/robot/state';
-  var dbRef = firebase.database().ref(dir);
-  dbRef.update({ listening: false });
   window.location.href = 'index.html';
 }
 
