@@ -146,7 +146,7 @@ function doneTyping() {
       endDiaryTime,
       "diary"
     );
-    window.location.href = "render-face.html";
+    window.location.href = "index.html";
   } 
   else {
     alert("Please type your reflection, based on the Robot's prompt");
