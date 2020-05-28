@@ -39,14 +39,28 @@ function updateFace() {
 }
 
 /* Callback function to remove current user's face when the X button is clicked */
-function removeFace(user, index, selector) {
+async function removeFace(user, index, selector) {
   console.log('removing user', user, 'index', index, 'selector', selector);
   console.log(allUserData);
+  var deleted = [];
+  await firebase
+    .database()
+    .ref('/users/' + Database.displayName + '/')
+    .once('value')
+    .then((snapshot) => {
+      console.log(snapshot.val());
+      if (snapshot.val().deletedFaces !== null) {
+        deleted = snapshot.val().deletedFaces;
+        console.log(deleted);
+      }
+    });
   if (selector === 'privateFaces') {
     if (currentUserData.faces.length === 1) {
-      alert("You can't delete this face, otherwise your robot will have no faces!");
+      alert("You can't delete this face, otherwise your robot will have no face!");
       return;
     }
+    deleted.push(currentUserData.faces[index]);
+    console.log(deleted);
     var newRobotFaces = currentUserData.faces;
     newRobotFaces.splice(index, 1);
     var dir = '/users/' + Database.displayName + '/robot/customAPI/states/';
@@ -68,6 +82,10 @@ function removeFace(user, index, selector) {
       );
     }
     dbRef.update(updates);
+    firebase
+      .database()
+      .ref('/users/' + Database.displayName)
+      .update({ deletedFaces: deleted });
   } else if (selector === 'publicFaces') {
     var newPublicFaces = {};
     var count = 0;
@@ -75,8 +93,12 @@ function removeFace(user, index, selector) {
       if (element.user === user && element.index !== index) {
         newPublicFaces[count] = element;
         count++;
+      } else if (element.user === user && element.index === index) {
+        deleted.push(element);
+        console.log(deleted);
       }
     });
+    firebase.database().ref('/users/' + Database.displayName).update({ deletedFaces: deleted });
     Object.keys(newPublicFaces).forEach((element) => {
       newPublicFaces[element]['index'] = parseInt(element);
     })
