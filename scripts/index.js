@@ -162,12 +162,13 @@ function backToIndexPage() {
 function doneTyping() {
   var diaryText = document.getElementById("diaryText").value;
   if (diaryText.length != 0) {
-    endDiaryTime = new Date().getTime();
-    calculateTime(
-      sessionStorage.getItem(startDiaryTime),
-      endDiaryTime,
-      "diary"
-    );
+    // Handled in the window.onbeforeunload now
+    // endDiaryTime = new Date().getTime();
+    // calculateTime(
+    //   sessionStorage.getItem(startDiaryTime),
+    //   endDiaryTime,
+    //   "diary"
+    // );
     window.location.href = "index.html";
   } 
   else {
