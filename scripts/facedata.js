@@ -591,11 +591,15 @@ function goToFaceRender() {
 /*
  * Function to add a copy of the currently displayed face to the current user's face list on the database
  */
-function createNewFace(parameters = newParameters) {
+function createNewFace(parameters = newParameters, defaultFace = false) {
   var newIndex = currentUserData.faces.length;
   parameters['public'] = false;
   storeUserFace(parameters);
-  recordData('copiedFaceFromPublic', {});
+  if (defaultFace) {
+    recordData('createdNewFace', {});
+  } else {
+    recordData('copiedFaceFromPublic', {});
+  }
   updselectedFaceChanged(
     document.getElementById(Database.displayName + newIndex + 'privateFaces'),
     Database.displayName,
@@ -615,7 +619,7 @@ function createDefaultFace() {
   xmlhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       var defaultFace = JSON.parse(this.responseText);
-      createNewFace(defaultFace);
+      createNewFace(defaultFace, true);
     }
   };
   xmlhttp.open('GET', './default_face.json', true);
