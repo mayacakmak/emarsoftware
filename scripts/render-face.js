@@ -16,20 +16,34 @@ function initializeRenderFace() {
   window.onresize = Face.draw;
   var svg = document.getElementById('faceSVG');
   screen.orientation.lock('landscape');
+
+  // Log time spent in face render
+  window.onbeforeunload = function () {
+    calculateTime(
+      sessionStorage.getItem('startFaceRenderTime'),
+      new Date().getTime(),
+      'faceRender'
+    );
+  };
+  window.onfocus = function () {
+    sessionStorage.setItem('startFaceRenderTime', new Date().getTime());
+  };
+  window.onblur = function () {
+    calculateTime(
+      sessionStorage.getItem('startFaceRenderTime'),
+      new Date().getTime(),
+      'faceRender'
+    );
+  };
 }
 
 function closeRobot() {
-  const backPage = currentState.listening;
-  var dir =
-    'users/' + firebase.auth().currentUser.displayName + '/robot/state';
-  var dbRef = firebase.database().ref(dir);
-  dbRef.update({ listening: false });
-  endFaceRenderTime = (new Date()).getTime();
-  calculateTime(
-    sessionStorage.getItem('startFaceRenderTime'),
-    endFaceRenderTime,
-    'faceRender'
-  );
+  // endFaceRenderTime = (new Date()).getTime();
+  // calculateTime(
+  //   sessionStorage.getItem('startFaceRenderTime'),
+  //   endFaceRenderTime,
+  //   'faceRender'
+  // );
   if (!backPage) {
     window.history.back();
   } else {

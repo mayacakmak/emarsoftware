@@ -19,6 +19,25 @@ function initializeEdit() {
   var uid = firebase.auth().currentUser.uid;
   var uidDiv = document.getElementById('uid');
   uidDiv.innerHTML = Database.displayName;
+
+  // Log user duration data
+  window.onbeforeunload = function () {
+    calculateTime(
+      sessionStorage.getItem('startEditTime'),
+      new Date().getTime(),
+      'faceEdit'
+    );
+  };
+  window.onfocus = function () {
+    sessionStorage.setItem('startEditTime', new Date().getTime());
+  };
+  window.onblur = function () {
+    calculateTime(
+      sessionStorage.getItem('startEditTime'),
+      new Date().getTime(),
+      'faceEdit'
+    );
+  };
 }
 
 function currentUserDataChanged(snapshot) {

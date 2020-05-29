@@ -639,11 +639,11 @@ function storeUserFace(faceParameters) {
 }
 
 function backToIndexPage() {
-  calculateTime(
-    sessionStorage.getItem('startEditTime'),
-    new Date().getTime(),
-    'faceEdit'
-  );
+//   calculateTime(
+//     sessionStorage.getItem('startEditTime'),
+//     new Date().getTime(),
+//     'faceEdit'
+//   );
   window.location.href = 'index.html';
 }
 
