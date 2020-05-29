@@ -23,6 +23,31 @@ function databaseReadyCallback() {
       console.log(username);
     });
   newFaceNotification();
+  window.onbeforeunload = function () {
+    if (window.location.href.includes('diary.html')) {
+      endDiaryTime = new Date().getTime();
+      calculateTime(
+        sessionStorage.getItem(startDiaryTime),
+        endDiaryTime,
+        'diary'
+      );
+    }
+  };
+  window.onfocus = function () {
+    if (window.location.href.includes('diary.html')) {
+      sessionStorage.setItem(startDiaryTime, new Date().getTime());
+    }
+  };
+  window.onblur = function () {
+    if (window.location.href.includes('diary.html')) {
+      endDiaryTime = new Date().getTime();
+      calculateTime(
+        sessionStorage.getItem(startDiaryTime),
+        endDiaryTime,
+        'diary'
+      );
+    }
+  };
 }
 
 function updateUserRobotInfo(snapshot) {
