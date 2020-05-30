@@ -18,26 +18,32 @@ var participants = [
   'elin_b',
   'kai_m_test',
 ];
+var ids = {};
 function databaseReadyCallback() {
   console.log('currUser:', firebase.auth().currentUser.uid);
   var dbRef = firebase.database().ref('/participants/');
   dbRef.once('value').then(function (snapshot) {
     participants = Object.keys(snapshot.val());
+    ids = snapshot.val();
   });
 }
 
 function signIn() {
   var login = document.getElementById("loginID").value
   login = login.toLowerCase();
+  console.log(participants);
+  console.log(login);
   if (login.length != 0 && participants.includes(login)) {
     if (Database.app.auth().currentUser.displayName != login) {
       firebase.auth().currentUser.updateProfile({
         displayName: login
-      }).then(() => {
-        console.log(login);
-        console.log(firebase.auth().currentUser.displayName);
-        Database.displayName = login;
-        Database.handleSignIn(() => { window.location.href = 'index.html'; });
+      }).then(() => { 
+        firebase.database().ref('users/' + login).update({'group_id': ids[login]}).then(() => {
+          console.log(login);
+          console.log(firebase.auth().currentUser.displayName);
+          Database.displayName = login;
+          Database.handleSignIn(() => { window.location.href = 'index.html'; });
+        });
       }).catch((error) => {
         console.log("Error: ", error);
       });
