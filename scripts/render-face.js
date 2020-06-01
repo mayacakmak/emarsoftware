@@ -44,11 +44,11 @@ function closeRobot() {
   //   endFaceRenderTime,
   //   'faceRender'
   // );
-  if (!backPage) {
-    window.history.back();
-  } else {
-    window.location.href = 'index.html';
-  }
+  // if (!backPage) {
+  window.history.back();
+  // } else {
+  //   window.location.href = 'index.html';
+  // }
 }
 
 function calculateTime(start, end, event) {
