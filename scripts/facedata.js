@@ -49,7 +49,7 @@ async function removeFace(user, index, selector) {
     .once('value')
     .then((snapshot) => {
       console.log(snapshot.val());
-      if (snapshot.val().deletedFaces !== null) {
+      if (snapshot.val().deletedFaces) {
         deleted = snapshot.val().deletedFaces;
         console.log(deleted);
       }
