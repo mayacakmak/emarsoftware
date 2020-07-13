@@ -1,0 +1,104 @@
+@media only screen and (max-device-width: 480px) {
+    img.face-thumb {
+        height: 75px;
+    }
+    div.scale {
+        display: initial;
+    }
+    .sliderName {
+        float:left;
+    }
+    div.sliderValue {
+        display:contents;
+    }
+    /* div.min-value {
+        float:left;
+        width: 100%;
+    }
+    div.max-value {
+        float:left;
+        width: 100%;
+        margin-bottom: 10px;
+        margin-left: 0;
+    } */
+    div.colorPicker{
+        display:inline-block;
+    
+    }
+    div.colorPicker > div {
+        padding: 5px;
+    }
+    div.bool-picker{
+        display:unset;
+    }
+    div.bool-picker > div {
+        font-size: large;
+    }
+    input[type=text].min {
+        text-align: center;
+    }
+    input[type=text].max {
+        text-align: center;
+    }
+    div.scale-labels > h4{
+        font-size: 1em;
+    }
+    div.face-parameters {
+        height: 200px;
+    }
+}
+.card-deck > .card {
+    min-width: 280px;
+    min-height: 200px;
+}
+
+.card-title {
+    display:flex;
+}
+
+.profile-card {
+    width: fit-content;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.col-sm-5 {
+    min-width: max-content;
+}
+
+.col-sm-7 {
+    margin-bottom: 10px; 
+}
+
+.startButtons {
+    display:  flex;
+    justify-content: space-between;
+}
+
+
+@media only screen and (min-width: 560px) and (max-width: 1000px) { 
+    .col-sm-7 {
+        min-width: fit-content;
+    }
+    #profilePic {
+        width: 100%;
+        max-width: 4px !important;
+        height: 'auto';
+    }
+}
+
+<<<<<<< Updated upstream
+
+=======
+/* @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {
+  html {
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    width: 100vh;
+    overflow-x: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
+} */
+>>>>>>> Stashed changes

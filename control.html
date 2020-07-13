@@ -5,7 +5,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>EMAR Robot Frontend Tools</title>
+  <title>Robot Study</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/style.processed.css">
 </head>
@@ -94,6 +94,38 @@
             <div class="top-aligned" id="faceControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
           </div>
         </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>LED Control</h2>
+          </div>
+          <div class="card-body">
+            <div id="neckControl">
+              <div class='row'>
+                <div class='col-9'>
+                  <div class='screen-element mt-4'>
+                    <div class='min-value screen-item'> Red: 0 </div>
+                    <input type='range' class='screen-slider' id='r' onchange='LEDValueChanged(this)' min='0' max='255'>
+                    <div class='max-value screen-item'> 255 </div>
+                  </div>
+                  <div class='screen-element mt-4'>
+                    <div class='min-value screen-item'> Green: 0 </div>
+                    <input type='range' class='screen-slider' id='g' onchange='LEDValueChanged(this)' min='0' max='255'>
+                    <div class='max-value screen-item'> 255 </div>
+                  </div>
+                  <div class='screen-element mt-4'>
+                    <div class='min-value screen-item'> Blue: 0 </div>
+                    <input type='range' class='screen-slider' id='b' onchange='LEDValueChanged(this)' min='0' max='255'>
+                    <div class='max-value screen-item'> 255 </div>
+                  </div>
+                </div>
+                <div class='col-3'>
+                  <div style="width:100%; height:100%" id='LEDColor'>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-sm-5">
         <div class="card">
@@ -123,7 +155,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/config.js"></script>
-  <script src="https://mayacakmak.github.io/databasejs/scripts/database.js"></script>
+  <script src="scripts/database.js"></script>
   <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/eyes.js"></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/face.js"></script>

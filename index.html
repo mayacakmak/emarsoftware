@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
-</html>
-
 <head>
+  <link rel="manifest" href="manifest.json">
   <meta charset="utf-8">
-  <title>EMAR Robot Frontend Tools</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Robot Studys</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/style.processed.css">
+  <link rel='stylesheet' href="styles/mobile.css">
 </head>
 
 <body>
@@ -16,60 +16,147 @@
     <div class="topbar-right" id="top"></div>
   </div>
   <div class="container-fluid px-sm-5">
-    <div class="row py-3">
-      <div class="col-sm-10">
-        <h1 class="display-4">Robot Frontend Tools</h1>
+    <div class="row py-3 h-20">
+      <div class="col">
+        <h1 class="display-4">Robot Study</h1>
       </div>
-      <div class="col-sm-2 text-center align-self-left justify-content-center">
-        <div class="btn-group"><button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span id="selectedRobot"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="pl-2">Loading robots...</span></span><div class="dropdown-menu" id="robots"></div></button></div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-4">
-        <div class="card bg-light mb-3">
-          <div class="card-header">
-            <h2>Robot Setup</h2>
+        <!-- <div class="btn-group"><button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span id="selectedRobot"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="pl-2">Loading robots...</span></span><div class="dropdown-menu" id="robots"></div></button></div> -->
+          <!-- <p>Name</p> -->
+        <div style = "width:100px; margin-right: 20px; margin-top:10px">
+          <div class="card text-center">
+          <div class="card-body" style="padding: 3%;">
+            <img src="assets/EMAR.jpg" alt="profilePic" class="face-thumb" 
+                id="profilePic" style="width:40px; max-width: 100px; height: auto;" />
+                <div style="text-align: center;"> 
+                    <h5 class="card-title"><span id="loginID"></span></h5>	             
+                  <button class="btn btn-warning" onclick="logout()" style="margin-bottom: 5%;">Logout</button>
+            </div>  
           </div>
-          <div class="card-body">
-            <p class="card-text">Select a robot above and press the button to set up its face and other parameters, before starting to control it.</p><button class="btn btn-warning" onclick="startSetup()" id="setupButton">Start Robot Setup</button></div>
         </div>
       </div>
-      <div class="col-sm-4">
+    </div>
+
+    <!-- <div class="col-sm-4">
+      <div class="card bg-light mb-3">
+        <div class="card-header">
+          <h2>Face Gallery</h2>
+        </div>
+        <div class="card-body">
+          <p class="card-text">View all faces made by members of your group.</p>
+        </div>
+        <div class="card-footer bg-transparent border-transparent">
+          <button class="btn btn-warning flex-end" type="button" onclick="startGallery()" id="galleryButton">Start Gallery</button>
+        </div>
+      </div>
+    </div> -->
+    <div class ="card-deck">
+        <div class="card bg-light mb-4">
+          <div class="card-header">
+            <div class='row'>
+              <div class='col'>
+                <h2>Instructions </h2>
+              </div>
+              <div style="width: max-content; margin-right:5%">
+                <button class="alert alert-success" role="alert" type="button" onclick="startInstructions()">
+                  Start Here
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-text">Find information about the study's overview, requirements and tasks.</p>
+          </div>
+          <div class="card-footer bg-transparent border-transparent">
+            <button class="btn btn-warning" type="button" onclick="startInstructions()" id="editButton"> Show Instructions</button>
+          </div>
+        </div>
+      
+        <div class="card bg-light mb-4">
+          <div class="card-header">
+            <div class='row'>
+              <div class='col'>
+                <h2>Robot Faces</h2>
+              </div>
+             <div style="display: none; width: max-content; margin-right:5%" id="newFaceNotifContainer" >
+                <button class="alert alert-warning" role="alert" type="button" onclick="startEditor()">
+                  New Faces for You!
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-text"> You can edit the face (works better on your computer) & set it to your robot (works better on your phone).</p>
+          </div>
+          <div class="card-footer bg-transparent border-transparent startButtons">
+            <button class="btn btn-warning" type="button" onclick="startEditor()" id="editButton">Start Face Editor</button>
+            <button class="btn btn-warning" type="button" onclick="startWebRobot()" id="editButton">Start Robot</button>
+          </div>
+        </div>
+
+        <div class="card bg-light mb-4">
+          <div class="card-header">
+            <h2>Diary</h2>
+          </div>
+          <div class="card-body">
+            <p class="card-text">Privately talk to your Robot.</p>
+          </div>
+          <div class="card-footer bg-transparent border-transparent">
+            <button class="btn btn-warning" type="button" onclick="startDiary()" id="diaryButton">Start Diary</button>
+          </div>
+        </div>
+     
+
+      
+        <div class="card bg-light mb-4">
+          <div class="card-header">
+            <h2>Daily Report</h2>
+          </div>
+          <div class="card-body">
+            <p class="card-text">Report how you are feeling today.</p>
+          </div>
+          <div class="card-footer bg-transparent border-transparent">
+            <button class="btn btn-warning" type="button" onclick="startVAS()" id="vasButton">Start Report</button>
+          </div>
+        </div>  
+      
+      
+        <div class="card bg-light mb-4">
+          <div class="card-header">
+            <h2>Contact</h2>
+          </div>
+          <div class="card-body">
+            <p class="card-text"> How to get in contact with the research team</p>
+          </div>
+          <div class="card-footer bg-transparent border-transparent">
+            <button class="btn btn-warning" type="button" onclick="startContact()" id="editButton">Show Information</button>
+          </div>
+        </div>
+  
+      <!-- <div class="col-sm-4">
         <div class="card bg-light mb-3">
           <div class="card-header">
             <h2>Robot Control (WoZ)</h2>
           </div>
           <div class="card-body">
-            <p class="card-text">Select a robot above and press the button to start controlling the robot's actions (Wizard of Oz) from your browser.</p><button class="btn btn-warning" onclick="startController()" id="controlButton">Start Robot Controller</button></div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="card bg-light mb-3">
-          <div class="card-header">
-            <h2>Face Editing</h2>
+            <p class="card-text">Select a robot above and press the button to start controlling the robot's actions (Wizard of
+              Oz) from your browser.</p>
           </div>
-          <div class="card-body">
-            <p class="card-text">Press button to start the face editor to customize your faces or create new faces.</p><button class="btn btn-warning" type="button" onclick="startEditor()" id="editButton">Start Face Editor</button></div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-4">
-        <div class="card bg-light mb-3">
-          <div class="card-header">
-            <h2>Robot Administration</h2>
+          <div class="card-footer bg-transparent border-transparent">
+            <button class="btn btn-warning" onclick="startController()" disabled id="controlButton">Start Robot Controller</button>
           </div>
-          <div class="card-body">
-            <p class="card-text">Add new robots and manage permissions by pressing the button below. If you are not an administrator you can contact another administrator.</p><button class="btn btn-warning" type="button" onclick="startAdmin()" id="adminButton">Start Admin Interface</button></div>
         </div>
-      </div>
+      </div> -->
     </div>
+      
+
     <div class="footer"></div>
   </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/config.js"></script>
-  <script src="https://mayacakmak.github.io/databasejs/scripts/database.js"></script>
+  <script src="scripts/database.js"></script>
   <script src="scripts/index.js"></script>
 </body>
+</html>

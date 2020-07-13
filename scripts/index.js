@@ -2,52 +2,125 @@ var config = new Config();
 var db = new Database(config.config, databaseReadyCallback);
 var currentRobot = -1;
 var robotNames = [];
+var startDiaryTime;
+var endDiaryTime;
 
 function databaseReadyCallback() {
-  var dbRef = firebase.database().ref('/');
-  dbRef.on("value", updateUserRobotInfo);
+  var dbRef = firebase.database().ref("/");
+  // dbRef.on("value", updateUserRobotInfo);
+
+  var displayName = firebase.auth().currentUser.displayName;
+  var uidDiv = document.getElementById("loginID");
+  if (uidDiv) {
+    uidDiv.innerHTML = displayName;
+  }
+  firebase
+    .database()
+    .ref("/users/" + displayName + "/analytics/" + Database.session)
+    .on("value", function(snapshot) {
+      var username =
+        (snapshot.val() && snapshot.val().SessionStarted.date) || "other";
+      console.log(username);
+    });
+  newFaceNotification();
+  window.onbeforeunload = function () {
+    if (window.location.href.includes('diary.html')) {
+      endDiaryTime = new Date().getTime();
+      calculateTime(
+        sessionStorage.getItem(startDiaryTime),
+        endDiaryTime,
+        'diary'
+      );
+    }
+  };
+  window.onfocus = function () {
+    if (window.location.href.includes('diary.html')) {
+      sessionStorage.setItem(startDiaryTime, new Date().getTime());
+    }
+  };
+  window.onblur = function () {
+    if (window.location.href.includes('diary.html')) {
+      endDiaryTime = new Date().getTime();
+      calculateTime(
+        sessionStorage.getItem(startDiaryTime),
+        endDiaryTime,
+        'diary'
+      );
+    }
+  };
 }
 
 function updateUserRobotInfo(snapshot) {
   var database = snapshot.val();
   var robotListHTML = "";
-  if (Database.uid != null) {
-    var userData = database.users[Database.uid];
+  if (Database.displayName != null) {
+    var userData = database.users[Database.displayName];
     if (userData != undefined)
       if (userData.currentRobot != undefined)
         currentRobot = userData.currentRobot;
     var robots = database.robots;
 
     robotNames = [];
-    for (var i=0; i<robots.length; i++) {
+    for (var i = 0; i < robots.length; i++) {
       robotNames.push(robots[i].name);
-      robotListHTML += "<a class='dropdown-item' href='#' onclick='setRobot(" + i + ")'>" + robots[i].name + "</a>";
+      robotListHTML +=
+        "<a class='dropdown-item' href='#' onclick='setRobot(" +
+        i +
+        ")'>" +
+        robots[i].name +
+        "</a>";
     }
-    
+
     var robotsDiv = document.getElementById("robots");
     robotsDiv.innerHTML = robotListHTML;
-    
+
     var selectedRobotDiv = document.getElementById("selectedRobot");
-    if (currentRobot == -1)
-      selectedRobotDiv.innerHTML = "Select robot";
-    else
-      selectedRobotDiv.innerHTML = robotNames[currentRobot];
+    if (currentRobot == -1) selectedRobotDiv.innerHTML = "Select robot";
+    else selectedRobotDiv.innerHTML = robotNames[currentRobot];
   }
-  
-    if (Database.isAnonymous){
-      disableButton("adminButton");
-      //TODO: Ultimtely most things should not be available anonymously.
-    } else {
-      enableButton("adminButton");
-      //TODO: Re-enable anything disabled above
-    }  
+}
+
+async function newFaceNotification() {
+  var dbUserRef = firebase.database().ref("/users/");
+  let total = 0;
+  const snapshot = await dbUserRef.once("value");
+  const userData = snapshot.val();
+  const group_id = userData[Database.displayName]["group_id"];
+  Object.keys(userData).forEach(element => {
+    if (
+      element !== Database.displayName && 
+      userData[element].public &&
+      userData[element].public.faces &&
+      userData[element]["group_id"] &&
+      userData[element]["group_id"] === group_id
+    ) {
+      total += Object.keys(userData[element].public.faces).length;
+    }
+  });
+  let count = 0;
+  if (
+    userData[Database.displayName] &&
+    userData[Database.displayName].public &&
+    userData[Database.displayName].public.viewedFaces
+  ) {
+    Object.keys(
+      userData[Database.displayName].public.viewedFaces
+    ).forEach(elem => {
+      if (elem !== Database.displayName) {
+        count += userData[Database.displayName].public.viewedFaces[elem].length;
+      }
+    });
+  }
+  if (count < total) {
+    notification = document.getElementById("newFaceNotifContainer");
+    notification.setAttribute("style", "display: block;");
+  }
 }
 
 function setRobot(robotId) {
-  console.log("Setting robot: " + robotId);
-  var dir = '/users/'+ (Database.uid) + "/";
+  var dir = "/users/" + Database.uid + "/";
   var dbRef = firebase.database().ref(dir);
-  dbRef.update({currentRobot:robotId});
+  dbRef.update({ currentRobot: robotId });
 }
 
 function disableButton(buttonID) {
@@ -61,18 +134,79 @@ function enableButton(buttonID) {
 }
 
 function startEditor() {
+  sessionStorage.setItem("startEditTime", new Date().getTime());
   window.location.href = "edit.html";
 }
 
-function startAdmin() {
-  window.location.href = "admin.html";
+function startInstructions() {
+  window.location.href = "instructions.html";
 }
 
-function startSetup() {
-  window.location.href = "setup.html?robot=" + currentRobot;
+function startContact() {
+  window.location.href = "contact.html";
 }
 
-function startController() {
-  window.location.href = "control.html?robot=" + currentRobot;
+function startGallery() {
+  window.location.href = "gallery.html";
 }
 
+function startDiary() {
+  sessionStorage.setItem(startDiaryTime, new Date().getTime());
+  window.location.href = "diary.html";
+}
+
+function backToIndexPage() {
+  window.location.href = 'index.html';
+}
+
+function doneTyping() {
+  var diaryText = document.getElementById("diaryText").value;
+  if (diaryText.length != 0) {
+    // Handled in the window.onbeforeunload now
+    // endDiaryTime = new Date().getTime();
+    // calculateTime(
+    //   sessionStorage.getItem(startDiaryTime),
+    //   endDiaryTime,
+    //   "diary"
+    // );
+    window.location.href = "index.html";
+  } 
+  else {
+    alert("Please type your reflection, based on the Robot's prompt");
+  }
+}
+
+function startVAS() {
+  window.location.href = "datain_stress.html";
+}
+
+function startWebRobot() {
+  sessionStorage.setItem("startFaceRenderTime", new Date().getTime());
+  window.location.href = "render-face.html";
+}
+
+function logout() {
+  Database.signOut();
+  window.location.href = "signin.html";
+}
+
+function calculateTime(start, end, event) {
+  var dur = (end - start) / 1000;
+  var currDate = new Date().toDateString();
+  console.log(dur);
+  var dir =
+    "users/" +
+    firebase.auth().currentUser.displayName +
+    "/" +
+    event +
+    "/" +
+    currDate;
+  var dbRef = firebase.database().ref(dir);
+  dbRef.push().set({
+    date: currDate,
+    time_start: start,
+    time_end: end,
+    duration_sec: dur
+  });
+  console.log("Logging diary time: ----------");
+}

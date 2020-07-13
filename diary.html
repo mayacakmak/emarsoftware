@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+</html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Robot Study</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="styles/style.processed.css">
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="topbar-left" id="topLeft"><button class="btn btn-info" onclick="backToIndexPage()"><<</button></div>
+    <div class="topbar-right" id="top"><span id="loginID" style="color:white"></span></div>
+  </div>
+  <div class="container-fluid px-sm-5 pb-4">
+    <div class="row">
+      <div class="col text-center">
+        <h1 class="display-4"> Diary Mode </h1>
+        <div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col py-3">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h2> Share your thoughts with the Robot below
+            </h2>
+            <img class="img-thumbnail rounded mx-auto d-block" src="assets/heart-emar.png" alt="EMAR-Heart" style="width:200px;height:200px;">
+            <h5 class="font-italic"> 
+              Information will not be stored in any shape or form and will be immediately deleted upon closing the diary
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <textarea class="form-control" id="diaryText" rows="4"></textarea>
+            </div>
+            <div class="d-flex justify-content-center mt-2">
+              <button class="btn btn-warning" data-toggle="modal" data-target="#modalDone" 
+              type="button" id="diaryFinish">Finish</button>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="modalDone" tabindex="-1" role="dialog" aria-labelledby="modalDone" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Are you done?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+                   </button>
+                  </div>
+                  <div class="modal-body centered">
+                     <button type="button" class="btn btn-success" onclick="doneTyping()" 
+                     data-dismiss="modal">Yes, I'm done. </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                      No, I want to continue typing.
+                      <span aria-hidden="true"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+  <script src="https://mayacakmak.github.io/robotbackend/scripts/config.js"></script>
+  <script src="scripts/database.js"></script>
+  <script src="scripts/index.js"></script>
+</body>

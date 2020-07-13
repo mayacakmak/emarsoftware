@@ -1,58 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 
-</html>
-
 <head>
   <meta charset="utf-8">
-  <title>EMAR Robot Frontend Tools</title>
+  <title>Robot Study</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/style.processed.css">
+  <link rel="stylesheet" href="styles/mobile.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
   <div class="topbar">
     <div class="topbar-left" id="topLeft"><button class="btn btn-info" onclick="backToIndexPage()"><<</button></div>
-    <div class="topbar-right" id="top"></div>
+    <div class="topbar-right" id="top"><span id="uid" style="color:white"></span></div>
   </div>
   <div class="container-fluid px-sm-5 pb-4">
-    <div class="row">
+    <div class="alert alert-warning" role="alert" style="display: none;" id="faceEditWarningBanner">
+      We reccomend using the Face Editor on your Laptop
+    </div>
+    <div class="card-deck">
       <div class="col text-center">
         <h1 class="display-4">Face Editing Panel</h1>
+        <div>
+        </div>
       </div>
     </div>
-    <div class="row">
+    <div class="card-deck">
       <div class="col py-3">
         <div class="card">
           <div class="card-header bg-light">
-            <h2>All faces</h2>
+            <h2>Public Gallery</h2>
           </div>
           <div class="card-body h-scrollable green-scroll">
-            <div class="btn-group mr-2" id="otherFaceList"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+            <div class="btn-group mr-2" id="publicFaces"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
           </div>
         </div>
-        <div class="p-1"><button class="btn btn-success" type="button" onclick="createNewFace()">Add selected face to my faces</button></div>
+        <div class="p-1">
+          <button class="btn btn-warning" onclick="setCurrentFace()" id="setCurrentFacePublic" data-toggle="modal" data-target="#modalDone">Display face on your robot!</button>
+        </div>
       </div>
     </div>
-    <div class="row pb-3">
+    <div class="card-deck pb-3">
       <div class="col">
         <div class="card">
           <div class="card-header bg-light">
-            <h2>My faces</h2>
+            <h2>Private Gallery</h2>
           </div>
-          <div class="card-body h-scrollable green-scroll">
-            <div class="btn-group mr-2" id="myFaceList"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+          <div class="card-body h-scrollable green-scroll" id="privateGallery">
+            <div class="btn-group mr-2" id="privateFaces">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            </div>
+            <button class="btn btn-secondary" onclick="createDefaultFace()" id="createDefaultFace">+ Create New Face</button>
           </div>
+        </div>
+        <div class="p-1">
+          <button class="btn btn-warning" onclick="setCurrentFace()" id="setCurrentFacePrivate" data-toggle="modal" data-target="#modalDone">Display face on your robot!</button>
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="card-deck">
       <div class="col-sm-7">
         <div class="card">
           <div class="card-header bg-light">
-            <h2>Face Parameters</h2>
+            <h2>Edit Face</h2>
           </div>
-          <div class="card-body scrollable green-scroll">
+          <div class="card-body scrollable green-scroll face-parameters">
             <div id="faceParameters"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
           </div>
         </div>
@@ -64,7 +78,50 @@
           </div>
           <div class="card-body">
             <div id="robotFace"><svg id="faceSVG"></svg></div>
-            <div class="d-flex justify-content-center mt-2"><input class="centered" type="text" onblur="faceRenamed()" id="faceName"></div>
+              <form>
+                <div class="form-group row">
+                  <label for="inputName" class="col-sm col-sm-auto col-form-label">Face Name:</label>
+                  <div class="col">
+                    <input type="text" onblur="faceRenamed()" id="faceName">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputDesc" class="col-sm col-sm-auto col-form-label">Description:</label>
+                  <div class="col">
+                    <input type="text" onblur="descriptionChanged()" id="faceDescription">
+                  </div>
+                </div>
+                <div class="form-group row" style="display: none;" id="faceTextContainer">
+                  <label for="inputDesc" class="col-sm col-sm-auto col-form-label">Text:</label>
+                  <div class="col">
+                    <input type="text" onblur="textChanged()" id="faceText">
+                  </div>
+                </div>
+              </form>
+            <div class="d-flex justify-content-center mt-2">
+              <div class='col text-center'>
+                <button class="btn btn-warning" onclick="shareFace()" disabled id="shareFace">Share Face in Public Gallery!</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="modalDone" tabindex="-1" role="dialog" aria-labelledby="modalDone" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Would you like to check out your Robot's new Face? You should try it out on your phone!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body centered">
+              <button type="button" class="btn btn-success" onclick="goToFaceRender()" data-dismiss="modal">Yes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                No, I want to keep editing.
+                <span aria-hidden="true"></span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -74,9 +131,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/config.js"></script>
-  <script src="https://mayacakmak.github.io/databasejs/scripts/database.js"></script>
+   <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+  <script src="scripts/database.js"></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/eyes.js"></script>
   <script src="https://mayacakmak.github.io/robotbackend/scripts/face.js"></script>
   <script src="scripts/facedata.js"></script>
   <script src="scripts/edit.js"></script>
 </body>
+</html>

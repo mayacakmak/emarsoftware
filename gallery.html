@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+</html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Robot Study</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles/style.processed.css">
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="topbar-left" id="topLeft"><div class="topbar-left" id="topLeft"><button class="btn btn-info" onclick="backToIndexPage()"><<</button>
+    </div>
+
+    </div>
+    <div class="topbar-right" id="top"><div class="topbar-right" id="top"><span id="uid" style="color:white"></span></div></div>
+  </div>
+  <div class="container-fluid px-sm-5 pb-4">
+    <div class="row">
+      <div class="col text-center">
+        <h1 class="display-4">Face Gallery</h1>
+      </div>
+    </div>
+    <div class="row">
+     <div class="col py-3">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h2>All faces</h2>
+          </div>
+          <div class="card-body flex-wrap">
+            <div class="btn-group mr-2 flex-wrap" id="otherFaceList"><span class="spinner-border spinner-border-sm" role="status"
+                aria-hidden="true"></span></div>
+          </div>
+        </div>
+        <div class="p-1"><button class="btn btn-success" type="button" onclick="createNewFace()">Add selected face to my
+            faces</button></div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="https://mayacakmak.github.io/robotbackend/scripts/config.js"></script>
+  <script src="scripts/database.js"></script>
+  <script src="https://mayacakmak.github.io/robotbackend/scripts/eyes.js"></script>
+  <script src="https://mayacakmak.github.io/robotbackend/scripts/face.js"></script>
+  <script src="scripts/facedata.js"></script>
+  <script src="scripts/edit.js"></script>
+</body>

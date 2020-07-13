@@ -1,0 +1,51 @@
+/* @media screen and (orientation:landscape) {
+  svg {
+    position:  fixed;
+    top:0;
+    left:0;
+    height:100%;
+    width:100%;
+  }
+} */
+
+@media screen and (orientation:portrait) {
+  /* .wrapper {
+    transform: rotate(-90deg); 
+     transform-origin: left top;
+    margin-top: 100%;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    overflow: hidden;
+    width: 100vh;
+    height: 100vw;
+    display:none;
+  } */
+  .orientation-warning {
+    text-align: center;
+    background-color: yellow;
+
+  }
+}
+
+@media screen and (orientation:landscape) {
+  .orientation-warning {
+    display: none;
+  }
+} 
+@media screen and (orientation: portrait) {
+  body {
+      transform: rotate(-90deg);
+      transform-origin: left top;
+      width: 100vh;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      position: absolute;
+      top: 100%;
+      left: 0;
+  }
+
+  #wrapper {
+    height: 100vw;
+  }
+}

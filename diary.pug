@@ -1,0 +1,25 @@
+extends structure/_layout.pug
+
+block content
+  include structure/_tool_header.pug
+
+  .container-fluid.px-sm-5.pb-4
+    .row
+      .col.text-center
+        h1.display-4 Diary Mode
+    .row
+      .col.py-3
+        .card
+          .card-header.bg-light
+            h2  Share your thoughts with EMAR below
+            h5.font-italic Information will not be stored in any shape or form and will be immediately deleted upon closing the diary 
+          .card-body
+            .d-flex.justify-content-center.mt-2
+              input(type="text" class="form-control input-lg centered")#diaryText
+
+block append scripts
+  script(src="https://mayacakmak.github.io/robotbackend/scripts/eyes.js")
+  script(src="https://mayacakmak.github.io/robotbackend/scripts/face.js")
+  script(src="scripts/facedata.js")
+  script(src="scripts/edit.js")
+

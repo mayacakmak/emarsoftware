@@ -6,45 +6,106 @@ function initializeEdit() {
   isEdit = true;
 
   var dbUserRef = firebase.database().ref('/users/');
-  dbUserRef.on("value", updateAllUsersFaceList);
-  
-  var dbUserRef = firebase.database().ref('/users/' + Database.uid + "/");
+  // var dbUserRef = firebase.database().ref('/robots/'); // Can use to get all old faces
+  dbUserRef.on('value', renderPublicFaces);
+
+  var dbUserRef = firebase.database().ref('/users/' + Database.displayName + "/robot/");
   dbUserRef.on("value", currentUserDataChanged);
 
+  var dbUserRef = firebase.database().ref('/users/' + Database.displayName + '/public/');
+  dbUserRef.on('value', currentUserPublicDataChanged);
+
   window.onresize = Face.draw;
+  var uid = firebase.auth().currentUser.uid;
+  var uidDiv = document.getElementById('uid');
+  uidDiv.innerHTML = Database.displayName;
+
+  // Log user duration data
+  window.onbeforeunload = function () {
+    calculateTime(
+      sessionStorage.getItem('startEditTime'),
+      new Date().getTime(),
+      'faceEdit'
+    );
+  };
+  window.onfocus = function () {
+    sessionStorage.setItem('startEditTime', new Date().getTime());
+  };
+  window.onblur = function () {
+    calculateTime(
+      sessionStorage.getItem('startEditTime'),
+      new Date().getTime(),
+      'faceEdit'
+    );
+  };
 }
 
 function currentUserDataChanged(snapshot) {
-  currentUserData = snapshot.val();
-  updateUserFaceList();
+  let robotData = snapshot.val();
+  if (
+    robotData['customAPI'] &&
+    robotData['customAPI']['states'] &&
+    robotData['customAPI']['states']['faces']
+  ) {
+    // currentUserData = robotData['customAPI']['states']; // Right now gets contents of user/uid/public, so object with key 'faces'
+    renderPrivateFaces(robotData['customAPI']['states']);
+  } else {
+    currentUserData = {
+      faces: [],
+    }
+  }
+
+  // updateUserFaceList();
   updateFace();
   updateFaceEditor();
 }
 
+function currentUserPublicDataChanged(snapshot) {
+  currentUserPublicData = snapshot.val();
+  if (!currentUserPublicData) {
+    currentUserPublicData = {};
+  }
+  if (!currentUserPublicData['faces']) {
+    currentUserPublicData.faces = [];
+  }
+  // if (!currentUserPublicData['viewedFaces']) {
+  //   currentUserPublicData.viewedFaces = {};
+  // }
+}
+
 function updateFaceEditor() {
   if (allUserData != null && selectedUser != null && selectedFace != null) {
-    if (selectedUser == Database.uid){
-      newParameters = currentUserData.faces[selectedFace];
+    if (selectedUser == Database.displayName){
+      if (selectedUser == Database.displayName && !isSetup) {
+        if (selectedFaceList === 'privateFaces') {
+          newParameters = currentUserData.faces[selectedFace];
+        } else if (selectedFaceList === 'all') {
+          newParameters = allUserData.find((element) => element.user === selectedUser && element.index === selectedFace);
+          // newParameters = allUserData[selectedUser].faces[selectedFace];
+        }
+      }
     }
     else {
-      var selectedUserData = allUserData[selectedUser];
-      newParameters = selectedUserData.faces[selectedFace];
+      newParameters = allUserData.find(
+        (element) =>
+          element.user === selectedUser && element.index === selectedFace
+      );
     }
   
       var mainDiv = document.getElementById("faceParameters");
 
-      if (selectedUser == Database.uid) {
+      if (selectedUser == Database.displayName && selectedFaceList === 'privateFaces') {
 
         /* Check if the scales are created already */
         var scaleExample = document.getElementById("eyeCenterDistPercent");
-        if (scaleExample === null) {
+        if (scaleExample === null || true) {
           mainDiv.innerHTML = "";
           /* Number type parameters, selected with sliders*/
           for (var i = 0; i < Object.keys(newParameters).length; i++) {
             var key = Object.keys(newParameters)[i];
             var param = newParameters[key];
             if (param.v2eyes === undefined) {
-              if (param.type == "number") {
+              if (param.type == "number" && !param.name.toLowerCase().includes('voice')) {
                 var nIncrements = 20;
                 if (param.nIncrements !== undefined)
                   nIncrements = param.nIncrements;
@@ -95,18 +156,49 @@ function updateFaceEditor() {
           faceName.value = "";
           faceName.placeholder = "face name";
         }
+
+        var faceDescription = document.getElementById('faceDescription');
+        faceDescription.disabled = '';
+        if (newParameters.description !== undefined) {
+          faceDescription.value = newParameters.description;
+        } else {
+          faceDescription.value = '';
+          faceDescription.placeholder = 'description';
+        }
+
+        // Enable share face button
+        var shareButton = document.getElementById("shareFace");
+        if (newParameters.public) {
+          shareButton.innerHTML = 'Shared!';
+          disableButton('shareFace');
+        } else {
+          shareButton.innerHTML = 'Share Face in Public Gallery!';
+          enableButton('shareFace');
+        }
       }
     else {
+        // mainDiv.innerHTML =
+        //   "You cannot edit this face. Click the 'Add new' button above to copy this face and edit it.";
         mainDiv.innerHTML =
-          "You cannot edit this face. Click the 'Add new' button above to copy this face and edit it.";
+          '<button class="btn btn-success" type="button" onclick="createNewFace()">Click me to add this face to your Private Gallery and edit!</button>';
         faceName = document.getElementById("faceName");
         faceName.disabled="disabled";
+        faceDescription = document.getElementById('faceDescription');
+        faceDescription.disabled = 'disabled';
         if (newParameters.name !== undefined) {
           faceName.value = newParameters.name;
         } else {
           faceName.value = "";
           faceName.placeholder = "face name";
         }
+        if (newParameters.description !== undefined) {
+          faceDescription.value = newParameters.description;
+        } else {
+          faceDescription.value = '';
+          faceDescription.placeholder = 'description';
+        }
+        document.getElementById('shareFace').innerHTML = 'Share Face in Public Gallery!';
+        disableButton('shareFace');
       }
 
       Face.draw();
@@ -139,6 +231,10 @@ function updateFaceEditor() {
 }
 
 function createBooleanInput(id, name, current, optionNames) {
+  // TEMPORARY FOR CEMAR
+  if (id === 'hasText') {
+    return;
+  }
   var radio1 =
     ' Yes <input type="radio" onchange="newParameterValue(this, \'current\')" ' +
     " name = " +
@@ -194,7 +290,7 @@ function createColorInput(id, name, current) {
       '<div class="sliderName"> ' +
       name +
       ":</div>" +
-      '<div> <input type="color" onchange="newParameterValue(this, \'current\')" ' +
+      '<div> <input type="color" style="z-index: 99;" onchange="newParameterValue(this, \'current\')" ' +
       " name = " +
       id +
       " id = " +
@@ -236,24 +332,25 @@ function getRangeHTML(id, name, current, min, max, nIncrements) {
     '<div class="sliderName">' +
     name +
     ":</div>" +
-    '<div class="sliderValue" id= "' +
-    id +
-    'Value">' +
-    current +
-    "</div>" +
-    '<div class="min-value"> <input class="min" type="text" name=' + id 
-    + ' onblur="newParameterValue(this, \'min\')" value=' +
-    min +
-    "> </div>" +
+    // '<div class="sliderValue" id= "' +
+    // id +
+    // 'Value">' +
+    // current +
+    // "</div>" +
+    // '<div class="min-value"> <input class="min" type="text" name=' + id 
+    // + ' onblur="newParameterValue(this, \'min\')" value=' +
+    // min +
+    // "> </div>" +
     "<div>" +
     '<input type="range" class="slider" ' + //list="' + name + 'tickmarks" ' +
     " min=" + min + " max=" + max + " step =" + (max - min) / nIncrements +
     ' onchange="newParameterValue(this, \'current\')" id=' + id + "Scale" + " name=" + id +
-    " value=" +current + "> </div>" + //+getDataList(name, min, max, nIncrements)
-    '<div class="max-value"> <input class="max" type="text" name=' + id 
-    + ' onblur="newParameterValue(this, \'max\')" value=' +
-    max +
-    "> </div>");
+    " value=" +current + "> </div>" //+getDataList(name, min, max, nIncrements)
+    // '<div class="max-value"> <input class="max" type="text" name=' + id 
+    // + ' onblur="newParameterValue(this, \'max\')" value=' +
+    // max +
+    // "> </div>"
+    );
 }
 
 function getDataList(name, min, max, nIncrements) {
@@ -270,15 +367,15 @@ function getDataList(name, min, max, nIncrements) {
 
 // Update the database in response to a UI event
 function newParameterValue(target, param) {
-  if (Database.uid !== null) {
-    var dir = "users/" + Database.uid;
-    var dbRef = firebase.database().ref(dir + "/faces/" + selectedFace + "/");
+  if (Database.displayName !== null) {
+    var dir = "users/" + Database.displayName;
+    var dbRef = firebase.database().ref(dir + "/robot/customAPI/states/faces/" + selectedFace + "/");
     var updates = {};
     
     var key = target.name;
     var newParam = newParameters[key];
-
-    if (newParam.type == "number" || newParam.type == "boolean"){
+    
+    if (newParam.type && (newParam.type == "number" || newParam.type == "boolean")){
       if (param == "min" || param == "max")
         newParam[param] = Number(target.value);
       else
@@ -291,24 +388,18 @@ function newParameterValue(target, param) {
 
     var newParamObj = {};
     newParamObj[key] = newParam;
-
-    if (newParam.type == "number") {
-      var sliderDiv = document.getElementById(key);
-      if (param == "current") {
-        var sliderValueDiv = sliderDiv.getElementsByClassName("sliderValue")[0];
-        sliderValueDiv.innerHTML = target.value;
-      } 
-      else {
-        var slider = sliderDiv.getElementsByClassName("slider")[0];
-        if (param == "min")
-          slider.min = target.value;
-        if (param == "max")
-          slider.max = target.value;
-      }
-    }
     
     dbRef.update(newParamObj);
     hasNewParams = true;
   }
 }
 
+function disableButton(buttonID) {
+  var button = document.getElementById(buttonID);
+  button.disabled = true;
+}
+
+function enableButton(buttonID) {
+  var button = document.getElementById(buttonID);
+  button.disabled = false;
+}

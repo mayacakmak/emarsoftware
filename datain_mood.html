@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+</html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Robot Study</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="styles/style.processed.css">
+    <link rel="stylesheet" href="styles/mobile.css">
+</head>
+
+<body>
+    <div class="topbar">
+        <div class="topbar-left" id="topLeft"><button class="btn btn-info" onclick="backToIndexPage()"><<</button></div>
+        <div class="topbar-right" id="top"></div>
+    </div>
+    <div class="container-fluid px-sm-5 pb-4">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="display-4"> Daily Report </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2>What is your mood right now?</h2>
+                        <p> This data is recorded for research purposes only, and will be aggregated for reports. If you have any questions, please contact the research team. </p>
+                    </div>
+                    <div class="card-body">
+                        <!-- First slider markers/labels -->
+                        <div class='screen-element mt-4'>
+                            <div class='min-value screen-item scale-labels'> <h4>  Not a Good Mood </h4> </div>
+                            <input type='range' 
+                            class='screen-slider' id='moodslider' value='500' min='1' max='1000'>
+                            <div class='max-value screen-item scale-labels'> <h4> Very Good Mood </h4> </div>
+                        </div>
+                        <div> </div>
+                        <div class="d-flex justify-content-center mt-4">
+                            <button class="btn btn-warning" onclick="recordMood()" 
+                            id="next-mood">Done</button>
+                        </div> 
+                        <div> <p> 2 of 2 </p> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+        <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+        <script src="https://mayacakmak.github.io/robotbackend/scripts/config.js"></script>
+        <script src="scripts/database.js"></script>
+        <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+        <script src="https://mayacakmak.github.io/robotbackend/scripts/eyes.js"></script>
+        <script src="https://mayacakmak.github.io/robotbackend/scripts/face.js"></script>
+        <script src="https://mayacakmak.github.io/robotbackend/scripts/belly.js"></script>
+        <script src="https://mayacakmak.github.io/robotapijs/scripts/robotapi.js"></script>
+        <script src="scripts/vas_mood.js"></script>
+</body>

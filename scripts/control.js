@@ -67,7 +67,16 @@ function updateRobotState(snapshot) {
     }
     createStateChangeInterface("screenControls", "Screens", 
                                screenNames, screenIndexes, "bellyScreenChanged",
-                               screenNames[robotState.currentBellyScreen]);  
+                               screenNames[robotState.currentBellyScreen]); 
+    
+    // LED
+    let r = robotState.currentLEDR;
+    let g = robotState.currentLEDG;
+    let b = robotState.currentLEDB;
+    document.getElementById("LEDColor").style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+    document.getElementById("r").value = r;
+    document.getElementById("g").value = g;
+    document.getElementById("b").value = b
   }
 }
 
@@ -145,4 +154,16 @@ function bubblePressed() {
 
 function bubbleClear() {
   robot.setSpeechBubble("");
+}
+
+function LEDValueChanged(target) {
+  const redElement = document.getElementById("r");
+  const r = redElement.value;
+  const greenElement = document.getElementById("g");
+  const g = greenElement.value;
+  const blueElement = document.getElementById("b");
+  const b = blueElement.value;
+  elem = document.getElementById("LEDColor").style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+  console.log("LED CHANGED");
+  robot.setLEDColor(r, g, b);
 }

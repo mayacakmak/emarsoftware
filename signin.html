@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Robot Study</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles/style.processed.css">
+  <link rel='stylesheet' href="styles/mobile.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="topbar-left" id="topLeft"></div>
+    <div class="topbar-right" id="top"></div>
+  </div>
+  <div class="container-fluid px-sm-5">
+    <div class="row py-3">
+      <div class="col-sm-10">
+        <h1 class="display-4">Participant Sign In</h1>
+      </div>
+    </div>
+    <div class="py-3">
+
+    </div>
+    <div class="card-deck justify-content-center">
+      <div class="card bg-light mb-3 loginCard">
+        <div class="card-header">
+            <h5> Login with your username </h5>
+             <p> (which is your "first-name _ last-name initial", for example Ben_S)
+             </p>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-center mt-2" id="myTabContent">
+            <input class="form-control input-lg centered" type="text" id="loginID" autocapitalize="off">
+          </div>
+          <div class="d-flex justify-content-center mt-2">
+            <button class="btn btn-warning" onclick="signIn()" id="loginDone">Continue</button>
+          </div>
+          </div>
+      </div>
+      
+    </div>
+    <div class="footer"></div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+   <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="https://mayacakmak.github.io/robotbackend/scripts/config.js"></script>
+  <script src="scripts/database.js"></script>
+  <script src="scripts/signin.js"></script>
+</body>
+</html>
