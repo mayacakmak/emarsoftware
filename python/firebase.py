@@ -12,12 +12,12 @@ this_robot_id = 0
 URL = "https://emar-database.firebaseio.com/"
 AUTH_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAisnI9BEW_Uc0-z1ad25nB6eNXEEQ_xQQ";
 headers = {'Content-type': 'application/json'}
-auth_params = {"returnSecureToken":"true"}
+auth_req_params = {"returnSecureToken":"true"}
 
 # Start connection to Firebase and get anonymous authentication
 connection = requests.Session()
 connection.headers.update(headers)
-auth_request = connection.post(url=AUTH_URL, params=auth_params)
+auth_request = connection.post(url=AUTH_URL, params=auth_req_params)
 auth_info = auth_request.json()
 auth_params = {'auth': auth_info["idToken"]}
 
