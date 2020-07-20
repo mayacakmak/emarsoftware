@@ -150,11 +150,11 @@ function updateBellyScreenList(snapshot) {
       bellyHTML += "</div><div class='screen-box-outer mb-4'><div class='screen-box-inner'>";
 
       if (screen.instructionLarge.isShown) {
-        bellyHTML += "<div class='screen-element'> <input type='text' class='instruction-large-setup' name='instructionLarge' onblur='changeScreenElement(this, " + i + ")' value='" + screen.instructionLarge.text + "'> </div> ";
+        bellyHTML += "<div class='screen-element'> <input type='text' class='instruction-large-setup' name='instructionLarge' onblur='changeScreenElement(this, " + i + ")' value='" + screen.instructionLarge.text.replace(/'/g, '&#39;') + "'> </div> ";
       }
 
       if (screen.instructionSmall.isShown) {
-        bellyHTML += "<div class='screen-element'> <input type='text' class='instruction-small-setup' name='instructionSmall' onblur='changeScreenElement(this, " + i + ")' value='" + screen.instructionSmall.text + "'> </div>";
+        bellyHTML += "<div class='screen-element'> <input type='text' class='instruction-small-setup' name='instructionSmall' onblur='changeScreenElement(this, " + i + ")' value='" + screen.instructionSmall.text.replace(/'/g, '&#39;') + "'> </div>";
       }
 
       if (screen.slider.isShown) {
