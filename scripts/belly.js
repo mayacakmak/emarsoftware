@@ -7,7 +7,7 @@ function Belly(robotId, scale) {
   Belly.currentScreen = -1;
   Belly.bellyScreens = null;
   Belly.scale = scale;
-  
+
   Belly.updateRobotBelly = function(snapshot) {
 
     var robotState = snapshot.val();
@@ -18,7 +18,7 @@ function Belly(robotId, scale) {
         && newScreenIndex >= 0 && newScreenIndex < Belly.bellyScreens.length) {
       if (newScreenIndex != Belly.currentScreen) {
         Belly.currentScreen = newScreenIndex;
-        
+
         var screen = Belly.bellyScreens[Belly.currentScreen];
         var screenDiv = document.getElementById("screenDiv");
         if (screen.instructionLarge.isShown) {
@@ -46,9 +46,9 @@ function Belly(robotId, scale) {
 
         if (screen.checkboxes.isShown) {
           bellyHTML += "<div class='screen-element mt-4'>";
-          if (screen.checkboxes.list != undefined) {
-            for (var j=0; j<screen.checkboxes.list.length; j++) {
-              var name = screen.checkboxes.list[j].name;
+          if (screen.checkboxes.names != undefined) {
+            for (var j=0; j<screen.checkboxes.names.length; j++) {
+              var name = screen.checkboxes.names[j];
               bellyHTML += "<div class='deletable-button mr-2 border border-light screen-item'>";
               bellyHTML += "<div><input type='checkbox' name='checkbox' " +
                 "onchange='Belly.bellyInputReceived(this," + Belly.currentScreen + "," + j +
@@ -118,4 +118,3 @@ function Belly(robotId, scale) {
   }
 
 }
-
