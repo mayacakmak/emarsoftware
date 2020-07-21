@@ -1,6 +1,6 @@
 var config = new Config();
 var db = new Database(config.config, databaseReadyCallback);
-var currentRobot = -1;
+var currentRobot = 0;
 var robotNames = [];
 
 function databaseReadyCallback() {
