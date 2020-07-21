@@ -354,7 +354,12 @@ function removeRobotFace(index) {
 function addRobotFace() {
   var dir = 'robots/' + (currentRobot) + "/customAPI/states/faces/";
   var dbRef = firebase.database().ref(dir);
-  var index = robotFaces.length;
+  var index;
+  if (robotFaces) {
+    index = robotFaces.length;
+  } else {
+    index = 0;
+  }
   var updates = {};
   var selectedUserData = allUserData[selectedUser];
   selectedFaceParameters = selectedUserData.faces[selectedFace];
