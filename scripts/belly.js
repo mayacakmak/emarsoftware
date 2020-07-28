@@ -21,6 +21,9 @@ function Belly(robotId, scale) {
         
         var screen = Belly.bellyScreens[Belly.currentScreen];
         var screenDiv = document.getElementById("screenDiv");
+        if (screen.backgroundColor) {
+          screenDiv.style.backgroundColor = screen.backgroundColor;
+        }
         if (screen.instructionLarge.isShown) {
           var largeInstruction = screen.instructionLarge.text;
           bellyHTML += "<div class='screen-element instruction-large'>" + largeInstruction + "</div> ";
