@@ -129,6 +129,7 @@ function updateBellyScreenList(snapshot) {
       var sliderChecked = "";
       var checkboxesChecked = "";
       var buttonsChecked = "";
+      var backgroundColor = "";
 
       if (screen.instructionLarge.isShown)
           instructionLargeChecked = "checked";
@@ -140,6 +141,8 @@ function updateBellyScreenList(snapshot) {
           checkboxesChecked = "checked";
       if (screen.buttons.isShown)
           buttonsChecked = "checked";
+      if (screen.backgroundColor)
+          backgroundColor = screen.backgroundColor;
 
       bellyHTML += "<div class='screen-checkboxes'>";
       bellyHTML += "<input type='checkbox' onclick='addRemoveScreenElements(this," + i + ")' name='instructionLarge' " + instructionLargeChecked + "> <div class='mr-2'> Large instruction </div>";
@@ -147,7 +150,8 @@ function updateBellyScreenList(snapshot) {
       bellyHTML += "<input type='checkbox' onclick='addRemoveScreenElements(this," + i + ")' name='slider'" + sliderChecked + "> <div class='mr-2'> Slider </div>";
       bellyHTML += "<input type='checkbox' onclick='addRemoveScreenElements(this," + i + ")' name='checkboxes'" + checkboxesChecked + "> <div class='mr-2'> Checkboxes </div>";
       bellyHTML += "<input type='checkbox' onclick='addRemoveScreenElements(this," + i + ")' name='buttons'" + buttonsChecked + "> <div class='mr-2'> Buttons </div>";
-      bellyHTML += "</div><div class='screen-box-outer mb-4'><div class='screen-box-inner'>";
+      bellyHTML += "<input type='color' onchange='addRemoveScreenElements(this," + i + ")' name='backgroundColor' value='" +  backgroundColor + "'> <div class='mr-2'> Color </div>";
+      bellyHTML += "</div><div class='screen-box-outer mb-4' style='background-color: " + backgroundColor +  ";'><div class='screen-box-inner'>";
 
       if (screen.instructionLarge.isShown) {
         bellyHTML += "<div class='screen-element'> <input type='text' class='instruction-large-setup' name='instructionLarge' onblur='changeScreenElement(this, " + i + ")' value='" + screen.instructionLarge.text.replace(/'/g, '&#39;') + "'> </div> ";
@@ -211,6 +215,8 @@ function updateBellyScreenList(snapshot) {
 }
 
 function addRemoveScreenElements(target, screenID) {
+  if (target.name.includes('backgroundColor')) 
+    bellyScreens[screenID][target.name] = target.value;
   if (target.checked)
     bellyScreens[screenID][target.name].isShown = 1;
   else
