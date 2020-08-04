@@ -46,11 +46,11 @@ a {
   background-color: #96e6a1;
 }
 
-img {
+/* img {
   border: 2px pink solid;
   height: auto;
   width: 100%;
-}
+} */
 
 img.face-thumb {
   border: 5px transparent solid;
