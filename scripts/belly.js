@@ -24,55 +24,99 @@ function Belly(robotId, scale) {
         if (screen.backgroundColor) {
           screenDiv.style.backgroundColor = screen.backgroundColor;
         }
+        if (screen.images) {
+          screen.images.forEach((element) => {
+            bellyHTML +=
+              "<img src='" +
+              element.path +
+              "' style='border: none; position: absolute; top: " +
+              element.location.x +
+              '; left: ' +
+              element.location.y +
+              ";' width='" +
+              element.size.x +
+              "' height='" +
+              element.size.y +
+              "'/>";
+          });
+        }
         if (screen.instructionLarge.isShown) {
           var largeInstruction = screen.instructionLarge.text;
-          bellyHTML += "<div class='screen-element instruction-large'>" + largeInstruction + "</div> ";
+          bellyHTML +=
+            "<div class='screen-element instruction-large' style='z-index: 2'>" +
+            largeInstruction +
+            '</div> ';
         }
 
         if (screen.instructionSmall.isShown) {
           var smallInstruction = screen.instructionSmall.text;
-          bellyHTML += "<div class='screen-element instruction-small'>" + smallInstruction + "</div>";
+          bellyHTML +=
+            "<div class='screen-element instruction-small' style='z-index: 2'>" +
+            smallInstruction +
+            '</div>';
         }
 
         if (screen.slider.isShown) {
           var sliderMin = screen.slider.min;
           var sliderCurrent = screen.slider.current;
           var sliderMax = screen.slider.max;
-          bellyHTML += "<div class='screen-element mt-4'>";
-          bellyHTML += "<div class='min-value screen-item'>" + sliderMin + "</div>";
-          bellyHTML += "<input type='range' class='screen-slider' name='slider'" +
-            " onchange='Belly.bellyInputReceived(this, " + Belly.currentScreen + ")'"+
-            " value='" + sliderCurrent + "' min='0' max='100'>";
-          bellyHTML += "<div class='max-value screen-item'>" + sliderMax + "</div>";
-          bellyHTML += "</div>";
+          bellyHTML += "<div class='screen-element mt-4'  style='z-index: 2'>";
+          bellyHTML +=
+            "<div class='min-value screen-item'  style='z-index: 2'>" +
+            sliderMin +
+            '</div>';
+          bellyHTML +=
+            "<input type='range' class='screen-slider' name='slider'" +
+            " onchange='Belly.bellyInputReceived(this, " +
+            Belly.currentScreen +
+            ")'" +
+            " value='" +
+            sliderCurrent +
+            "' min='0' max='100'>";
+          bellyHTML +=
+            "<div class='max-value screen-item'>" + sliderMax + '</div>';
+          bellyHTML += '</div>';
         }
 
         if (screen.checkboxes.isShown) {
-          bellyHTML += "<div class='screen-element mt-4'>";
+          bellyHTML += "<div class='screen-element mt-4' >";
           if (screen.checkboxes.names != undefined) {
-            for (var j=0; j<screen.checkboxes.names.length; j++) {
+            for (var j = 0; j < screen.checkboxes.names.length; j++) {
               var name = screen.checkboxes.names[j];
-              bellyHTML += "<div class='deletable-button mr-2 border border-light screen-item'>";
-              bellyHTML += "<div><input type='checkbox' name='checkbox' " +
-                "onchange='Belly.bellyInputReceived(this," + Belly.currentScreen + "," + j +
-                ")'>" + name + "</div>";
-              bellyHTML += "</div>";
+              bellyHTML +=
+                "<div class='deletable-button mr-2 border border-light screen-item' >";
+              bellyHTML +=
+                "<div  style='z-index: 2'><input type='checkbox'  style='z-index: 2'name='checkbox' " +
+                "onchange='Belly.bellyInputReceived(this," +
+                Belly.currentScreen +
+                ',' +
+                j +
+                ")'>" +
+                name +
+                '</div>';
+              bellyHTML += '</div>';
             }
           }
-          bellyHTML += "</div>";
+          bellyHTML += '</div>';
         }
 
         if (screen.buttons.isShown) {
-          bellyHTML += "<div class='screen-element mt-4'>";
+          bellyHTML += "<div class='screen-element mt-4'  style='z-index: 2'>";
           if (screen.buttons.list != undefined) {
-            for (var j=0; j<screen.buttons.list.length; j++) {
+            for (var j = 0; j < screen.buttons.list.length; j++) {
               var name = screen.buttons.list[j].name;
-              bellyHTML += "<div><button class='btn btn-secondary mx-2 screen-item' "+
-                "onclick='Belly.bellyInputReceived(this," + Belly.currentScreen + "," + j +
-                ")' name='button'>" + name + "</button></div>";
+              bellyHTML +=
+                "<div><button class='btn btn-secondary mx-2 screen-item' " +
+                "onclick='Belly.bellyInputReceived(this," +
+                Belly.currentScreen +
+                ',' +
+                j +
+                ")' name='button'>" +
+                name +
+                '</button></div>';
             }
           }
-          bellyHTML += "</div>";
+          bellyHTML += '</div>';
         }
 
         screenDiv.innerHTML = bellyHTML;
