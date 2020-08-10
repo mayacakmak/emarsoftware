@@ -24,34 +24,6 @@ function Belly(robotId, scale) {
         if (screen.backgroundColor) {
           screenDiv.style.backgroundColor = screen.backgroundColor;
         }
-        if (screen.images) {
-          screen.images.forEach((element) => {
-            var position = '';
-            if (element.location.top !== undefined) {
-              position += 'top: ' + element.location.top + '; ';
-            }
-            if (element.location.bottom !== undefined) {
-              position += 'bottom: ' + element.location.bottom + '; ';
-            }
-            if (element.location.left !== undefined) {
-              position += 'left: ' + element.location.left + '; ';
-            }
-            if (element.location.right !== undefined) {
-              position += 'right: ' + element.location.right + '; ';
-            }
-            position += "'";
-            console.log(position);
-            bellyHTML +=
-              "<img src='" +
-              element.path +
-              "' style='border: none; position: absolute;" + position +
-              "width='" +
-              element.size.x +
-              "' height='" +
-              element.size.y +
-              "'/>";
-          });
-        }
         if (screen.instructionLarge.isShown) {
           var largeInstruction = screen.instructionLarge.text;
           bellyHTML +=
@@ -66,6 +38,39 @@ function Belly(robotId, scale) {
             "<div class='screen-element instruction-small' style='z-index: 2'>" +
             smallInstruction +
             '</div>';
+        }
+        
+        if (screen.images) {
+          screen.images.forEach((element) => {
+            var position = '';
+            if (element.location.position && element.location.position === 'absolute') {
+              position += 'position: absolute;';
+              if (element.location.top !== undefined) {
+                position += 'top: ' + element.location.top + '; ';
+              }
+              if (element.location.bottom !== undefined) {
+                position += 'bottom: ' + element.location.bottom + '; ';
+              }
+              if (element.location.left !== undefined) {
+                position += 'left: ' + element.location.left + '; ';
+              }
+              if (element.location.right !== undefined) {
+                position += 'right: ' + element.location.right + '; ';
+              }
+            } else {
+              position += 'position: relative;';
+            }
+            position += "'";
+            bellyHTML +=
+              "<img src='" +
+              element.path +
+              "' style='border: none; " + position +
+              "width='" +
+              element.size.x +
+              "' height='" +
+              element.size.y +
+              "'/>";
+          });
         }
 
         if (screen.slider.isShown) {
