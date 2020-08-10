@@ -26,14 +26,26 @@ function Belly(robotId, scale) {
         }
         if (screen.images) {
           screen.images.forEach((element) => {
+            var position = '';
+            if (element.location.top !== undefined) {
+              position += 'top: ' + element.location.top + '; ';
+            }
+            if (element.location.bottom !== undefined) {
+              position += 'bottom: ' + element.location.bottom + '; ';
+            }
+            if (element.location.left !== undefined) {
+              position += 'left: ' + element.location.left + '; ';
+            }
+            if (element.location.right !== undefined) {
+              position += 'right: ' + element.location.right + '; ';
+            }
+            position += "'";
+            console.log(position);
             bellyHTML +=
               "<img src='" +
               element.path +
-              "' style='border: none; position: absolute; top: " +
-              element.location.x +
-              '; left: ' +
-              element.location.y +
-              ";' width='" +
+              "' style='border: none; position: absolute;" + position +
+              "width='" +
               element.size.x +
               "' height='" +
               element.size.y +
