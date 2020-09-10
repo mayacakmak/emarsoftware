@@ -117,13 +117,51 @@ function Belly(robotId, scale) {
           bellyHTML += '</div>';
         }
 
+        console.log(screen);
+        if (screen.textInput && screen.textInput.isShown === 1) {
+          console.log(screen.textInput);
+          bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
+          bellyHTML += '<textarea name="textinput" rows="4" cols="50"';
+          bellyHTML += ' placeholder="' + screen.textInput.text + '"';
+          bellyHTML += '></textarea>';
+          bellyHTML += '</div>';
+        }
+
         if (screen.buttons.isShown) {
+          // Image Buttons
           bellyHTML += "<div class='screen-element mt-4'  style='z-index: 2'>";
           if (screen.buttons.list != undefined) {
             for (var j = 0; j < screen.buttons.list.length; j++) {
               var name = screen.buttons.list[j].name;
-              bellyHTML +=
-                "<div><button class='btn btn-secondary mx-2 screen-item' " +
+              if (screen.buttons.list[j].url) {
+                var url = screen.buttons.list[j].url;
+                bellyHTML +=
+                  "<div style='align-self: start'><button class='btn btn-secondary mx-2 screen-item' " +
+                  "onclick='Belly.bellyInputReceived(this," +
+                  Belly.currentScreen +
+                  ',' +
+                  j +
+                  ")' name='button'>" +
+                  '<div><img  src=' +
+                  url +
+                  " width='80' height='80'/></div>" +
+                  name +
+                  '</button> ';
+              } 
+              if (screen.buttons.list[j].label) {
+                bellyHTML += '<h2 style="max-width: 160px">' + screen.buttons.list[j].label + '</h2>';
+              }
+              bellyHTML += '</div>';
+            }
+          }
+          bellyHTML += '</div>';
+          bellyHTML += "<div class='screen-element mt-4'  style='z-index: 2; flex-wrap: wrap; margin-top: -10px;'>";
+          if (screen.buttons.list != undefined) {
+            for (var j = 0; j < screen.buttons.list.length; j++) {
+              var name = screen.buttons.list[j].name;
+              if (!screen.buttons.list[j].url && !screen.buttons.list[j].label) {
+                bellyHTML +=
+                "<div style='margin-top: 10px;'><button class='btn btn-secondary mx-2 screen-item' " +
                 "onclick='Belly.bellyInputReceived(this," +
                 Belly.currentScreen +
                 ',' +
@@ -131,6 +169,7 @@ function Belly(robotId, scale) {
                 ")' name='button'>" +
                 name +
                 '</button></div>';
+              }
             }
           }
           bellyHTML += '</div>';
@@ -173,6 +212,10 @@ function Belly(robotId, scale) {
 
     if (target.name == "button") {
       Belly.bellyScreens[screenID].buttons.list[itemID].lastPressed = date.getTime();
+    }
+
+    if (target.name == "imageButton") {
+      Belly.bellyScreens[screenID].imageButtons.list[itemID].lastPressed = date.getTime();
     }
 
     var dir = 'robots/' + (Belly.robotId) + "/customAPI/inputs/";
