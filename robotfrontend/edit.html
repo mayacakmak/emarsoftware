@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
-
-</html>
-
+<html lang="en"></html>
 <head>
   <meta charset="utf-8">
   <title>EMAR Robot Frontend Tools</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/style.processed.css">
 </head>
-
 <body>
   <div class="topbar">
-    <div class="topbar-left" id="topLeft"><button class="btn btn-info" onclick="backToIndexPage()"><<</button></div>
+    <div class="topbar-left" id="topLeft">
+      <button class="btn btn-info" onclick="backToIndexPage()"><<</button>
+    </div>
     <div class="topbar-right" id="top"></div>
   </div>
   <div class="container-fluid px-sm-5 pb-4">
@@ -31,7 +29,9 @@
             <div class="btn-group mr-2" id="otherFaceList"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
           </div>
         </div>
-        <div class="p-1"><button class="btn btn-success" type="button" onclick="createNewFace()">Add selected face to my faces</button></div>
+        <div class="p-1">
+          <button class="btn btn-success" type="button" onclick="createNewFace()">Add selected face to my faces</button>
+        </div>
       </div>
     </div>
     <div class="row pb-3">
@@ -63,8 +63,12 @@
             <h2>Face Preview</h2>
           </div>
           <div class="card-body">
-            <div id="robotFace"><svg id="faceSVG"></svg></div>
-            <div class="d-flex justify-content-center mt-2"><input class="centered" type="text" onblur="faceRenamed()" id="faceName"></div>
+            <div id="robotFace">
+              <svg id="faceSVG"></svg>
+            </div>
+            <div class="d-flex justify-content-center mt-2">
+              <input class="centered" type="text" onblur="faceRenamed()" id="faceName">
+            </div>
           </div>
         </div>
       </div>

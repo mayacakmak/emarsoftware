@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
-
-</html>
-
+<html lang="en"></html>
 <head>
   <meta charset="utf-8">
   <title>EMAR Robot Frontend Tools</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/style.processed.css">
 </head>
-
 <body>
   <div class="topbar">
-    <div class="topbar-left" id="topLeft"><button class="btn btn-info" onclick="backToIndexPage()"><<</button></div>
+    <div class="topbar-left" id="topLeft">
+      <button class="btn btn-info" onclick="backToIndexPage()"><<</button>
+    </div>
     <div class="topbar-right" id="top"></div>
   </div>
   <div class="container-fluid px-sm-5 pb-4">
@@ -24,18 +22,21 @@
     <div class="row mb-2">
       <div class="col">
         <div class="card">
-          <div class="card-header" id="headingFaces"><button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseFaces" aria-expanded="true" aria-controls="collapseFaces">Select robot faces</button></div>
-          <div class="collapse collapsed" aria-labelledby="headingFaces"
-            id="collapseFaces">
+          <div class="card-header" id="headingFaces">
+            <button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseFaces" aria-expanded="true" aria-controls="collapseFaces">Select robot faces</button>
+          </div>
+          <div class="collapse collapsed" aria-labelledby="headingFaces" id="collapseFaces">
             <div class="card-body">
-              <div class="mt-2">
+              <div class="mt-2"> 
                 <h3>All faces</h3>
               </div>
               <div class="h-scrollable green-scroll">
                 <div class="btn-group mr-2" id="otherFaceList"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
               </div>
-              <div class="row justify-content-end my-4 mr-2"><button class="btn btn-primary" type="button" onclick="addRobotFace()" id="addFaceButton">Add selected</button></div>
-              <div class="mt-2">
+              <div class="row justify-content-end my-4 mr-2">
+                <button class="btn btn-primary" type="button" onclick="addRobotFace()" id="addFaceButton">Add selected</button>
+              </div>
+              <div class="mt-2"> 
                 <h3>Faces on this robot</h3>
               </div>
               <div class="h-scrollable green-scroll">
@@ -49,9 +50,10 @@
     <div class="row mb-2">
       <div class="col">
         <div class="card">
-          <div class="card-header" id="headingSpeak"><button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseSpeak" aria-expanded="true" aria-controls="collapseSpeak">Edit Preset Utterances</button></div>
-          <div class="collapse collapsed" aria-labelledby="headingSpeak"
-            id="collapseSpeak">
+          <div class="card-header" id="headingSpeak">
+            <button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseSpeak" aria-expanded="true" aria-controls="collapseSpeak">Edit Preset Utterances</button>
+          </div>
+          <div class="collapse collapsed" aria-labelledby="headingSpeak" id="collapseSpeak">
             <div class="card-body">
               <div class="top-aligned" id="utteranceList"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
             </div>
@@ -62,9 +64,10 @@
     <div class="row mb-2">
       <div class="col">
         <div class="card">
-          <div class="card-header" id="headingBelly"><button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseBelly" aria-expanded="true" aria-controls="collapseBelly">Edit Belly Input</button></div>
-          <div class="collapse collapsed" aria-labelledby="headingBelly"
-            id="collapseBelly">
+          <div class="card-header" id="headingBelly">
+            <button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseBelly" aria-expanded="true" aria-controls="collapseBelly">Edit Belly Input</button>
+          </div>
+          <div class="collapse collapsed" aria-labelledby="headingBelly" id="collapseBelly">
             <div class="card-body">
               <div class="top-aligned" id="bellySetup"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
             </div>
@@ -75,9 +78,10 @@
     <div class="row mb-2">
       <div class="col">
         <div class="card">
-          <div class="card-header" id="headingSounds"><button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseSounds" aria-expanded="true" aria-controls="collapseSounds">Select robot sounds</button></div>
-          <div class="collapse collapsed" aria-labelledby="headingSounds"
-            id="collapseSounds">
+          <div class="card-header" id="headingSounds">
+            <button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseSounds" aria-expanded="true" aria-controls="collapseSounds">Select robot sounds</button>
+          </div>
+          <div class="collapse collapsed" aria-labelledby="headingSounds" id="collapseSounds">
             <div class="card-body" id="soundSetup">
               <div class="row">
                 <div class="col-5">
