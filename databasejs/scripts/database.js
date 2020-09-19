@@ -95,7 +95,7 @@ function Database(config, readyCallback) {
 
       if (!Database.isAnonymous) {
         console.log("Signed in as " + user.displayName);
-        console.log("Email: " + user.email;
+        console.log("Email: " + user.email);
 
         Database.userEmail = user.email;
         let signinButton = document.getElementById('googleSignInButton');
