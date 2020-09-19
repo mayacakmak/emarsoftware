@@ -8,6 +8,10 @@ function databaseReadyCallback() {
   dbRef.on("value", updateUserRobotInfo);
 }
 
+function signInWithGoogle() {
+  Database.signInWithGoogle();
+}
+
 function updateUserRobotInfo(snapshot) {
   var database = snapshot.val();
   var robotListHTML = "";
