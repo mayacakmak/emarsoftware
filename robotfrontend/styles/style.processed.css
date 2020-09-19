@@ -52,6 +52,10 @@ a {
   width: 100%;
 } */
 
+img.img-button {
+  height: 40px;
+}
+
 img.face-thumb {
   border: 5px transparent solid;
   width: auto;
@@ -812,6 +816,12 @@ input[type=button].newButton {
 .full-button {
   margin-top: 2px;
   width: 100%;
+}
+
+button.btn-google {
+  width: auto;
+  padding: 0px;
+  margin-bottom: 10px;
 }
 
 button.btn-delete {
