@@ -64,6 +64,23 @@ function Database(config, readyCallback) {
     }
   }
 
+  Database.signInWithGoogle = function () {
+    if (Database.uid == null || Database.isAnonymous) {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().useDeviceLanguage();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(function (result) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+          var user = result.user;
+        })
+        .catch(Database.handleError);
+    }
+  }
+
   Database.handleError = function(error) {
     var errorCode = error.code;
     var errorMessage = error.message;
@@ -77,6 +94,9 @@ function Database(config, readyCallback) {
 
       if (!Database.isAnonymous) {
         console.log("Signed in as " + user.displayName);
+        let signinButton = document.getElementById('googleSignInButton');
+        if (signinButton != null)
+          signinButton.innerHTML="Signed in as " + user.displayName;
       } else {
         console.log("Signed in anonymously as " + user.uid);
       }
