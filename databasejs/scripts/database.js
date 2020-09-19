@@ -5,6 +5,7 @@ function Database(config, readyCallback) {
   
   Database.isAnonymous = false;
   Database.uid = null;
+  Database.userEmail = null;
   Database.isLogging = true;
 
   /*
@@ -94,6 +95,9 @@ function Database(config, readyCallback) {
 
       if (!Database.isAnonymous) {
         console.log("Signed in as " + user.displayName);
+        console.log("Email: " + user.email;
+
+        Database.userEmail = user.email;
         let signinButton = document.getElementById('googleSignInButton');
         let signoutButton = document.getElementById('googleSignOutButton');
         if (signinButton != null)

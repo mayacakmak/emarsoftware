@@ -17,14 +17,15 @@ function signOutFromGoogle() {
 }
 
 function updateUserRobotInfo(snapshot) {
-  var database = snapshot.val();
-  var robotListHTML = "";
+  let database = snapshot.val();
+  let robotListHTML = "";
   if (Database.uid != null) {
-    var userData = database.users[Database.uid];
+    let userData = database.users[Database.uid];
     if (userData != undefined)
       if (userData.currentRobot != undefined)
         currentRobot = userData.currentRobot;
-    var robots = database.robots;
+    let robots = database.robots;
+    let admins = database.administrators;
 
     robotNames = [];
     for (var i=0; i<robots.length; i++) {
@@ -42,12 +43,15 @@ function updateUserRobotInfo(snapshot) {
       selectedRobotDiv.innerHTML = robotNames[currentRobot];
   }
   
-    if (Database.isAnonymous){
+    if (Database.isAnonymous || Database.userEmail == null){
       disableButton("adminButton");
       //TODO: Ultimtely most things should not be available anonymously.
     } else {
-      enableButton("adminButton");
-      //TODO: Re-enable anything disabled above
+      // Check if the user is in the admin list
+      if (admins.includes(Database.userEmail))
+        enableButton("adminButton");
+      else
+        disableButton("adminButton");
     }  
 }
 
