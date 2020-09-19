@@ -57,7 +57,7 @@ function Database(config, readyCallback) {
   Database.loadJSLibrary(src="https://www.gstatic.com/firebasejs/6.3.0/firebase-database.js");
 
   Database.signInAnonymously = function() {
-    if (Database.uid == null) {
+    if (Database.uid == null && Database.userEmail == null) {
       firebase
         .auth()
         .signInAnonymously()
@@ -104,6 +104,7 @@ function Database(config, readyCallback) {
           signinButton.innerHTML="<i>Signed in as " + user.displayName + "</i>";
       } else {
         console.log("Signed in anonymously as " + user.uid);
+        Database.userEmail = null;
       }
 
       // Create directory in database to save this user's data
