@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"></html>
+<head>
+  <meta charset="utf-8">
+  <title>EMAR Robot Frontend Tools</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles/style.processed.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-left" id="topLeft">
+      <button class="btn btn-info" onclick="backToIndexPage()"><<</button>
+    </div>
+    <div class="topbar-right" id="top"></div>
+  </div>
+  <div class="container-fluid px-sm-5 pb-4">
+    <div class="row">
+      <div class="col text-center">
+        <h1 class="display-4">Robot Setup</h1>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col">
+        <div class="card">
+          <div class="card-header" id="headingFaces">
+            <button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseAddAdmin" aria-expanded="true" aria-controls="collapseAddAdmin">List of admins</button>
+          </div>
+          <div class="collapse collapsed" aria-labelledby="headingFaces" id="collapseAddAdmin">
+            <div class="card-body">
+              <div class="mb-4" id="adminInfo"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col">
+        <div class="card">
+          <div class="card-header" id="headingSpeak">
+            <button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseNewRobot" aria-expanded="true" aria-controls="collapseNewRobot">Create new robot</button>
+          </div>
+          <div class="collapse collapsed" aria-labelledby="headingSpeak" id="collapseNewRobot">
+            <div class="card-body">
+              <div class="mb-4" id="robotInfo"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+              <div class="mb-2 mb-1" id="newRobot">Name:
+                <input class="large-text" type="text" name="robotName" id="robotName">
+                <button class="btn btn-success" onclick="addNewRobot()">Create new robot</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://mayacakmak.github.io/emarsoftware/robotbackend/scripts/config.js"></script>
+  <script src="https://mayacakmak.github.io/emarsoftware/databasejs/scripts/database.js"></script>
+  <script src="scripts/admin.js"></script>
+</body>

@@ -1,0 +1,37 @@
+extends structure/_layout.pug
+
+block content
+  include structure/_tool_header.pug
+
+  .container-fluid.px-sm-5.pb-4
+    .row
+      .col.text-center
+        h1.display-4 Robot Setup
+    .row.mb-2
+      .col
+        .card
+          .card-header#headingFaces
+            button(class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseAddAdmin" aria-expanded="true" aria-controls="collapseAddAdmin") List of admins
+          .collapse.collapsed(aria-labelledby="headingFaces")#collapseAddAdmin
+            .card-body
+              .mb-4#adminInfo
+                span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+
+    .row.mb-2
+      .col
+        .card
+          .card-header#headingSpeak
+            button(class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseNewRobot" aria-expanded="true" aria-controls="collapseNewRobot") Create new robot
+          .collapse.collapsed(aria-labelledby="headingSpeak")#collapseNewRobot
+            .card-body
+              .mb-4#robotInfo
+                span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+              .mb-2.mb-1#newRobot Name:
+                input(type="text" class="large-text" name="robotName")#robotName
+                button.btn.btn-success(onclick="addNewRobot()") Create new robot
+
+
+
+block append scripts
+  script(src="scripts/admin.js")
+  
