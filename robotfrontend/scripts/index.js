@@ -43,6 +43,9 @@ function updateUserRobotInfo(snapshot) {
       selectedRobotDiv.innerHTML = robotNames[currentRobot];
   }
   
+    console.log(admins);
+    console.log("Database.userEmail: "+ Database.userEmail);
+    
     if (Database.isAnonymous || Database.userEmail == null){
       disableButton("adminButton");
       //TODO: Ultimtely most things should not be available anonymously.
