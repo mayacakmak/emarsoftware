@@ -135,9 +135,12 @@ function Robot(robotId, apiDiv) {
   */
   Robot._updateRobotAPI = function(snapshot) {
     var apiData = snapshot.val();
-    Robot.faces = apiData.states.faces;
-    Robot.bellyScreens = apiData.inputs.bellyScreens;
-    Robot.sounds = apiData.actions.sounds;
+    if (apiData.states != undefined)
+      Robot.faces = apiData.states.faces;
+    if (apiData.inputs != undefined)
+      Robot.bellyScreens = apiData.inputs.bellyScreens;
+    if (apiData.actions != undefined)
+      Robot.sounds = apiData.actions.sounds;
 
     if (Robot.apiDiv != undefined) {
       Robot.apiDiv.innerHTML = Robot.getAPIHTML();
