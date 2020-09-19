@@ -27,7 +27,11 @@ function Database(config, readyCallback) {
   Database.initialize = function(){
       Database.app = firebase.initializeApp(Database.config);
       firebase.auth().onAuthStateChanged(Database.handleAuthStateChange);
-      Database.signInAnonymously();    
+      // Wait a little bit to see is we are already logged in
+      // then attempt an anonymous sign in
+      window.setTimeout(function(){
+        Database.signInAnonymously();
+      }, 1000);    
   }
   
   /*
@@ -66,7 +70,7 @@ function Database(config, readyCallback) {
   }
 
   Database.signInWithGoogle = function () {
-    if (Database.uid == null || Database.isAnonymous) {
+    if (Database.userEmail == null) {
       var provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().useDeviceLanguage();
       firebase
@@ -96,8 +100,8 @@ function Database(config, readyCallback) {
       if (!Database.isAnonymous) {
         console.log("Signed in as " + user.displayName);
         console.log("Email: " + user.email);
-
         Database.userEmail = user.email;
+
         let signinButton = document.getElementById('googleSignInButton');
         let signoutButton = document.getElementById('googleSignOutButton');
         if (signinButton != null)
