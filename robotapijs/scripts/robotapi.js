@@ -146,7 +146,8 @@ function Robot(robotId, apiDiv) {
 
   Robot._updateRobotInput = function(snapshot) {
     var inputData = snapshot.val();
-    Robot.tactile = inputData.tactile;
+    if (inputData != null)
+      Robot.tactile = inputData.tactile;
   }
   
   this.getSliderValue = function() {
