@@ -46,16 +46,24 @@
       </div>
       <div class="row mx-1 mt-2 mb-4 d-flex flex-row">
         <div class="p-1">
-          <button class="btn btn-success" type="button" onclick="saveProgram()">Save</button>
+          <button class="btn btn-success" type="button" onclick="saveProgram()" id="saveButton">Save</button>
         </div>
         <div class="p-1">
-          <button class="btn btn-danger" type="button" onclick="deleteProgram()">Delete</button>
-        </div>
-        <div class="p-1">
-          <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#robotAPI">Show robot functions</button>
+          <button class="btn btn-danger" type="button" onclick="deleteProgram()" id="deleteButton">Delete</button>
         </div>
         <div class="p-1 ml-auto">
-          <button class="btn btn-primary" type="button" onclick="runProgram()">Run</button>
+          <button class="btn btn-primary" type="button" onclick="runProgram()" id="runButton">Run</button>
+        </div>
+      </div>
+      <div class="row mx-1 mt-2 mb-4 d-flex flex-row">
+        <div class="p-1">
+          <button class="btn btn-outline-warning" type="button" onclick="copyToRobotPrograms()" id="copyRobotButton">Copy to robot programs</button>
+        </div>
+        <div class="p-1">
+          <button class="btn btn-outline-warning" type="button" onclick="copyToMyPrograms()" disabled id="copyMyButton">Copy to my programs</button>
+        </div>
+        <div class="p-1 ml-auto">
+          <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#robotAPI">Show robot functions</button>
         </div>
         <div class="saved-alert" id="saved-alert">
           <div class="alert alert-success" role="alert" id="alert">Program saved.</div>

@@ -15,6 +15,7 @@ var myPrograms;
 var editor = null;
 var robotNames = null;
 var currentProgramId = -1;
+var isMyProgram = true;
 
 function initialize() {
 	let codeDiv = document.getElementById("code");
@@ -121,7 +122,7 @@ function updateRobotList(snapshot) {
   var robotsDiv = document.getElementById("robots");
   robotsDiv.innerHTML = robotListHTML;
   
-  if (currentProgramId != -1 && programs != undefined)
+  if (currentProgramId != -1 && myPrograms != undefined)
     setRobot(myPrograms[currentProgramId].robot);
   else
     setRobot(0);
@@ -144,13 +145,13 @@ function setRobot(robotId) {
   let programsDiv = document.getElementById("robotPrograms");
   let programsButtonDiv = document.getElementById("robotProgramsButtonText");
 
+  let programListHTML = "";
   if (thisRobotPrograms != undefined) {
-    var programListHTML = "";
     for (var i=0; i<thisRobotPrograms.length; i++) {
       programListHTML += "<a class='dropdown-item' href='#' onclick='loadRobotProgram(" + robotId + "," + i + ")'>" + thisRobotPrograms[i].name + "</a>"
     }
-    programsDiv.innerHTML = programListHTML;
   }
+  programsDiv.innerHTML = programListHTML;
   programsButtonDiv.innerHTML = "Programs on " + robotNames[robotId];
 }
 
@@ -165,41 +166,113 @@ function resetProgram() {
 function loadProgram(index) {
 	console.log("Loading program: " + myPrograms[index].name);
   currentProgramId = index;
-  
   editor.setValue(myPrograms[currentProgramId].program);
 	var codeNameDiv = document.getElementById("programName");
-	codeNameDiv.value = myPrograms[currentProgramId].name;
-  
+	codeNameDiv.value = myPrograms[currentProgramId].name;  
   setRobot(myPrograms[currentProgramId].robot);
-  // currentProgram = myPrograms[currentProgramId].program;
+  isMyProgram = true;
+  let saveButton = document.getElementById("saveButton");
+  saveButton.disabled = false;
+  let deleteButton = document.getElementById("deleteButton");
+  deleteButton.disabled = false;
+  let copyRobotButton = document.getElementById("copyRobotButton");
+  copyRobotButton.disabled = false;
+  let copyMyButton = document.getElementById("copyMyButton");
+  copyMyButton.disabled = true;
+}
+
+function loadRobotProgram(robotId, programId) {
+  console.log("Loading program: " + robotPrograms[robotId][programId].name);
+  currentProgramId = programId;
+  editor.setValue(robotPrograms[robotId][programId].program);
+  var codeNameDiv = document.getElementById("programName");
+  codeNameDiv.value = robotPrograms[robotId][programId].name;
+  isMyProgram = false;
+  let saveButton = document.getElementById("saveButton");
+  saveButton.disabled = true;
+  let deleteButton = document.getElementById("deleteButton");
+  deleteButton.disabled = true;
+  let copyRobotButton = document.getElementById("copyRobotButton");
+  copyRobotButton.disabled = true;
+  let copyMyButton = document.getElementById("copyMyButton");
+  copyMyButton.disabled = false;
+}
+
+function copyToRobotPrograms() {
+  if (isMyProgram) {
+    if (saveProgram()) {
+      let robotId = myPrograms[currentProgramId].robot;
+      let thisRobotPrograms = allRobotPrograms[robotId];
+      // Add the current program to the corresponding robot's list
+      thisRobotPrograms.push(myPrograms[currentProgramId]);
+      let dir = "/robots/" + robotId + "/";
+      let dbRef = firebase.database().ref(dir);
+      let updates = {"programs":thisRobotPrograms};
+      dbRef.update(updates);      
+    }
+  }
+}
+
+function copyToMyPrograms() {
+  if (!isMyProgram) {
+    let codeNameDiv = document.getElementById("programName");
+    var dir = "users/" + Database.uid + "/programs/";
+    var dbRef = firebase.database().ref(dir);
+    if (myPrograms == undefined)
+      myPrograms = [];
+    
+    myPrograms.push({"name": codeNameDiv.value,
+                     "program": editor.getValue(),
+                     "robot": Robot.robotId});
+    
+    dbRef.set(myPrograms);
+    console.log("Robot program saved to my programs.");
+    
+    var alertDiv = document.getElementById("saved-alert");
+    alertDiv.style.visibility = "visible";
+    window.setTimeout(hideAlert, 2000);    
+  }
 }
 
 function saveProgram() {
-  var codeNameDiv = document.getElementById("programName");
+  if (isMyProgram) {
+    let codeNameDiv = document.getElementById("programName");
 
-	var dir = "users/" + Database.uid + "/programs/";
-  var dbRef = firebase.database().ref(dir);
-  
-  if (programs == undefined)
-    programs = [];
-  
-  if (currentProgramId == -1) {
-    currentProgramId = programs.length;
-  	programs.push({"name": codeNameDiv.value,
-                   "program": editor.getValue(),
-                   "robot": Robot.robotId});
-  } else {
-    myPrograms[currentProgramId].name = codeNameDiv.value;
-    myPrograms[currentProgramId].program = editor.getValue();
-    myPrograms[currentProgramId].robot = Robot.robotId;
+    if (codeNameDiv.value == "") {
+       console.log("Cannot save: The program needs a name.");
+       return false;
+    } 
+    else if(editor.getValue() == "") {
+       console.log("Cannot save: The program is empty.");
+       return false;
+    }
+    else {
+      var dir = "users/" + Database.uid + "/programs/";
+      var dbRef = firebase.database().ref(dir);
+      
+      if (myPrograms == undefined)
+        myPrograms = [];
+      
+      if (currentProgramId == -1) {
+        currentProgramId = myPrograms.length;
+        myPrograms.push({"name": codeNameDiv.value,
+                       "program": editor.getValue(),
+                       "robot": Robot.robotId});
+      } else {
+        myPrograms[currentProgramId].name = codeNameDiv.value;
+        myPrograms[currentProgramId].program = editor.getValue();
+        myPrograms[currentProgramId].robot = Robot.robotId;
+      }
+      
+      dbRef.set(myPrograms);
+      console.log("Program saved.");
+      
+      var alertDiv = document.getElementById("saved-alert");
+      alertDiv.style.visibility = "visible";
+      window.setTimeout(hideAlert, 2000);
+      return true;
+    }
   }
-  
-	dbRef.set(programs);
-  console.log("Program saved.");
-  
-  var alertDiv = document.getElementById("saved-alert");
-  alertDiv.style.visibility = "visible";
-  window.setTimeout(hideAlert, 2000);
 }
 
 function hideAlert() {
@@ -208,9 +281,11 @@ function hideAlert() {
 }
 
 function deleteProgram() {
-	var dir = "users/" + Database.uid + "/programs/";
-  var dbRef = firebase.database().ref(dir);
-  myPrograms.splice(currentProgramId,1);
-	dbRef.set(myPrograms);
-  resetProgram();
+  if (isMyProgram && myPrograms!=null) {
+    var dir = "users/" + Database.uid + "/programs/";
+    var dbRef = firebase.database().ref(dir);
+    myPrograms.splice(currentProgramId,1);
+    dbRef.set(myPrograms);
+    resetProgram();
+  }
 }

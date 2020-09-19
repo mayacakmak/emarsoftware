@@ -36,13 +36,18 @@ block content
           textarea(type="text")#code
       .row.mx-1.mt-2.mb-4.d-flex.flex-row
         .p-1
-          button.btn.btn-success(type="button" onclick="saveProgram()") Save
+          button.btn.btn-success(type="button" onclick="saveProgram()")#saveButton Save
         .p-1
-          button.btn.btn-danger(type="button" onclick="deleteProgram()") Delete
-        .p-1
-          button.btn.btn-secondary(type="button" data-toggle="modal" data-target="#robotAPI") Show robot functions
+          button.btn.btn-danger(type="button" onclick="deleteProgram()")#deleteButton Delete
         .p-1.ml-auto
-          button.btn.btn-primary(type="button" onclick="runProgram()") Run
+          button.btn.btn-primary(type="button" onclick="runProgram()")#runButton Run
+      .row.mx-1.mt-2.mb-4.d-flex.flex-row
+        .p-1
+          button.btn.btn-outline-warning(type="button" onclick="copyToRobotPrograms()")#copyRobotButton Copy to robot programs
+        .p-1
+          button.btn.btn-outline-warning(type="button" onclick="copyToMyPrograms()" "disabled")#copyMyButton Copy to my programs
+        .p-1.ml-auto
+          button.btn.btn-outline-secondary(type="button" data-toggle="modal" data-target="#robotAPI") Show robot functions
         .saved-alert#saved-alert
           .alert.alert-success(role="alert")#alert Program saved.
           
