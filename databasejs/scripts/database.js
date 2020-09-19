@@ -105,10 +105,10 @@ function Database(config, readyCallback) {
         let signinButton = document.getElementById('googleSignInButton');
         let signinInfo = document.getElementById('googleSignInInfo');
         if (signinButton != null) {
-          signinButton.style.visibility = 'hidden';
+          signinButton.style.display = 'none';
         }
         if (signinInfo != null) {
-          signinInfo.style.visibility = '';
+          signinInfo.style.display = 'block';
           signinInfo.innerHTML="<i>Signed in as " + user.displayName + "</i>";
         }
       } else {
@@ -117,10 +117,10 @@ function Database(config, readyCallback) {
         let signinButton = document.getElementById('googleSignInButton');
         let signinInfo = document.getElementById('googleSignInInfo');
         if (signinButton != null) {
-          signinButton.style.visibility = '';
+          signinButton.style.display = 'block';
         }
         if (signinInfo != null) {
-          signinInfo.style.visibility = 'hidden';
+          signinInfo.style.display = 'none';
         }
       }
 
