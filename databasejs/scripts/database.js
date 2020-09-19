@@ -95,6 +95,7 @@ function Database(config, readyCallback) {
       if (!Database.isAnonymous) {
         console.log("Signed in as " + user.displayName);
         let signinButton = document.getElementById('googleSignInButton');
+        let signoutButton = document.getElementById('googleSignOutButton');
         if (signinButton != null)
           signinButton.innerHTML="Signed in as " + user.displayName;
       } else {

@@ -12,6 +12,10 @@ function signInWithGoogle() {
   Database.signInWithGoogle();
 }
 
+function signOutFromGoogle() {
+  Database.signOut();
+}
+
 function updateUserRobotInfo(snapshot) {
   var database = snapshot.val();
   var robotListHTML = "";
