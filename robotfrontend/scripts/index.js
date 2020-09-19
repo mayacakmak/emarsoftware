@@ -50,8 +50,13 @@ function updateUserRobotInfo(snapshot) {
       //TODO: Ultimtely most things should not be available anonymously.
     } else {
       // Check if the user is in the admin list
-      if (admins.includes(Database.userEmail))
+
+      console.log(admins.includes(Database.userEmail));
+
+      if (admins.includes(Database.userEmail)){
         enableButton("adminButton");
+        console.log('button enabled');        
+      }
       else
         disableButton("adminButton");
     }  
