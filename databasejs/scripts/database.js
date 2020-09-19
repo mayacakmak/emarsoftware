@@ -108,8 +108,7 @@ function Database(config, readyCallback) {
           signinButton.style.visibility = 'hidden';
         }
         if (signinInfo != null) {
-          signinInfo.classList.remove('invisible');
-          signinInfo.style.visibility = 'visible';
+          signinInfo.style.visibility = '';
           signinInfo.innerHTML="<i>Signed in as " + user.displayName + "</i>";
         }
       } else {
@@ -118,7 +117,7 @@ function Database(config, readyCallback) {
         let signinButton = document.getElementById('googleSignInButton');
         let signinInfo = document.getElementById('googleSignInInfo');
         if (signinButton != null) {
-          signinButton.style.visibility = 'visible';
+          signinButton.style.visibility = '';
         }
         if (signinInfo != null) {
           signinInfo.style.visibility = 'hidden';
