@@ -103,12 +103,25 @@ function Database(config, readyCallback) {
         Database.userEmail = user.email;
 
         let signinButton = document.getElementById('googleSignInButton');
-        let signoutButton = document.getElementById('googleSignOutButton');
-        if (signinButton != null)
-          signinButton.innerHTML="<i>Signed in as " + user.displayName + "</i>";
+        let signinInfo = document.getElementById('googleSignInInfo');
+        if (signinButton != null) {
+          signinButton.style.visibility = 'hidden';
+        }
+        if (signinInfo != null) {
+          signinInfo.style.visibility = 'visible';
+          signinInfo.innerHTML="<i>Signed in as " + user.displayName + "</i>";
+        }
       } else {
         console.log("Signed in anonymously as " + user.uid);
         Database.userEmail = null;
+        let signinButton = document.getElementById('googleSignInButton');
+        let signinInfo = document.getElementById('googleSignInInfo');
+        if (signinButton != null) {
+          signinButton.style.visibility = 'visible';
+        }
+        if (signinInfo != null) {
+          signinInfo.style.visibility = 'hidden';
+        }
       }
 
       // Create directory in database to save this user's data
