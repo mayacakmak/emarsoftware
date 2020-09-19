@@ -108,6 +108,7 @@ function Database(config, readyCallback) {
           signinButton.style.visibility = 'hidden';
         }
         if (signinInfo != null) {
+          signinInfo.classList.remove('invisible');
           signinInfo.style.visibility = 'visible';
           signinInfo.innerHTML="<i>Signed in as " + user.displayName + "</i>";
         }
