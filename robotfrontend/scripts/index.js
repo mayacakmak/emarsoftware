@@ -53,7 +53,7 @@ function updateUserRobotInfo(snapshot) {
       }
       else
         disableButton("adminButton");
-    }  
+    }
   }
 }
 
