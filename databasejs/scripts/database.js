@@ -31,7 +31,7 @@ function Database(config, readyCallback) {
       // then attempt an anonymous sign in
       window.setTimeout(function(){
         Database.signInAnonymously();
-      }, 1000);    
+      }, 500);    
   }
   
   /*
