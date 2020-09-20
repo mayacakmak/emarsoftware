@@ -1,0 +1,32 @@
+extends structure/_layout.pug
+
+block content
+
+  .container-fluid.px-sm-5
+    .row.px-3
+      .col-sm-3
+      .col-sm-6.text-center.align-self-left.justify-content-center.px-5.pt-5.pb-1
+        .border.border-secondary.rounded-lg.bg-secondary
+          .m-5#robotFace
+            svg#faceSVG
+      .col-sm-3
+    .row.px-3
+      .col-sm-3
+      .col-sm-6.text-center.align-self-left.justify-content-center.px-2.pb-5.pt-1
+        .border.border-secondary.rounded-lg.bg-secondary
+          .m-5
+            .screen-box-outer
+              .screen-box-inner.overflow-auto#screenDiv
+                span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+      .col-sm-3
+
+
+block append scripts
+  script(src="https://code.responsivevoice.org/responsivevoice.js")
+  script(src="scripts/config.js")
+  script(src="scripts/eyes.js")
+  script(src="scripts/face.js")
+  script(src="scripts/sound.js")
+  script(src="scripts/belly.js")
+  script(src="scripts/robot-backend.js")
+  script(src="scripts/web-robot.js")
