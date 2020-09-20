@@ -1,0 +1,27 @@
+extends structure/_layout.pug
+
+block content
+
+  .robot-container
+    .top-filler
+    .robot-face
+      .m-0#robotFace
+        svg#faceSVG
+    .middle-filler
+    .robot-face
+      .m-0
+        .screen-box-outer
+          .screen-box-inner#screenDiv
+            span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+    .bottom-filler
+
+
+block append scripts
+  script(src="https://code.responsivevoice.org/responsivevoice.js")
+  script(src="scripts/config.js")
+  script(src="scripts/eyes.js")
+  script(src="scripts/face.js")
+  script(src="scripts/sound.js")
+  script(src="scripts/belly.js")
+  script(src="scripts/robot-backend.js")
+  script(src="scripts/web-robot.js")
