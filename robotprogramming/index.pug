@@ -2,12 +2,12 @@ extends structure/_layout.pug
 
 block content
   .container-fluid.d-flex.align-items-center.justify-content-center
-    .container-fixed
+    .container
       .row.mx-1.mt-5
           h1.display-4 Robot Programming
-      .row.mx-1
-        .mb-3 Select a program from a robot (read-only) or from your programs (editable). Press 'Run' to test the program. You can copy programs on a robot to your programs to edit them or create a new program. You can share your programs by copying them onto a robot. 
-      .row.mx-1.mb-1
+      .flex-row.mx-1.mb-3
+        p.text-left.font-weight-light Select a program from a robot (read-only) or from your programs (editable). Press 'Run' to test the program. You can copy programs on a robot to your programs to edit them or create a new program. You can share your programs by copying them onto a robot. 
+      .row.mx-1.d-flex.flex-row.mb-1
         .button-group
           button(type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") 
             span#selectedRobot
@@ -42,6 +42,7 @@ block content
       .row.mx-1.mb-1
         .programming-area
           textarea(type="text")#code
+      
       .row.mx-1.mt-2.mb-4.d-flex.flex-row
         .p-1
           button.btn.btn-success(type="button" onclick="saveProgram()")#saveButton Save

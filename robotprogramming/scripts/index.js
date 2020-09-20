@@ -48,7 +48,7 @@ function initialize() {
       },
     });
 
-	editor.setSize("600", "400");
+	editor.setSize("100%", "500");
   editor.setOption("readOnly", false);
 }
 
@@ -220,7 +220,7 @@ function loadRobotProgram(robotId, programId) {
   var codeNameDiv = document.getElementById("programName");
   codeNameDiv.value = robotPrograms[robotId][programId].name;
   setProgramRobot(robotPrograms[robotId][programId].robot);
-  
+
   isMyProgram = false;
   let saveButton = document.getElementById("saveButton");
   saveButton.disabled = true;
