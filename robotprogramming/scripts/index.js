@@ -195,6 +195,7 @@ function loadProgram(index) {
 	var codeNameDiv = document.getElementById("programName");
 	codeNameDiv.value = myPrograms[currentProgramId].name;  
   setProgramRobot(myPrograms[currentProgramId].robot);
+  
   isMyProgram = true;
   let saveButton = document.getElementById("saveButton");
   saveButton.disabled = false;
@@ -204,6 +205,8 @@ function loadProgram(index) {
   copyRobotButton.disabled = false;
   let programName = document.getElementById("programName");
   programName.disabled = false;
+  let programRobotsButton = document.getElementById("programRobotsButton");
+  programRobotsButton.disabled = false;
   editor.setOption("readOnly", false);
 
   let copyMyButton = document.getElementById("copyMyButton");
@@ -216,6 +219,8 @@ function loadRobotProgram(robotId, programId) {
   editor.setValue(robotPrograms[robotId][programId].program);
   var codeNameDiv = document.getElementById("programName");
   codeNameDiv.value = robotPrograms[robotId][programId].name;
+  setProgramRobot(robotPrograms[robotId][programId].robot);
+  
   isMyProgram = false;
   let saveButton = document.getElementById("saveButton");
   saveButton.disabled = true;
@@ -225,6 +230,8 @@ function loadRobotProgram(robotId, programId) {
   copyRobotButton.disabled = true;
   let programName = document.getElementById("programName");
   programName.disabled = true;
+  let programRobotsButton = document.getElementById("programRobotsButton");
+  programRobotsButton.disabled = true;
   editor.setOption("readOnly", "nocursor");
 
   let copyMyButton = document.getElementById("copyMyButton");
