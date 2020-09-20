@@ -42,6 +42,10 @@ function setRobot(robotId) {
   dbRef.update({currentRobot:robotId});
 }
 
+function startPageWithRobot(pageName) {
+  window.location.href = pageName + ".html?robot=" + currentRobot;
+}
+
 function startRenderer() {
   window.location.href = "render-face.html?robot=" + currentRobot;
 }

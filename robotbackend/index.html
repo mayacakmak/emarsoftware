@@ -32,7 +32,7 @@
           </div>
           <div class="card-body">
             <p class="card-text font-weight-light">Select a robot above and press the button to set up your tablet screen as the robot's face.</p>
-            <button class="btn btn-info" onclick="startRenderer()" id="renderButton">Start Face Renderer</button>
+            <button class="btn btn-info" onclick="startPageWithRobot('render-face')" id="renderButton">Start Face Renderer</button>
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@
           </div>
           <div class="card-body">
             <p class="card-text font-weight-light">Select a robot above and press the button to set up your screen as the robot's belly.</p>
-            <button class="btn btn-info" onclick="startBellyRenderer()" id="bellyButton">Start Belly Renderer</button>
+            <button class="btn btn-info" onclick="startPageWithRobot('render-belly')" id="bellyButton">Start Belly Renderer</button>
           </div>
         </div>
       </div>
@@ -54,7 +54,8 @@
           </div>
           <div class="card-body">
             <p class="card-text font-weight-light">Select a robot above and press the button to render a full robot on the browser.</p>
-            <button class="btn btn-info" onclick="startWebRobot()" id="renderButton">Start Web Robot</button>
+            <button class="btn btn-info mr-2 mb-1" onclick="startPageWithRobot('web-robot-square')">Square Robot</button>
+            <button class="btn btn-info mb-1" onclick="startPageWithRobot('web-robot')">Rounded Robot</button>
           </div>
         </div>
       </div>
@@ -65,7 +66,7 @@
           </div>
           <div class="card-body">
             <p class="card-text font-weight-light">Select a robot above and press the button to render a full robot on a phone browser.</p>
-            <button class="btn btn-info" onclick="startPhoneRobot()" id="phoneButton">Start Phone Robot</button>
+            <button class="btn btn-info" onclick="startPageWithRobot('phone-robot')" id="phoneButton">Phone Robot</button>
           </div>
         </div>
       </div>

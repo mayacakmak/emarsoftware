@@ -46,7 +46,7 @@ a {
   background-color: #96e6a1;
 }
 
-.robot-container {
+.phone-robot-container {
   height: 100%; 
   width: 100%;
   display: flex;
@@ -57,20 +57,47 @@ a {
   background-size: 100% auto;
   background-color: #cccccc;
 }
-.robot-face {
-  width: 74%;
+
+.web-robot-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: url("../emar.png") no-repeat #cccccc;
+  background-size: auto 100%;
+  background-color: #cccccc;
+  background-position: center;
 }
-.top-filler {
+
+.web-robot-face {
+  height: 27vh;
+}
+.web-robot-belly {
+  height: 27vh;
+  width: 48vh;
+}
+.web-top-filler {
   height: 3%;
-  width: 100%;
 }
-.middle-filler {
+.web-middle-filler {
   height: 24%;
-  width: 100%;
 }
-.bottom {
+.phone-robot-face {
+  width: 75vw;
+}
+.phone-robot-belly {
+  width: 75vw;
+}
+.phone-top-filler {
+  height: 3%;
+}
+.phone-middle-filler {
+  height: 25%;
+}
+.bottom-filler {
   height: auto;
-  width: 100%;
 }
 
 /* img {
@@ -314,7 +341,7 @@ div.screen-box-inner {
   left: 0;
   bottom: 0;
   right: 0;
-  margin: 2px 0px;
+  margin: 0px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
