@@ -5,31 +5,39 @@ block content
     .container-fixed
       .row.mx-1.mt-5
           h1.display-4 Robot Programming
-      .row.mx-1.mb-3.pb-3.border-bottom
-        .btn-group
-          button(type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") 
+      .row.mx-1
+        .mb-3 Select a program from a robot (read-only) or from your programs (editable). Press 'Run' to test the program. You can copy programs on a robot to your programs to edit them or create a new program. You can share your programs by copying them onto a robot. 
+      .row.mx-1.mb-1
+        .button-group
+          button(type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") 
             span#selectedRobot
               span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
               span.pl-2 Loading robots...
             .dropdown-menu#robots
-        .btn-group
-          button(type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+        .button-group
+          button(type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
             span#robotProgramsButtonText
               span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
               span.pl-2 Loading programs...
           .dropdown-menu#robotPrograms
+      .row.mx-1.mb-3.pb-3.d-flex.flex-row.border-bottom
+        button(type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+          span#programsButtonText
+            span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+            span.pl-2 Loading programs...
+        .dropdown-menu#myPrograms
       .row.mx-1.d-flex.flex-row
-        .p-1
-          button(type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
-            span#programsButtonText
-              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
-              span.pl-2 Loading programs...
-          .dropdown-menu#myPrograms
         .p-1
           .input-group.mb-1
             .input-group-prepend
               span(class="input-group-text" id="program-name") Program name
             input(type="text" class="form-control" placeholder="" aria-label="program-name" aria-describedby="program-name")#programName
+        .p-1.ml-auto
+          button(type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") 
+            span#currentProgramRobot
+              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+              span.pl-2 Loading robots...
+            .dropdown-menu#programRobots
 
       .row.mx-1.mb-1
         .programming-area

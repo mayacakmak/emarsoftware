@@ -14,7 +14,8 @@ var robotPrograms;
 var myPrograms;
 var editor = null;
 var robotNames = null;
-var currentProgramId = -1;
+var currentProgramId = null;
+var selectedRobotId = null;
 var isMyProgram = true;
 
 function initialize() {
@@ -48,6 +49,7 @@ function initialize() {
     });
 
 	editor.setSize("600", "400");
+  editor.setOption("readOnly", false);
 }
 
 async function runProgram() {
@@ -111,33 +113,55 @@ function updateMyProgramList(snapshot) {
 
 function updateRobotList(snapshot) { 
   let robotListHTML = "";
+  let programRobotListHTML = "";
   let robots = snapshot.val();
   robotNames = [];
   robotPrograms = [];
   for (var i=0; i<robots.length; i++) {
     robotNames.push(robots[i].name);
     robotPrograms.push(robots[i].programs);
-		robotListHTML += "<a class='dropdown-item' href='#' onclick='robotChanged(" + i + ")'>" + robots[i].name + "</a>";
+		robotListHTML += "<a class='dropdown-item' href='#' onclick='selectedRobotChanged(" +
+        i + ")'>" + robots[i].name + "</a>";
+    programRobotListHTML += "<a class='dropdown-item' href='#' onclick='programRobotChanged(" +
+        i + ")'>" + robots[i].name + "</a>";
 	}
-  var robotsDiv = document.getElementById("robots");
+  let robotsDiv = document.getElementById("robots");
   robotsDiv.innerHTML = robotListHTML;
+  let programRobotsDiv = document.getElementById("programRobots");
+  programRobotsDiv.innerHTML = programRobotListHTML;
   
-  if (currentProgramId != -1 && myPrograms != undefined)
-    setRobot(myPrograms[currentProgramId].robot);
+  if (currentProgramId != null && myPrograms != undefined){    
+    setProgramRobot(myPrograms[currentProgramId].robot);
+  }
   else
-    setRobot(0);
+    setProgramRobot(0);
+
+  if (selectedRobotId != null)
+    setSelectedRobot(selectedRobotId);
+  else
+    setSelectedRobot(0);
 }
 
-function robotChanged(robotId) {
-  setRobot(robotId);
-  if (currentProgramId != -1) {
+function programRobotChanged(robotId) {
+  setProgramRobot(robotId);
+  if (currentProgramId != null) {
     saveProgram();
   }
 }
 
-function setRobot(robotId) {
-  console.log("setting robot: " + robotId);
+function selectedRobotChanged(robotId) {
+  setSelectedRobot(robotId);
+}
+
+function setProgramRobot(robotId) {
+  console.log("Current program's robot is: " + robotId);
   Robot.setRobotId(robotId);
+  var programRobotDiv = document.getElementById("currentProgramRobot");
+  programRobotDiv.innerHTML = robotNames[robotId];
+}
+
+function setSelectedRobot(robotId) {
+  selectedRobotId = robotId;
   var selectedRobotDiv = document.getElementById("selectedRobot");
   selectedRobotDiv.innerHTML = robotNames[robotId];
 
@@ -148,7 +172,8 @@ function setRobot(robotId) {
   let programListHTML = "";
   if (thisRobotPrograms != undefined) {
     for (var i=0; i<thisRobotPrograms.length; i++) {
-      programListHTML += "<a class='dropdown-item' href='#' onclick='loadRobotProgram(" + robotId + "," + i + ")'>" + thisRobotPrograms[i].name + "</a>"
+      programListHTML += "<a class='dropdown-item' href='#' onclick='loadRobotProgram(" 
+      + robotId + "," + i + ")'>" + thisRobotPrograms[i].name + "</a>"
     }
   }
   programsDiv.innerHTML = programListHTML;
@@ -160,7 +185,7 @@ function resetProgram() {
   editor.setValue("");
 	var codeNameDiv = document.getElementById("programName");
 	codeNameDiv.value = "";
-  currentProgramId = -1;
+  currentProgramId = null;
 }
 
 function loadProgram(index) {
@@ -169,7 +194,7 @@ function loadProgram(index) {
   editor.setValue(myPrograms[currentProgramId].program);
 	var codeNameDiv = document.getElementById("programName");
 	codeNameDiv.value = myPrograms[currentProgramId].name;  
-  setRobot(myPrograms[currentProgramId].robot);
+  setProgramRobot(myPrograms[currentProgramId].robot);
   isMyProgram = true;
   let saveButton = document.getElementById("saveButton");
   saveButton.disabled = false;
@@ -177,6 +202,10 @@ function loadProgram(index) {
   deleteButton.disabled = false;
   let copyRobotButton = document.getElementById("copyRobotButton");
   copyRobotButton.disabled = false;
+  let programName = document.getElementById("programName");
+  programName.disabled = false;
+  editor.setOption("readOnly", false);
+
   let copyMyButton = document.getElementById("copyMyButton");
   copyMyButton.disabled = true;
 }
@@ -194,6 +223,10 @@ function loadRobotProgram(robotId, programId) {
   deleteButton.disabled = true;
   let copyRobotButton = document.getElementById("copyRobotButton");
   copyRobotButton.disabled = true;
+  let programName = document.getElementById("programName");
+  programName.disabled = true;
+  editor.setOption("readOnly", "nocursor");
+
   let copyMyButton = document.getElementById("copyMyButton");
   copyMyButton.disabled = false;
 }
@@ -202,13 +235,13 @@ function copyToRobotPrograms() {
   if (isMyProgram) {
     if (saveProgram()) {
       let robotId = myPrograms[currentProgramId].robot;
-      let thisRobotPrograms = allRobotPrograms[robotId];
+      let thisRobotPrograms = robotPrograms[robotId];
       // Add the current program to the corresponding robot's list
       thisRobotPrograms.push(myPrograms[currentProgramId]);
       let dir = "/robots/" + robotId + "/";
       let dbRef = firebase.database().ref(dir);
       let updates = {"programs":thisRobotPrograms};
-      dbRef.update(updates);      
+      dbRef.update(updates);
     }
   }
 }
@@ -253,7 +286,7 @@ function saveProgram() {
       if (myPrograms == undefined)
         myPrograms = [];
       
-      if (currentProgramId == -1) {
+      if (currentProgramId == null) {
         currentProgramId = myPrograms.length;
         myPrograms.push({"name": codeNameDiv.value,
                        "program": editor.getValue(),
