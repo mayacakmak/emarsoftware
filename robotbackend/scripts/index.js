@@ -54,3 +54,7 @@ function startWebRobot() {
   window.location.href = "web-robot.html?robot=" + currentRobot;
 }
 
+function startPhoneRobot() {
+  window.location.href = "phone-robot.html?robot=" + currentRobot;
+}
+
