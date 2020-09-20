@@ -23,7 +23,7 @@ block content
           .card-header
             h2 Robot Setup
           .card-body
-            p.card-text Select a robot above and press the button to set up its face and other parameters, before starting to control it.
+            p.card-text.font-weight-light Select a robot above and press the button to set up its face and other parameters, before starting to control it.
             button.btn.btn-warning(onclick="startSetup()")#setupButton Start Robot Setup
       
       .col-sm-4
@@ -31,7 +31,7 @@ block content
           .card-header 
             h2 Robot Control (WoZ)
           .card-body
-            p.card-text Select a robot above and press the button to start controlling the robot's actions (Wizard of Oz) from your browser.
+            p.card-text.font-weight-light Select a robot above and press the button to start controlling the robot's actions (Wizard of Oz) from your browser.
             button.btn.btn-warning(onclick="startController()")#controlButton Start Robot Controller
 
       .col-sm-4
@@ -39,7 +39,7 @@ block content
           .card-header
             h2 Face Editing
           .card-body
-            p.card-text Press button to start the face editor to customize your faces or create new faces.
+            p.card-text.font-weight-light Press button to start the face editor to customize your faces or create new faces.
             button.btn.btn-warning(type="button" onclick="startEditor()")#editButton Start Face Editor
 
     .row
@@ -48,7 +48,7 @@ block content
           .card-header
             h2 Robot Administration
           .card-body
-            p.card-text Sign in and press button below to add new robots and manage permissions. If you are not an administrator you can contact another administrator.
+            p.card-text.font-weight-light Sign in and press button below to add new robots and manage permissions. If you are not an administrator you can contact another administrator.
             .mb-2#googleSignInButton
               button.btn.btn-google(type="button" onclick="signInWithGoogle()")
                 img(class="img-button" src="assets/web/2x/btn_google_signin_light_focus_web@2x.png")#googleIMG
