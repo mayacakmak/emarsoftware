@@ -1,0 +1,40 @@
+extends robotfrontend/structure/_layout.pug
+
+block content
+  .topbar
+    .topbar-left#topLeft
+    .topbar-right#top
+
+  .container-fluid.px-sm-5
+    .row.py-3
+      .col-sm-10
+        h1.display-4 EMAR Robot Software Tools
+    .row
+      .col-sm-4
+        .card.bg-light.mb-3
+          .card-header
+            h3.text-info Robot Backend
+          .card-body
+            p.card-text Back-end tools allow rendering the robot face and belly on tablets or simulate a robot on a screen or phone.
+            a.btn.btn-dark(href="robotbackend/index.html") Go to backend tools
+      
+      .col-sm-4
+        .card.bg-light.mb-3
+          .card-header 
+            h3.text-warning Robot Frontend
+          .card-body
+            p.card-text Front-end tools allow administration and set up of different robots, editing of program content (robot faces, robot belly screens), and Wizard of Oz conrol of a robot.
+            a.btn.btn-dark(href="robotfrontend/index.html") Go to frontend tools
+
+      .col-sm-4
+        .card.bg-light.mb-3
+          .card-header 
+            h3.text-danger Robot Programming
+          .card-body
+            p.card-text The robot programming tool introduces the robot Application Programming Interface (API), and allows creating and running programs for robots in JavaScript.
+            a.btn.btn-dark(href="robotprogramming/index.html") Go to robot programming tool
+        
+    .footer
+
+block append scripts
+  script(src="scripts/index.js")
