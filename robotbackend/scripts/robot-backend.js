@@ -29,8 +29,8 @@ function RobotBackend(robotId, scale) {
     dbRefActions.on("value", RobotBackend.soundReceived);
   }
 
-  RobotBackend.initializeBelly = function() {
-    RobotBackend.belly = new Belly(robotId, scale);
+  RobotBackend.initializeBelly = function(resizeAxis) {
+    RobotBackend.belly = new Belly(robotId, scale, resizeAxis);
     
     var dbRefState = firebase.database().ref(
       '/robots/' + RobotBackend.robotId + '/state/');

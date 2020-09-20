@@ -1,12 +1,13 @@
 /*
 * Belly class for creating the user interface on the robot's belly tablet
 */
-function Belly(robotId, scale) {
+function Belly(robotId, scale, resizeAxis) {
 
   Belly.robotId = robotId;
   Belly.currentScreen = -1;
   Belly.bellyScreens = null;
   Belly.scale = scale;
+  Belly.resizeAxis = resizeAxis;
 
   Belly.updateRobotBelly = function(snapshot) {
 
@@ -14,16 +15,24 @@ function Belly(robotId, scale) {
     var bellyHTML = "";
 
     var newScreenIndex = robotState.currentBellyScreen;
+
+    // Make sure it is a valid screen index
     if (newScreenIndex != undefined && Belly.bellyScreens != null
         && newScreenIndex >= 0 && newScreenIndex < Belly.bellyScreens.length) {
+      // Make sure it is a different screen from the currently displayed one
       if (newScreenIndex != Belly.currentScreen) {
         Belly.currentScreen = newScreenIndex;
-
         var screen = Belly.bellyScreens[Belly.currentScreen];
+
         var screenDiv = document.getElementById("screenDiv");
+        // Set screen color
         if (screen.backgroundColor) {
           screenDiv.style.backgroundColor = screen.backgroundColor;
         }
+
+        /*********
+         Text instructions
+        *********/
         if (screen.instructionLarge.isShown) {
           var largeInstruction = screen.instructionLarge.text;
           bellyHTML +=
@@ -40,6 +49,9 @@ function Belly(robotId, scale) {
             '</div>';
         }
         
+        /*********
+         Images
+        *********/
         if (screen.images) {
           screen.images.forEach((element) => {
             var position = '';
@@ -73,6 +85,9 @@ function Belly(robotId, scale) {
           });
         }
 
+        /*********
+         Slider
+        *********/
         if (screen.slider.isShown) {
           var sliderMin = screen.slider.min;
           var sliderCurrent = screen.slider.current;
@@ -95,6 +110,9 @@ function Belly(robotId, scale) {
           bellyHTML += '</div>';
         }
 
+        /*********
+         Checkboxes
+        *********/
         if (screen.checkboxes.isShown) {
           bellyHTML += "<div class='screen-element mt-4' >";
           if (screen.checkboxes.names != undefined) {
@@ -117,9 +135,10 @@ function Belly(robotId, scale) {
           bellyHTML += '</div>';
         }
 
-        console.log(screen);
+        /*********
+         Text input field
+        *********/
         if (screen.textInput && screen.textInput.isShown === 1) {
-          console.log(screen.textInput);
           bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
           bellyHTML += '<textarea name="textinput" rows="4" cols="50"';
           bellyHTML += ' placeholder="' + screen.textInput.text + '"';
@@ -127,12 +146,18 @@ function Belly(robotId, scale) {
           bellyHTML += '</div>';
         }
 
+        /*********
+         Buttons
+        *********/
         if (screen.buttons.isShown) {
-          // Image Buttons
+
           bellyHTML += "<div class='screen-element mt-4'  style='z-index: 2'>";
+          
           if (screen.buttons.list != undefined) {
             for (var j = 0; j < screen.buttons.list.length; j++) {
               var name = screen.buttons.list[j].name;
+              
+              // Buttons with images
               if (screen.buttons.list[j].url) {
                 var url = screen.buttons.list[j].url;
                 bellyHTML +=
@@ -148,17 +173,14 @@ function Belly(robotId, scale) {
                   name +
                   '</button> ';
               } 
+
+              // Buttons with text
               if (screen.buttons.list[j].label) {
                 bellyHTML += '<h2 style="max-width: 160px">' + screen.buttons.list[j].label + '</h2>';
               }
-              bellyHTML += '</div>';
-            }
-          }
-          bellyHTML += '</div>';
-          bellyHTML += "<div class='screen-element mt-4'  style='z-index: 2; flex-wrap: wrap; margin-top: -10px;'>";
-          if (screen.buttons.list != undefined) {
-            for (var j = 0; j < screen.buttons.list.length; j++) {
-              var name = screen.buttons.list[j].name;
+
+              // Buttons that have neither label nor image
+              // TODO: Why is .name and .label a different thing?
               if (!screen.buttons.list[j].url && !screen.buttons.list[j].label) {
                 bellyHTML +=
                 "<div style='margin-top: 10px;'><button class='btn btn-secondary mx-2 screen-item' " +
@@ -170,9 +192,12 @@ function Belly(robotId, scale) {
                 name +
                 '</button></div>';
               }
+
+              bellyHTML += '</div>';
             }
           }
           bellyHTML += '</div>';
+
         }
 
         screenDiv.innerHTML = bellyHTML;
@@ -182,17 +207,30 @@ function Belly(robotId, scale) {
           var smallInstructionElements = document.getElementsByClassName("instruction-small");
           var otherElements = document.getElementsByClassName("screen-item");
 
-          for (var i=0; i<largeInstructionElements.length; i++)
-            largeInstructionElements[i].style.fontSize = '3vw';
-          for (var i=0; i<smallInstructionElements.length; i++)
-            smallInstructionElements[i].style.fontSize = '2vw';
-          for (var i=0; i<otherElements.length; i++)
-            otherElements[i].style.fontSize = '1.5vw';
+          if (Belly.resizeAxis == "width") {
+            for (var i=0; i<largeInstructionElements.length; i++)
+              largeInstructionElements[i].style.fontSize = '3vw';
+            for (var i=0; i<smallInstructionElements.length; i++)
+              smallInstructionElements[i].style.fontSize = '2vw';
+            for (var i=0; i<otherElements.length; i++)
+              otherElements[i].style.fontSize = '1.5vw';
+          }
+          else {
+            for (var i=0; i<largeInstructionElements.length; i++)
+              largeInstructionElements[i].style.fontSize = '3vh';
+            for (var i=0; i<smallInstructionElements.length; i++)
+              smallInstructionElements[i].style.fontSize = '2vh';
+            for (var i=0; i<otherElements.length; i++)
+              otherElements[i].style.fontSize = '1.5vh';
+          }
         }
       }
       else {
         console.log("Screen has not changed.");
       }
+    }
+    else {
+      console.log("Screen index is not valid.");
     }
   }
 

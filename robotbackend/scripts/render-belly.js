@@ -11,7 +11,5 @@ function initializeRenderBelly() {
   
   var robot = new RobotBackend(currentRobot);
   RobotBackend.initializeAPI();
-  RobotBackend.initializeBelly();
-  
+  RobotBackend.initializeBelly("width");
 }
-
