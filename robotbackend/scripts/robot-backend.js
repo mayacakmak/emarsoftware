@@ -52,40 +52,44 @@ function RobotBackend(robotId, scale) {
   RobotBackend.isSpeaking = false;
   RobotBackend.speakReceived = function(snapshot) {
     var robotActions = snapshot.val();
-    var sentence = robotActions.speak.text;
-    if (sentence != "") {
-      if (!RobotBackend.isSpeaking)
-      {
-        RobotBackend.isSpeaking = true;
-        console.log(">>>>>>>>>   Speaking sentence " + sentence);
-        Sound.speak(sentence);
-        RobotBackend.resetRobotAction("speak", {text:""});
+    if (robotActions.speak != undefined) {
+      var sentence = robotActions.speak.text;
+      if (sentence != "") {
+        if (!RobotBackend.isSpeaking)
+        {
+          RobotBackend.isSpeaking = true;
+          console.log(">>>>>>>>>   Speaking sentence " + sentence);
+          Sound.speak(sentence);
+          RobotBackend.resetRobotAction("speak", {text:""});
+        }
+      } else {
+        RobotBackend.isSpeaking = false;
       }
-    } else {
-      RobotBackend.isSpeaking = false;
     }
   }
 
   RobotBackend.isMakingSound = false;
   RobotBackend.soundReceived = function(snapshot) {
     var robotActions = snapshot.val();
-    var soundIndex = Number(robotActions.sound.index);
-    if (soundIndex != -1) {
-      if (!RobotBackend.isMakingSound)
-      {
-        if (Sound.sounds != null && Sound.sounds.length > 0) {
-          if (soundIndex<0 || soundIndex>=Sound.sounds.length)
-            soundIndex = 0;
+    if (robotActions.sound != undefined) {
+      var soundIndex = Number(robotActions.sound.index);
+      if (soundIndex != -1) {
+        if (!RobotBackend.isMakingSound)
+        {
+          if (Sound.sounds != null && Sound.sounds.length > 0) {
+            if (soundIndex<0 || soundIndex>=Sound.sounds.length)
+              soundIndex = 0;
 
-          RobotBackend.isMakingSound = true;
-          var soundInfo = Sound.sounds[soundIndex];
-          console.log(">>>>>>>>>   Making sound " + soundInfo.name);
-          Sound.makeSound(soundIndex);
-          RobotBackend.resetRobotAction("sound", {index:-1});
+            RobotBackend.isMakingSound = true;
+            var soundInfo = Sound.sounds[soundIndex];
+            console.log(">>>>>>>>>   Making sound " + soundInfo.name);
+            Sound.makeSound(soundIndex);
+            RobotBackend.resetRobotAction("sound", {index:-1});
+          }
         }
+      } else {
+        RobotBackend.isMakingSound = false;
       }
-    } else {
-      RobotBackend.isMakingSound = false;
     }
   }
   
