@@ -114,7 +114,7 @@ function Belly(robotId, scale, resizeAxis) {
          Checkboxes
         *********/
         if (screen.checkboxes.isShown) {
-          bellyHTML += "<div class='screen-element mt-4' >";
+          bellyHTML += "<div class='d-flex justify-content-center flex-wrap screen-element mt-4' >";
           if (screen.checkboxes.names != undefined) {
             for (var j = 0; j < screen.checkboxes.names.length; j++) {
               var name = screen.checkboxes.names[j];
@@ -151,7 +151,7 @@ function Belly(robotId, scale, resizeAxis) {
         *********/
         if (screen.buttons.isShown) {
 
-          bellyHTML += "<div class='screen-element mt-4'  style='z-index: 2'>";
+          bellyHTML += "<div class='d-flex justify-content-center flex-wrap screen-element mt-4'  style='z-index: 2'>";
           
           if (screen.buttons.list != undefined) {
             for (var j = 0; j < screen.buttons.list.length; j++) {
@@ -161,7 +161,8 @@ function Belly(robotId, scale, resizeAxis) {
               if (screen.buttons.list[j].url) {
                 var url = screen.buttons.list[j].url;
                 bellyHTML +=
-                  "<div style='align-self: start'><button class='btn btn-secondary mx-2 screen-item' " +
+                  "<div style='align-self: start'>" + 
+                  "<button class='btn btn-secondary mx-2 screen-item' " +
                   "onclick='Belly.bellyInputReceived(this," +
                   Belly.currentScreen +
                   ',' +
@@ -171,19 +172,20 @@ function Belly(robotId, scale, resizeAxis) {
                   url +
                   " width='80' height='80'/></div>" +
                   name +
-                  '</button> ';
-              } 
-
-              // Buttons with text
-              if (screen.buttons.list[j].label) {
-                bellyHTML += '<h2 style="max-width: 160px">' + screen.buttons.list[j].label + '</h2>';
+                  '</button>';
+                // Buttons with text
+                if (screen.buttons.list[j].label) {
+                  bellyHTML += '<h2 style="max-width: 160px">' + screen.buttons.list[j].label + '</h2>';
+                }
+                bellyHTML += '</div>';
               }
 
               // Buttons that have neither label nor image
               // TODO: Why is .name and .label a different thing?
               if (!screen.buttons.list[j].url && !screen.buttons.list[j].label) {
                 bellyHTML +=
-                "<div style='margin-top: 10px;'><button class='btn btn-secondary mx-2 screen-item' " +
+                "<div class='mt-2'>"+
+                "<button class='btn btn-secondary mx-2 screen-item' " +
                 "onclick='Belly.bellyInputReceived(this," +
                 Belly.currentScreen +
                 ',' +
@@ -193,7 +195,6 @@ function Belly(robotId, scale, resizeAxis) {
                 '</button></div>';
               }
 
-              bellyHTML += '</div>';
             }
           }
           bellyHTML += '</div>';
