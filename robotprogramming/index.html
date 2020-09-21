@@ -5,108 +5,43 @@
   <title>EMAR Robot Programming</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/index.processed.css">
-  <link rel="stylesheet" href="codemirror/lib/codemirror.css">
-  <link rel="stylesheet" href="codemirror/theme/base16-light.css">
-  <link rel="stylesheet" href="codemirror/theme/base16-dark.css">
-  <link rel="stylesheet" href="codemirror/doc/show-hint.css">
 </head>
 <body>
-  <div class="container-fluid d-flex align-items-center justify-content-center">
-    <div class="container">
-      <div class="row mx-1 mt-5">
-        <h1 class="display-4">Robot Programming</h1>
+  <div class="topbar">
+    <div class="topbar-left" id="topLeft"></div>
+    <div class="topbar-right" id="top"></div>
+  </div>
+  <div class="container-fluid px-sm-5">
+    <div class="row py-3">
+      <div class="col-sm-10">
+        <h1 class="display-4">Robot Programming Tools</h1>
       </div>
-      <div class="flex-row mx-1 mb-3">
-        <p class="text-left font-weight-light">Select a program from a robot (read-only) or from your programs (editable). Press 'Run' to test the program. You can copy programs on a robot to your programs to edit them or create a new program. You can share your programs by copying them onto a robot. </p>
-      </div>
-      <div class="row mx-1 d-flex flex-row mb-1">
-        <div class="button-group">
-          <button class="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span id="selectedRobot"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="pl-2">Loading robots...</span></span>
-            <div class="dropdown-menu" id="robots"></div>
-          </button>
-        </div>
-        <div class="button-group">
-          <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="robotProgramsButtonText"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="pl-2">Loading programs...</span></span></button>
-          <div class="dropdown-menu" id="robotPrograms"></div>
-        </div>
-      </div>
-      <div class="row mx-1 mb-3 pb-3 d-flex flex-row border-bottom">
-        <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="programsButtonText"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="pl-2">Loading programs...</span></span></button>
-        <div class="dropdown-menu" id="myPrograms"></div>
-      </div>
-      <div class="row mx-1 d-flex flex-row">
-        <div class="p-1">
-          <div class="input-group mb-1">
-            <div class="input-group-prepend"><span class="input-group-text" id="program-name">Program name</span></div>
-            <input class="form-control" type="text" placeholder="" aria-label="program-name" aria-describedby="program-name" id="programName">
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="card bg-light mb-3">
+          <div class="card-header">
+            <h2>Run Robot Programs</h2>
+          </div>
+          <div class="card-body">
+            <p class="card-text font-weight-light">Browse the list of available programs for each robot and test them.</p><a class="btn btn-danger" href="run.html">Open robot programs</a>
           </div>
         </div>
-        <div class="p-1 ml-auto">
-          <button class="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="programRobotsButton"><span id="currentProgramRobot"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="pl-2">Loading robots...</span></span>
-            <div class="dropdown-menu" id="programRobots"></div>
-          </button>
-        </div>
       </div>
-      <div class="row mx-1 mb-1">
-        <div class="programming-area">
-          <textarea type="text" id="code"></textarea>
-        </div>
-      </div>
-      <div class="row mx-1 mt-2 mb-4 d-flex flex-row">
-        <div class="p-1">
-          <button class="btn btn-success" type="button" onclick="saveProgram()" id="saveButton">Save</button>
-        </div>
-        <div class="p-1">
-          <button class="btn btn-danger" type="button" onclick="deleteProgram()" id="deleteButton">Delete</button>
-        </div>
-        <div class="p-1 ml-auto">
-          <button class="btn btn-primary" type="button" onclick="runProgram()" id="runButton">Run</button>
-        </div>
-      </div>
-      <div class="row mx-1 mt-2 mb-4 d-flex flex-row">
-        <div class="p-1">
-          <button class="btn btn-outline-warning" type="button" onclick="copyToRobotPrograms()" id="copyRobotButton">Copy to robot programs</button>
-        </div>
-        <div class="p-1">
-          <button class="btn btn-outline-warning" type="button" onclick="copyToMyPrograms()" disabled id="copyMyButton">Copy to my programs</button>
-        </div>
-        <div class="p-1 ml-auto">
-          <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#robotAPI">Show robot functions</button>
-        </div>
-        <div class="saved-alert" id="saved-alert">
-          <div class="alert alert-success" role="alert" id="alert">Program saved.</div>
-        </div>
-        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="robotAPITitle" aria-hidden="true" id="robotAPI">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="robotAPITitle">Available Robot Functions</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              </div>
-              <div class="modal-body" id="robotAPIDescription">
-                <p>Robot not specified.</p>
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-              </div>
-            </div>
+      <div class="col-sm-4">
+        <div class="card bg-light mb-3">
+          <div class="card-header"> 
+            <h2>Write Robot Programs</h2>
+          </div>
+          <div class="card-body">
+            <p class="card-text font-weight-light">Create new programs, edit existing programs, test and share programs on different robots.</p><a class="btn btn-danger" href="programming.html">Start programming</a>
           </div>
         </div>
       </div>
     </div>
+    <div class="footer"></div>
   </div>
-  <div class="footer"></div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script src="codemirror/lib/codemirror.js"></script>
-  <script src="codemirror/mode/javascript.js"></script>
-  <script src="codemirror/scripts/closetag.js"></script>
-  <script src="codemirror/scripts/closebrackets.js"></script>
-  <script src="codemirror/scripts/show-hint.js"></script>
-  <script src="codemirror/scripts/javascript-hint.js"></script>
-  <script src="codemirror/scripts/active-line.js"></script>
-  <script src="https://mayacakmak.github.io/emarsoftware/databasejs/scripts/database.js"></script>
-  <script src="https://mayacakmak.github.io/emarsoftware/robotapijs/scripts/robotapi.js"></script>
-  <script src="scripts/index.js"></script>
 </body>

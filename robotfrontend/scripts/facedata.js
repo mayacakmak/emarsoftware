@@ -280,8 +280,3 @@ function createNewFace() {
   var dbRef = firebase.database().ref(dir + '/faces/' + newFaceIndex + '/');
   dbRef.set(newParameters);
 }
-
-function backToIndexPage() {
-  window.location.href = "index.html";
-}
-

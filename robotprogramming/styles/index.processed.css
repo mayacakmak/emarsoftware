@@ -6,6 +6,23 @@ body {
   background: #f5f5f5;
 }
 
+h2 {
+  font-size: 21px;
+  font-weight: 500;
+  margin: 5px 0px;
+}
+
+.program-grid {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.program-item {
+  display: flex;
+  flex-direction: column;
+}
+
 .programming-area {
   width: 100%;
   border: 1px solid #ccc;
@@ -23,3 +40,4 @@ body {
   text-align: center;
   visibility: hidden;
 }
+

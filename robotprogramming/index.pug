@@ -1,80 +1,28 @@
 extends structure/_layout.pug
 
 block content
-  .container-fluid.d-flex.align-items-center.justify-content-center
-    .container
-      .row.mx-1.mt-5
-          h1.display-4 Robot Programming
-      .flex-row.mx-1.mb-3
-        p.text-left.font-weight-light Select a program from a robot (read-only) or from your programs (editable). Press 'Run' to test the program. You can copy programs on a robot to your programs to edit them or create a new program. You can share your programs by copying them onto a robot. 
-      .row.mx-1.d-flex.flex-row.mb-1
-        .button-group
-          button(type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") 
-            span#selectedRobot
-              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
-              span.pl-2 Loading robots...
-            .dropdown-menu#robots
-        .button-group
-          button(type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
-            span#robotProgramsButtonText
-              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
-              span.pl-2 Loading programs...
-          .dropdown-menu#robotPrograms
-      .row.mx-1.mb-3.pb-3.d-flex.flex-row.border-bottom
-        button(type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
-          span#programsButtonText
-            span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
-            span.pl-2 Loading programs...
-        .dropdown-menu#myPrograms
-      .row.mx-1.d-flex.flex-row
-        .p-1
-          .input-group.mb-1
-            .input-group-prepend
-              span(class="input-group-text" id="program-name") Program name
-            input(type="text" class="form-control" placeholder="" aria-label="program-name" aria-describedby="program-name")#programName
-        .p-1.ml-auto
-          button(type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")#programRobotsButton
-            span#currentProgramRobot
-              span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
-              span.pl-2 Loading robots...
-            .dropdown-menu#programRobots
+  .topbar
+    .topbar-left#topLeft
+    .topbar-right#top
 
-      .row.mx-1.mb-1
-        .programming-area
-          textarea(type="text")#code
+  .container-fluid.px-sm-5
+    .row.py-3
+      .col-sm-10
+        h1.display-4 Robot Programming Tools
+    .row
+      .col-sm-4
+        .card.bg-light.mb-3
+          .card-header
+            h2 Run Robot Programs
+          .card-body
+            p.card-text.font-weight-light Browse the list of available programs for each robot and test them.
+            a.btn.btn-danger(href="run.html") Open robot programs
       
-      .row.mx-1.mt-2.mb-4.d-flex.flex-row
-        .p-1
-          button.btn.btn-success(type="button" onclick="saveProgram()")#saveButton Save
-        .p-1
-          button.btn.btn-danger(type="button" onclick="deleteProgram()")#deleteButton Delete
-        .p-1.ml-auto
-          button.btn.btn-primary(type="button" onclick="runProgram()")#runButton Run
-      .row.mx-1.mt-2.mb-4.d-flex.flex-row
-        .p-1
-          button.btn.btn-outline-warning(type="button" onclick="copyToRobotPrograms()")#copyRobotButton Copy to robot programs
-        .p-1
-          button.btn.btn-outline-warning(type="button" onclick="copyToMyPrograms()" "disabled")#copyMyButton Copy to my programs
-        .p-1.ml-auto
-          button.btn.btn-outline-secondary(type="button" data-toggle="modal" data-target="#robotAPI") Show robot functions
-        .saved-alert#saved-alert
-          .alert.alert-success(role="alert")#alert Program saved.
-          
-        .modal.fade(tabindex="-1" role="dialog" aria-labelledby="robotAPITitle" aria-hidden="true")#robotAPI
-          .modal-dialog.modal-dialog-centered(role="document")
-            .modal-content
-              .modal-header
-                h5.modal-title#robotAPITitle Available Robot Functions
-                button(type="button" class="close" data-dismiss="modal" aria-label="Close")
-                  span(aria-hidden="true") &times;
-              .modal-body#robotAPIDescription
-                p Robot not specified.
-              .modal-footer
-                button(type="button" class="btn btn-secondary" data-dismiss="modal") Close
-
-  .footer
-
-block append scripts
-  script(src="https://mayacakmak.github.io/emarsoftware/databasejs/scripts/database.js")
-  script(src="https://mayacakmak.github.io/emarsoftware/robotapijs/scripts/robotapi.js")
-  script(src="scripts/index.js")
+      .col-sm-4
+        .card.bg-light.mb-3
+          .card-header 
+            h2 Write Robot Programs
+          .card-body
+            p.card-text.font-weight-light Create new programs, edit existing programs, test and share programs on different robots.
+            a.btn.btn-danger(href="programming.html") Start programming
+    .footer

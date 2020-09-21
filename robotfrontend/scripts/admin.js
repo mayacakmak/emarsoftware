@@ -87,11 +87,7 @@ function addNewRobot() {
   }
 }
 
-function backToIndexPage() {
-  window.location.href = "index.html";
-}
-
-
+// No write permissions for admininstrator sub-branch so removing this functionality
 // function addNewAdmin() {
 //   if (admins != null) {
 //     let nAdmins = admins.length;
