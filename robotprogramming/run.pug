@@ -1,0 +1,23 @@
+extends structure/_layout.pug
+
+block meta
+
+  link(rel="stylesheet" href="../fontawesome/css/all.css")
+
+block content
+  include structure/_tool_header.pug
+
+  .container-fluid.px-sm-5.pb-4
+    .row
+      .col.text-center
+        h1.display-4 Robot Programs
+    .row
+      .col#robotList
+        span.spinner-border.spinner-border-sm(role="status" aria-hidden="true")
+
+
+block append scripts
+  script(src="https://mayacakmak.github.io/emarsoftware/robotbackend/scripts/config.js")
+  script(src="https://mayacakmak.github.io/emarsoftware/databasejs/scripts/database.js")
+  script(src="https://mayacakmak.github.io/emarsoftware/robotapijs/scripts/robotapi.js")
+  script(src="scripts/run.js")
