@@ -76,16 +76,18 @@ function updateCustomRobotAPI(snapshot) {
   Belly.bellyScreens = customAPI.inputs.bellyScreens;
   Face.faces = customAPI.states.faces;
 
-  var presetSpeakList = customAPI.actions.presetSpeak;
-  
-  if (presetSpeakList != null) {
-    var presetDiv = document.getElementById("presetSpeak");
-    var presetHTML = "";
-    for (var i=0; i<presetSpeakList.length; i++) {
-      presetHTML += "<button class='btn btn-info' onclick='sayPreset(this)'>";
-      presetHTML += presetSpeakList[i] + "</button>";
-    }
-    presetDiv.innerHTML = presetHTML;
+  if (customAPI.actions != undefined) {
+    var presetSpeakList = customAPI.actions.presetSpeak;
+    
+    if (presetSpeakList != null) {
+      var presetDiv = document.getElementById("presetSpeak");
+      var presetHTML = "";
+      for (var i=0; i<presetSpeakList.length; i++) {
+        presetHTML += "<button class='btn btn-info' onclick='sayPreset(this)'>";
+        presetHTML += presetSpeakList[i] + "</button>";
+      }
+      presetDiv.innerHTML = presetHTML;
+    }    
   }
 }
 

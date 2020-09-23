@@ -278,7 +278,7 @@ function Robot(robotId, apiDiv) {
   }
   
   this.setScreen = function(screenIndex){
-    console.log("Setting face to " + screenIndex);
+    console.log("Setting screen to " + screenIndex);
     if (screenIndex < 0 || screenIndex>=Robot.bellyScreens.length)
       console.log("Wrong screen index.");
     else {

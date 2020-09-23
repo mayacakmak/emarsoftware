@@ -20,14 +20,6 @@ block content
     .row
       .col-sm-4
         .card.bg-light.mb-3
-          .card-header
-            h2 Robot Setup
-          .card-body
-            p.card-text.font-weight-light Select a robot above and press the button to set up its face and other parameters, before starting to control it.
-            button.btn.btn-warning(onclick="startSetup()")#setupButton Start Robot Setup
-      
-      .col-sm-4
-        .card.bg-light.mb-3
           .card-header 
             h2 Robot Control (WoZ)
           .card-body
@@ -42,6 +34,14 @@ block content
             p.card-text.font-weight-light Press button to start the face editor to customize your faces or create new faces.
             button.btn.btn-warning(type="button" onclick="startEditor()")#editButton Start Face Editor
 
+      .col-sm-4
+        .card.bg-light.mb-3
+          .card-header
+            h2 Robot Setup
+          .card-body
+            p.card-text.font-weight-light Select a robot above and press the button to set up its face and other parameters, before starting to control it.
+            button.btn.btn-warning(onclick="startSetup()")#setupButton Start Robot Setup
+      
     .row
       .col-sm-4
         .card.bg-light.mb-3

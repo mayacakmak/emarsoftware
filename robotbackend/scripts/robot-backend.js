@@ -36,9 +36,9 @@ function RobotBackend(robotId, scale) {
       '/robots/' + RobotBackend.robotId + '/state/');
     dbRefState.on("value", Belly.updateRobotBelly);
     
-    var dbRefAPI = firebase.database().ref(
-      '/robots/' + RobotBackend.robotId + '/customAPI/');
-    dbRefAPI.on("value", Belly.updateRobotBelly);
+    // var dbRefAPI = firebase.database().ref(
+      // '/robots/' + RobotBackend.robotId + '/customAPI/');
+    // dbRefAPI.on("value", Belly.updateRobotBelly);
   }
   
   RobotBackend.resetRobotAction = function(actionName, updates) {
