@@ -90,16 +90,16 @@ function updateMyProgramList(snapshot) {
 	myPrograms = snapshot.val();
   let programsDiv = document.getElementById("myPrograms");
   let programsButtonDiv = document.getElementById("programsButtonText");
-
+	
+  var programListHTML = "";//"<a class='dropdown-item' href='#'>Programs</a>";
   if (myPrograms != undefined) {
-    var programListHTML = "";//"<a class='dropdown-item' href='#'>Programs</a>";
     for (var i=0; i<myPrograms.length; i++) {
       programListHTML += "<a class='dropdown-item' href='#' onclick='loadProgram(" + i + ")'>" + myPrograms[i].name + "</a>"
     }
     programListHTML += "<div class='dropdown-divider'></div>";
-    programListHTML += "<a class='dropdown-item' href='#' onclick='resetProgram()'>Create new</a>";
-    programsDiv.innerHTML = programListHTML;
   }
+  programListHTML += "<a class='dropdown-item' href='#' onclick='resetProgram()'>Create new</a>";
+  programsDiv.innerHTML = programListHTML;
   programsButtonDiv.innerHTML = "My programs";
 }
 
