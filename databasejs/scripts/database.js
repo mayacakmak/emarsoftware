@@ -24,8 +24,8 @@ function Database(config, readyCallback) {
   /*
   * Function to initialize firebase and sign in anonymously
   */
-  Database.initialize = function(){
-      Database.app = firebase.initializeApp(Database.config);
+  Database.initialize = async function(){
+      Database.app = await firebase.initializeApp(Database.config);
       firebase.auth().onAuthStateChanged(Database.handleAuthStateChange);
       // Wait a little bit to see is we are already logged in
       // then attempt an anonymous sign in
@@ -47,7 +47,7 @@ function Database(config, readyCallback) {
     }
   }
   
-  Database.loadJSLibrary = function(path) {
+  Database.loadJSLibrary = async function(path) {
       var js = document.createElement("script");
       js.type = "text/javascript";
       js.src = path;
@@ -59,6 +59,7 @@ function Database(config, readyCallback) {
   Database.loadJSLibrary(src="https://www.gstatic.com/firebasejs/6.3.0/firebase-app.js");
   Database.loadJSLibrary(src="https://www.gstatic.com/firebasejs/6.3.0/firebase-auth.js");
   Database.loadJSLibrary(src="https://www.gstatic.com/firebasejs/6.3.0/firebase-database.js");
+  Database.loadJSLibrary(src="https://www.gstatic.com/firebasejs/5.9.1/firebase-storage.js");
 
   Database.signInAnonymously = function() {
     if (Database.uid == null && Database.userEmail == null) {
@@ -128,7 +129,7 @@ function Database(config, readyCallback) {
       Database.logEvent("SessionStarted");
 
       if (Database.readyCallback != null || Database.readyCallback != undefined)
-        Database.readyCallback();
+        Database.readyCallback(Database.uid);
 
     } else {
       console.log("User is signed out.");

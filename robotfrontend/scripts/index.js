@@ -78,6 +78,10 @@ function startEditor() {
   window.location.href = "edit.html";
 }
 
+function startBellyEditor() {
+  window.location.href = "bellyEdit.html?robot=" + currentRobot;
+}
+
 function startAdmin() {
   window.location.href = "admin.html";
 }
