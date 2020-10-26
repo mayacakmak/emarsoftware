@@ -232,7 +232,8 @@ function loadRobotProgram(robotId, programId) {
   let saveButton = document.getElementById("saveButton");
   saveButton.disabled = true;
   let deleteButton = document.getElementById("deleteButton");
-  deleteButton.disabled = true;
+  // deleteButton.disabled = true;
+  deleteButton.disabled = false;
   let copyRobotButton = document.getElementById("copyRobotButton");
   copyRobotButton.disabled = true;
   let programName = document.getElementById("programName");
@@ -336,10 +337,26 @@ function hideAlert() {
 
 function deleteProgram() {
   if (isMyProgram && myPrograms!=null) {
-    var dir = "users/" + Database.uid + "/programs/";
-    var dbRef = firebase.database().ref(dir);
-    myPrograms.splice(currentProgramId,1);
-    dbRef.set(myPrograms);
-    resetProgram();
+    var confirmation = confirm("Are you sure you want to delete this program?");
+    if (confirmation) {
+      var dir = 'users/' + Database.uid + '/programs/';
+      var dbRef = firebase.database().ref(dir);
+      myPrograms.splice(currentProgramId, 1);
+      dbRef.set(myPrograms);
+      resetProgram();
+    }
+  } else {
+    var confirmation = confirm("Are you sure you want to delete " + robotPrograms[selectedRobotId][currentProgramId].name  + " from " + robotNames[selectedRobotId] + "?");
+    if (confirmation) {
+      console.log('Old', robotPrograms[selectedRobotId]);
+      var temp = [...robotPrograms[selectedRobotId]];
+      temp.splice(currentProgramId, 1);
+      console.log('Updated', temp);
+      var dir = 'robots/' + selectedRobotId + '/programs/';
+      var dbRef = firebase.database().ref(dir);
+      dbRef.set(temp);
+      resetProgram();
+    }
   }
 }
+
