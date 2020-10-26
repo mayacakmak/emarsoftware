@@ -78,6 +78,7 @@ function renderSelectedBellyScreen(snapshot) {
           <button class="dropdown-item" onclick='setLayout(this)'>Buttons</button>
           <button class="dropdown-item" onclick='setLayout(this)'>Checkboxes</button>
           <button class="dropdown-item" onclick='setLayout(this)'>Images</button>
+          <button class="dropdown-item" onclick='setLayout(this)'>User Text Input</button>
         </div>
       </div>
       </div>`;
@@ -186,6 +187,14 @@ function renderSelectedBellyScreen(snapshot) {
         ")' value='" +
         screen.instructionSmall.text.replace(/'/g, '&#39;') +
         "'> </div>";
+    }
+
+    if (screen.textInput && screen.textInput.isShown) {
+      bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
+      bellyHTML += '<textarea disabled name="textinput" rows="4" cols="50"';
+      bellyHTML += ' placeholder="' + screen.textInput.text + '"';
+      bellyHTML += '></textarea>';
+      bellyHTML += '</div>';
     }
 
     if (screen.images && screen.images.isShown && screen.images.list) {
@@ -399,6 +408,10 @@ function setLayout(element) {
           {
             name: 'images',
             checked: false,
+          },
+          {
+            name: 'textInput',
+            checked: false,
           }
         ],
         selectedBellyScreen
@@ -434,6 +447,10 @@ function setLayout(element) {
           },
           {
             name: 'images',
+            checked: false,
+          },
+          {
+            name: 'textInput',
             checked: false,
           },
         ],
@@ -472,6 +489,10 @@ function setLayout(element) {
             name: 'images',
             checked: false,
           },
+          {
+            name: 'textInput',
+            checked: false,
+          },
         ],
         selectedBellyScreen
       );
@@ -506,6 +527,10 @@ function setLayout(element) {
           },
           {
             name: 'images',
+            checked: false,
+          },
+          {
+            name: 'textInput',
             checked: false,
           },
         ],
@@ -544,6 +569,50 @@ function setLayout(element) {
             name: 'images',
             checked: true,
           },
+          {
+            name: 'textInput',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+    case 'User Text Input':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'instructionLarge',
+            checked: true,
+          },
+          {
+            name: 'instructionSmall',
+            checked: true,
+          },
+          {
+            name: 'slider',
+            checked: false,
+            value: 50,
+          },
+          {
+            name: 'checkboxes',
+            checked: false,
+          },
+          {
+            name: 'buttons',
+            checked: true,
+          },
+          {
+            name: 'backgroundColor',
+            checked: true,
+          },
+          {
+            name: 'images',
+            checked: false,
+          },
+          {
+            name: 'textInput',
+            checked: true,
+          }
         ],
         selectedBellyScreen
       );
