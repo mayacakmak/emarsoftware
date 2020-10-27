@@ -38,7 +38,6 @@ function Belly(robotId, scale, resizeAxis) {
   // Belly.renderBellyScreen = 
 
   Belly.bellyInputReceived = function(target, screenID, itemID) {
-
     // TODO: clean up the the non "list" parts of database once backwards compatibility issues are gone
     var date = new Date();
     if (target.name == "slider"){
@@ -57,6 +56,13 @@ function Belly(robotId, scale, resizeAxis) {
 
     if (target.name == "imageButton") {
       Belly.bellyScreens[screenID].imageButtons.list[itemID].lastPressed = date.getTime();
+    }
+
+    if (target.name == "textInput") {
+      console.log(document.getElementById(target.id).value);
+      Belly.bellyScreens[screenID].textInput.value = document.getElementById(
+        target.id
+      ).value;
     }
 
     var dir = 'robots/' + (Belly.robotId) + "/customAPI/inputs/";
@@ -202,8 +208,11 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           *********/
     if (screen.textInput && screen.textInput.isShown === 1) {
       bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
-      bellyHTML += '<textarea name="textinput" rows="4" cols="50"';
+      bellyHTML += '<textarea id="textInput" name="textInput" rows="4" cols="50"';
       bellyHTML += ' placeholder="' + screen.textInput.text + '"';
+      bellyHTML += " onchange='Belly.bellyInputReceived(this," +
+            Belly.currentScreen +
+            ")'";
       bellyHTML += '></textarea>';
       bellyHTML += '</div>';
     }

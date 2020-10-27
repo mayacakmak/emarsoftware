@@ -73,6 +73,12 @@ function Robot(robotId, apiDiv) {
                         "Obtains the current value of the slider on the screen.",
                        "<b>sliderValue</b> is an Integer between 0 and 100 indicating the current value of the slider.",
                        "var sliderValue = robot.getSliderValue();");
+      apiText += Robot._getAPICardHTML(
+        '(textInputValue) robot.getTextInputValue()',
+        'Obtains the current text from the text area field on the screen.',
+        '<b>textInputValue</b> is an String indicating the current value of the text area field.',
+        'var textInputValue = robot.getTextInputValue();'
+      );
       apiText += Robot._getAPICardHTML("(buttonName) robot.waitForButton()",
                         "Makes the robot wait until a button in the screen is pressed and returns the name of the pressed button.",
                        "<b>buttonName</b> is a String that indicates the name of the button that was pressed.",
@@ -161,6 +167,19 @@ function Robot(robotId, apiDiv) {
         sliderValue = Number(Robot.bellyScreens[Robot.currentScreen].slider.current);
     }
     return sliderValue;
+  }
+
+  this.getTextInputValue = function() {
+    var textInputValue = null;
+    if (
+      Robot.bellyScreens != null &&
+      Robot.currentScreen >= 0 &&
+      Robot.currentScreen < Robot.bellyScreens.length
+    ) {
+      if (Number(Robot.bellyScreens[Robot.currentScreen].textInput.isShown) == 1)
+        sliderValue = Robot.bellyScreens[Robot.currentScreen].textInput.value;
+    }
+    return textInputValue;
   }
 
   this.getTactileSensor = function(sensorName) {
