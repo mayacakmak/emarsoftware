@@ -254,7 +254,12 @@ function copyToRobotPrograms() {
       let robotId = myPrograms[currentProgramId].robot;
       let thisRobotPrograms = robotPrograms[robotId];
       // Add the current program to the corresponding robot's list
+      if (thisRobotPrograms === undefined) {
+        thisRobotPrograms = [];
+      }
       thisRobotPrograms.push(myPrograms[currentProgramId]);
+      robotPrograms[robotId] = thisRobotPrograms;
+      setSelectedRobot(robotId);
       let dir = "/robots/" + robotId + "/";
       let dbRef = firebase.database().ref(dir);
       let updates = {"programs":thisRobotPrograms};
@@ -348,14 +353,14 @@ function deleteProgram() {
   } else {
     var confirmation = confirm("Are you sure you want to delete " + robotPrograms[selectedRobotId][currentProgramId].name  + " from " + robotNames[selectedRobotId] + "?");
     if (confirmation) {
-      console.log('Old', robotPrograms[selectedRobotId]);
       var temp = [...robotPrograms[selectedRobotId]];
       temp.splice(currentProgramId, 1);
-      console.log('Updated', temp);
+      robotPrograms[selectedRobotId] = [...temp];
       var dir = 'robots/' + selectedRobotId + '/programs/';
       var dbRef = firebase.database().ref(dir);
       dbRef.set(temp);
       resetProgram();
+      setSelectedRobot(selectedRobotId);
     }
   }
 }
