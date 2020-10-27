@@ -66,7 +66,12 @@ function updateRobots(snapshot) {
   for (let i=0; i<nRobots; i++) {
     let li = document.createElement('li');
     li.setAttribute('class', 'list-group-item');
-    li.innerHTML = robots[i].name;
+    let inner = "<div style='display: flex; justify-content: space-between'><p>";
+    inner += robots[i].name;
+    inner += `</p>
+      <button class="btn btn-link btn-lg" type="button" onclick="copyRobot(` + i  + `)">Copy Robot</button></div>
+    `;
+    li.innerHTML = inner;
     ul.appendChild(li);
   }
   robotDiv.appendChild(ul);
@@ -83,6 +88,23 @@ function addNewRobot() {
     let dbRef = firebase.database().ref("/robots/");
     let updates = {};
     updates[newRobotIndex] = newRobotData;
+    dbRef.update(updates);
+  }
+}
+
+function copyRobot(index) {
+  console.log('copying robot', index);
+  if (robots != null) {
+    let nRobots = robots.length;
+    let newRobotData = Object.values(robots)[index];
+    let newRobotIndex = Number(Object.keys(robots)[nRobots - 1]) + 1;
+    let robotName = newRobotData.name + "_copy";
+    newRobotData.name = robotName;
+
+    let dbRef = firebase.database().ref('/robots/');
+    let updates = {};
+    updates[newRobotIndex] = newRobotData;
+    console.log(updates);
     dbRef.update(updates);
   }
 }
