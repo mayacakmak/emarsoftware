@@ -68,8 +68,17 @@ function updateRobots(snapshot) {
     li.setAttribute('class', 'list-group-item');
     let inner = "<div style='display: flex; justify-content: space-between'><p>";
     inner += robots[i].name;
-    inner += `</p>
-      <button class="btn btn-link btn-lg" type="button" onclick="copyRobot(` + i  + `)">Copy Robot</button></div>
+    inner +=
+      `</p>
+      <div style='display: flex; flex-direction: row;'>
+        <button style="margin-right: 20px;" class="btn btn-secondary btn-lg" type="button" onclick="copyRobot(` +
+      i +
+      `)">Copy Robot</button>
+        <button class="btn btn-danger btn-lg" type="button" onclick="deleteRobot(` +
+      i +
+      `)">Delete Robot</button>
+      </div>
+      </div>
     `;
     li.innerHTML = inner;
     ul.appendChild(li);
@@ -93,7 +102,6 @@ function addNewRobot() {
 }
 
 function copyRobot(index) {
-  console.log('copying robot', index);
   if (robots != null) {
     let nRobots = robots.length;
     let newRobotData = Object.values(robots)[index];
@@ -106,6 +114,18 @@ function copyRobot(index) {
     updates[newRobotIndex] = newRobotData;
     console.log(updates);
     dbRef.update(updates);
+  }
+}
+
+function deleteRobot(index) {
+  var confirmation = confirm(
+    'Are you sure you want to delete ' + robots[index].name + "?"
+  );
+  if (confirmation) {
+    let updRobots = [...robots];
+    updRobots.splice(index, 1);
+    let dbRef = firebase.database().ref('/robots/');
+    dbRef.set(updRobots);
   }
 }
 

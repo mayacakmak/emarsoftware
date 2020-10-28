@@ -59,7 +59,6 @@ function Belly(robotId, scale, resizeAxis) {
     }
 
     if (target.name == "textInput") {
-      console.log(document.getElementById(target.id).value);
       Belly.bellyScreens[screenID].textInput.value = document.getElementById(
         target.id
       ).value;
@@ -209,7 +208,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     if (screen.textInput && screen.textInput.isShown === 1) {
       bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
       bellyHTML += '<textarea id="textInput" name="textInput" rows="4" cols="50"';
-      bellyHTML += ' placeholder="' + screen.textInput.text + '"';
+      bellyHTML += ' placeholder="' + (screen.textInput.text ? screen.textInput.text : "" ) + '"';
       bellyHTML += " onchange='Belly.bellyInputReceived(this," +
             Belly.currentScreen +
             ")'";

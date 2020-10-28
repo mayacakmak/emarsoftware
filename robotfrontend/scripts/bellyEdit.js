@@ -53,9 +53,8 @@ function setAllBellyColors(target) {
 function renderSelectedBellyScreen(snapshot) {
   // bellySnapshot = snapshot;
   bellyScreens = snapshot.val();
-  console.log('bruv', bellyScreens, selectedBellyScreen);
   BellyScreenRenders = [];
-
+  let bellyHTML = "";
   if (bellyScreens != undefined && bellyScreens.length > 0) {
     var bellyDiv = document.getElementById('bellyEdit');
     var screen = bellyScreens[selectedBellyScreen];
@@ -95,7 +94,6 @@ function renderSelectedBellyScreen(snapshot) {
     if (screen.checkboxes.isShown) checkboxesChecked = 'checked';
     if (screen.buttons.isShown) buttonsChecked = 'checked';
     if (screen.backgroundColor) backgroundColor = screen.backgroundColor;
-
     // bellyHTML += "<div class='screen-checkboxes'>";
     // bellyHTML +=
     //   "<input type='checkbox' onclick='addRemoveScreenElements(this," +
@@ -191,8 +189,10 @@ function renderSelectedBellyScreen(snapshot) {
 
     if (screen.textInput && screen.textInput.isShown) {
       bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
-      bellyHTML += '<textarea disabled name="textinput" rows="4" cols="50"';
-      bellyHTML += ' placeholder="' + screen.textInput.text + '"';
+      bellyHTML += '<textarea id="textInput" name="textInput" rows="4" cols="50"';
+      bellyHTML += ' placeholder="' + (screen.textInput.text ? screen.textInput.text : '' ) + '" ' + 'onchange="changeScreenElement(this, ' +
+        i +
+        ')"';
       bellyHTML += '></textarea>';
       bellyHTML += '</div>';
     }
@@ -694,7 +694,12 @@ function addRemoveMultipleElements(targets, screenID) {
         };
       }
     }
-    else bellyScreens[screenID][target.name].isShown = 0;
+    else {
+      if (!bellyScreens[screenID][target.name]) {
+        bellyScreens[screenID][target.name] = {};
+      }
+        bellyScreens[screenID][target.name].isShown = 0;
+    }
   });
 
   var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
@@ -786,6 +791,12 @@ function changeScreenElement(target, screenID, itemID) {
 
   if (target.name == 'checkboxDelete') {
     bellyScreens[screenID].checkboxes.names.splice(itemID, 1);
+  }
+
+  if (target.name == 'textInput') {
+    bellyScreens[screenID].textInput.text = document.getElementById(
+      target.id
+    ).value;
   }
 
   var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
