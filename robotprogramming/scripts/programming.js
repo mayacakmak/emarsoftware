@@ -122,19 +122,27 @@ function updateRobotList(snapshot) {
   let programRobotsDiv = document.getElementById("programRobots");
   programRobotsDiv.innerHTML = programRobotListHTML;
   
-  if (currentProgramId != null && myPrograms != undefined){    
-    setProgramRobot(myPrograms[currentProgramId].robot);
+  if (currentProgramId != null && myPrograms != undefined) {
+    if (isMyProgram) {
+      setProgramRobot(myPrograms[currentProgramId].robot);
+    } else {
+      setProgramRobot(robotPrograms[selectedRobotId][currentProgramId].robot);
+    }
   }
-  else
+  else {
+    console.log(currentProgramId, myPrograms);
     setProgramRobot(0);
+  }
 
-  if (selectedRobotId != null)
+  if (selectedRobotId != null) {
     setSelectedRobot(selectedRobotId);
+  }
   else
     setSelectedRobot(0);
 }
 
 function programRobotChanged(robotId) {
+  console.log('Program Robot Changed???', robotId);
   setProgramRobot(robotId);
   if (currentProgramId != null) {
     saveProgram();
@@ -146,6 +154,7 @@ function selectedRobotChanged(robotId) {
 }
 
 function setProgramRobot(robotId) {
+  console.log('setting with parameters', selectedRobotId, robotId);
   console.log("Current program's robot is: " + robotId);
   Robot.setRobotId(robotId);
   var programRobotDiv = document.getElementById("currentProgramRobot");
@@ -153,6 +162,7 @@ function setProgramRobot(robotId) {
 }
 
 function setSelectedRobot(robotId) {
+  console.log('settting to', robotId);
   selectedRobotId = robotId;
   var selectedRobotDiv = document.getElementById("selectedRobot");
   selectedRobotDiv.innerHTML = robotNames[robotId];
@@ -193,6 +203,7 @@ function loadProgram(index) {
     codeDescDiv.value = '';
   else
     codeDescDiv.value = myPrograms[currentProgramId].description;
+  console.log('Load progrram', myPrograms, currentProgramId);
   setProgramRobot(myPrograms[currentProgramId].robot);
   
   isMyProgram = true;
