@@ -1,75 +1,76 @@
 /*
-* Belly class for creating the user interface on the robot's belly tablet
-*/
+ * Belly class for creating the user interface on the robot's belly tablet
+ */
 function Belly(robotId, scale, resizeAxis) {
-
   Belly.robotId = robotId;
   Belly.currentScreen = -1;
   Belly.bellyScreens = null;
   Belly.scale = scale;
   Belly.resizeAxis = resizeAxis;
 
-  Belly.updateRobotBelly = function(snapshot) {
-
+  Belly.updateRobotBelly = function (snapshot) {
     var robotState = snapshot.val();
-    var bellyHTML = "";
+    var bellyHTML = '';
 
     let newScreenIndex = robotState.currentBellyScreen;
 
     // Make sure it is a valid screen index
     if (newScreenIndex != undefined && Belly.bellyScreens != null) {
-      
       newScreenIndex = Number(robotState.currentBellyScreen);
       if (newScreenIndex >= 0 && newScreenIndex < Belly.bellyScreens.length) {
         bellyHTML += renderBellyScreen(newScreenIndex, this.Belly);
+      } else {
+        console.log('Screen index out of range.');
       }
-      else {
-        console.log("Screen index out of range.");  
-      }
-    }
-    else {
-      console.log("Screen index is not valid.");
-      console.log("newScreenIndex: " + newScreenIndex);
+    } else {
+      console.log('Screen index is not valid.');
+      console.log('newScreenIndex: ' + newScreenIndex);
       console.log(Belly.bellyScreens);
       console.log(robotState);
     }
-  }
+  };
 
-  // Belly.renderBellyScreen = 
+  // Belly.renderBellyScreen =
 
-  Belly.bellyInputReceived = function(target, screenID, itemID) {
+  Belly.bellyInputReceived = function (target, screenID, itemID) {
     // TODO: clean up the the non "list" parts of database once backwards compatibility issues are gone
     var date = new Date();
-    if (target.name == "slider"){
+    if (target.name == 'slider') {
       Belly.bellyScreens[screenID].slider.current = target.value;
       Belly.bellyScreens[screenID].slider.lastChanged = date.getTime();
     }
 
-    if (target.name == "checkbox") {
-      Belly.bellyScreens[screenID].checkboxes.list[itemID].value = target.checked;
-      Belly.bellyScreens[screenID].checkboxes.list[itemID].lastChanged = date.getTime();
+    if (target.name == 'checkbox') {
+      Belly.bellyScreens[screenID].checkboxes.list[itemID].value =
+        target.checked;
+      Belly.bellyScreens[screenID].checkboxes.list[
+        itemID
+      ].lastChanged = date.getTime();
     }
 
-    if (target.name == "button") {
-      Belly.bellyScreens[screenID].buttons.list[itemID].lastPressed = date.getTime();
+    if (target.name == 'button') {
+      Belly.bellyScreens[screenID].buttons.list[
+        itemID
+      ].lastPressed = date.getTime();
     }
 
-    if (target.name == "imageButton") {
-      Belly.bellyScreens[screenID].imageButtons.list[itemID].lastPressed = date.getTime();
+    if (target.name == 'imageButton') {
+      Belly.bellyScreens[screenID].imageButtons.list[
+        itemID
+      ].lastPressed = date.getTime();
     }
 
-    if (target.name == "textInput") {
+    if (target.name == 'textInput') {
       Belly.bellyScreens[screenID].textInput.value = document.getElementById(
         target.id
       ).value;
     }
 
-    var dir = 'robots/' + (Belly.robotId) + "/customAPI/inputs/";
+    var dir = 'robots/' + Belly.robotId + '/customAPI/inputs/';
     var dbRef = firebase.database().ref(dir);
-    var updates = {"bellyScreens": Belly.bellyScreens};
+    var updates = { bellyScreens: Belly.bellyScreens };
     dbRef.update(updates);
-  }
-
+  };
 }
 
 function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
@@ -77,7 +78,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
   if (screenDivId !== 'screenDiv') {
     bellyHTML += " style='pointer-events: none;'>";
   } else {
-    bellyHTML += ">";
+    bellyHTML += '>';
   }
   // Make sure it is a different screen from the currently displayed one
   if (newScreenIndex != Belly.currentScreen) {
@@ -95,16 +96,38 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           *********/
     if (screen.instructionLarge.isShown) {
       var largeInstruction = screen.instructionLarge.text;
+      var fontFamily = ((fontFamily) => {
+        switch (fontFamily) {
+          case 'Courier':
+            return 'font-family: "Lucida Console", Courier, monospace;';
+          case 'Times':
+            return 'font-family: "Times New Roman", Times, serif;';
+          default:
+            return 'font-family: Arial, Helvetica, sans-serif;';
+        }
+      })(screen.instructionLarge.fontFamily);
       bellyHTML +=
-        "<div class='screen-element instruction-large' style='z-index: 2'>" +
+        "<div class='screen-element instruction-large' style='z-index: 2; " + fontFamily + "'>" +
         largeInstruction +
         '</div> ';
     }
 
     if (screen.instructionSmall.isShown) {
       var smallInstruction = screen.instructionSmall.text;
+      var fontFamily = ((fontFamily) => {
+        switch (fontFamily) {
+          case 'Courier':
+            return 'font-family: "Lucida Console", Courier, monospace;';
+          case 'Times':
+            return 'font-family: "Times New Roman", Times, serif;';
+          default:
+            return 'font-family: Arial, Helvetica, sans-serif;';
+        }
+      })(screen.instructionSmall.fontFamily);
       bellyHTML +=
-        "<div class='screen-element instruction-small' style='z-index: 2'>" +
+        "<div class='screen-element instruction-small' style='z-index: 2; " +
+        fontFamily +
+        "'>" +
         smallInstruction +
         '</div>';
     }
@@ -113,7 +136,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
            Images
           *********/
     if (screen.images && screen.images.isShown && screen.images.list) {
-      bellyHTML += "<div style='flex-direction: row'>"
+      bellyHTML += "<div style='flex-direction: row'>";
       screen.images.list.forEach((element) => {
         console.log(element);
         var position = '';
@@ -149,7 +172,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           element.size.y +
           "'/>";
       });
-      bellyHTML += "</div>";
+      bellyHTML += '</div>';
     }
 
     /*********
@@ -207,11 +230,16 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           *********/
     if (screen.textInput && screen.textInput.isShown === 1) {
       bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
-      bellyHTML += '<textarea id="textInput" name="textInput" rows="4" cols="50"';
-      bellyHTML += ' placeholder="' + (screen.textInput.text ? screen.textInput.text : "" ) + '"';
-      bellyHTML += " onchange='Belly.bellyInputReceived(this," +
-            Belly.currentScreen +
-            ")'";
+      bellyHTML +=
+        '<textarea id="textInput" name="textInput" rows="4" cols="50"';
+      bellyHTML +=
+        ' placeholder="' +
+        (screen.textInput.text ? screen.textInput.text : '') +
+        '"';
+      bellyHTML +=
+        " onchange='Belly.bellyInputReceived(this," +
+        Belly.currentScreen +
+        ")'";
       bellyHTML += '></textarea>';
       bellyHTML += '</div>';
     }
@@ -298,31 +326,31 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           otherElements[i].style.fontSize = '1.5vh';
       }
     } else if (Belly.scale == 'medium') {
-       var largeInstructionElements = document.getElementsByClassName(
-         'instruction-large'
-       );
-       var smallInstructionElements = document.getElementsByClassName(
-         'instruction-small'
-       );
-       var otherElements = document.getElementsByClassName('screen-item');
+      var largeInstructionElements = document.getElementsByClassName(
+        'instruction-large'
+      );
+      var smallInstructionElements = document.getElementsByClassName(
+        'instruction-small'
+      );
+      var otherElements = document.getElementsByClassName('screen-item');
 
-       if (Belly.resizeAxis == 'width') {
-         for (var i = 0; i < largeInstructionElements.length; i++)
-           largeInstructionElements[i].style.fontSize = '4.5vw';
-         for (var i = 0; i < smallInstructionElements.length; i++)
-           smallInstructionElements[i].style.fontSize = '3vw';
-         for (var i = 0; i < otherElements.length; i++)
-           otherElements[i].style.fontSize = '2.25vw';
-       } else {
-         for (var i = 0; i < largeInstructionElements.length; i++)
-           largeInstructionElements[i].style.fontSize = '4.5vh';
-         for (var i = 0; i < smallInstructionElements.length; i++)
-           smallInstructionElements[i].style.fontSize = '3vh';
-         for (var i = 0; i < otherElements.length; i++)
-           otherElements[i].style.fontSize = '2.25vh';
-       }
+      if (Belly.resizeAxis == 'width') {
+        for (var i = 0; i < largeInstructionElements.length; i++)
+          largeInstructionElements[i].style.fontSize = '4.5vw';
+        for (var i = 0; i < smallInstructionElements.length; i++)
+          smallInstructionElements[i].style.fontSize = '3vw';
+        for (var i = 0; i < otherElements.length; i++)
+          otherElements[i].style.fontSize = '2.25vw';
+      } else {
+        for (var i = 0; i < largeInstructionElements.length; i++)
+          largeInstructionElements[i].style.fontSize = '4.5vh';
+        for (var i = 0; i < smallInstructionElements.length; i++)
+          smallInstructionElements[i].style.fontSize = '3vh';
+        for (var i = 0; i < otherElements.length; i++)
+          otherElements[i].style.fontSize = '2.25vh';
+      }
     }
-    bellyHTML += "</div>";
+    bellyHTML += '</div>';
   } else {
     console.log('Screen has not changed.');
   }

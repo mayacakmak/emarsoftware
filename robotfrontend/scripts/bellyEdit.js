@@ -67,6 +67,8 @@ function renderSelectedBellyScreen(snapshot) {
       "'> <button class='btn btn-danger btn-delete' onclick='removeScreen(" +
       i +
       `)'> Delete screen </button>
+      </div>
+      <div class='center-aligned'>
       <div class="dropdown">
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Screen Layout
@@ -79,6 +81,32 @@ function renderSelectedBellyScreen(snapshot) {
           <button class="dropdown-item" onclick='setLayout(this)'>Images</button>
           <button class="dropdown-item" onclick='setLayout(this)'>User Text Input</button>
         </div>
+      </div>
+      <div class="dropdown">
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Title Font
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" onclick='setFontFamily("instructionLarge", this)'>Arial</button>
+          <button class="dropdown-item" onclick='setFontFamily("instructionLarge", this)'>Courier</button>
+          <button class="dropdown-item" onclick='setFontFamily("instructionLarge", this)'>Times</button>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Subtitle Font
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" onclick='setFontFamily("instructionSmall", this)'>Arial</button>
+          <button class="dropdown-item" onclick='setFontFamily("instructionSmall", this)'>Courier</button>
+          <button class="dropdown-item" onclick='setFontFamily("instructionSmall", this)'>Times</button>
+        </div>
+      </div>
+      <div>
+      <input type='color' onchange='setScreenColor(this)' name='backgroundColor'
+      value='` +
+      screen.backgroundColor +
+      `'> <div class='mr-2'> Color </div>
       </div>
       </div>`;
     var instructionLargeChecked = '';
@@ -373,6 +401,20 @@ function uploadImage(target, index) {
       name: 'images',
     }, selectedBellyScreen, '');
   });
+}
+
+function setScreenColor(element) {
+  addRemoveScreenElements(element, selectedBellyScreen);
+}
+
+function setFontFamily(name,  element) {
+  var screenID = selectedBellyScreen;
+  bellyScreens[screenID][name].fontFamily = element.innerHTML;
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
 }
 
 function setLayout(element) {
@@ -689,7 +731,7 @@ function addRemoveMultipleElements(targets, screenID) {
       if (bellyScreens[screenID][target.name]) {
         bellyScreens[screenID][target.name].isShown = 1;
       } else {
-        bellyScreens[screenID][target.name] =   {
+        bellyScreens[screenID][target.name] = {
           isShown: 1
         };
       }
