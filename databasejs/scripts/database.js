@@ -24,14 +24,14 @@ function Database(config, readyCallback) {
   /*
   * Function to initialize firebase and sign in anonymously
   */
-  Database.initialize = async function(){
+  Database.initialize = async function() {
       Database.app = await firebase.initializeApp(Database.config);
       firebase.auth().onAuthStateChanged(Database.handleAuthStateChange);
       // Wait a little bit to see is we are already logged in
       // then attempt an anonymous sign in
       window.setTimeout(function(){
         Database.signInAnonymously();
-      }, 500);    
+      }, 1000);    
   }
   
   /*

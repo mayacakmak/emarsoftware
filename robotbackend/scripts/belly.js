@@ -49,9 +49,14 @@ function Belly(robotId, scale, resizeAxis) {
     }
 
     if (target.name == 'button') {
-      Belly.bellyScreens[screenID].buttons.list[
-        itemID
-      ].lastPressed = date.getTime();
+      if (Belly.bellyScreens[screenID].buttons.list[itemID].link) {
+        window.location.href =
+          Belly.bellyScreens[screenID].buttons.list[itemID].link;
+      } else {
+        Belly.bellyScreens[screenID].buttons.list[
+          itemID
+        ].lastPressed = date.getTime();
+      }
     }
 
     if (target.name == 'imageButton') {
@@ -268,9 +273,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
               ")' name='button'>" +
               '<div><img  src=' +
               url +
-              " width='80' height='80'/></div>" +
+              " width='60' height='60'/></div><p style='font-size:16;color:white'>" +
               name +
-              '</button>';
+              '</p></button>';
             // Buttons with text
             if (screen.buttons.list[j].label) {
               bellyHTML +=
