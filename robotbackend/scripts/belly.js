@@ -30,7 +30,11 @@ function Belly(robotId, scale, resizeAxis) {
     }
   };
 
-  // Belly.renderBellyScreen =
+  Belly.infoButtonClicked = function (screenID) {
+    if (Belly.bellyScreens[screenID].informationButton && Belly.bellyScreens[screenID].informationButton.text) {
+      alert(Belly.bellyScreens[screenID].informationButton.text);
+    }
+  }
 
   Belly.bellyInputReceived = function (target, screenID, itemID) {
     // TODO: clean up the the non "list" parts of database once backwards compatibility issues are gone
@@ -97,6 +101,25 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     }
 
     /*********
+           Information Button
+          *********/
+    if (screen.informationButton && screen.informationButton.isShown) {
+      bellyHTML += `
+        <div style="position: absolute; top: 0; right: 0; padding-right: 10px; padding-top: 10px;">
+          <button type="button" class="btn btn-info" onclick="Belly.infoButtonClicked(
+        `
+        + Belly.currentScreen + 
+        `
+          )">
+        `
+        + (screen.informationButton.label ? screen.informationButton.label : "?") + 
+        `
+          </button>
+        </div>
+      `;
+    }
+
+    /*********
            Text instructions
           *********/
     if (screen.instructionLarge.isShown) {
@@ -112,7 +135,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
         }
       })(screen.instructionLarge.fontFamily);
       bellyHTML +=
-        "<div class='screen-element instruction-large' style='z-index: 2; " + fontFamily + "'>" +
+        "<div class='screen-element instruction-large' style='z-index: 2; " +
+        fontFamily +
+        "'>" +
         largeInstruction +
         '</div> ';
     }
