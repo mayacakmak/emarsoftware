@@ -792,11 +792,11 @@ input[type=text].max {
 input[type=text].instruction-large-setup {
   width: 90%;
   text-align: center;
-  font-size: 4vw;
+  font-size: 2vw;
 }
 
 input[type=text].instruction-small-setup {
-  font-size: 2.5vw;
+  font-size: 1vw;
   width: 90%;
   text-align: center;
 }

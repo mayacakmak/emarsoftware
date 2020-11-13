@@ -219,12 +219,21 @@ function Robot(robotId, apiDiv) {
     var waiting = true;
     while (waiting) {
       buttonList = Robot.bellyScreens[Robot.currentScreen].buttons.list;
-      for (var i=0; i<buttonList.length; i++) {
+      if (
+        Robot.bellyScreens[Robot.currentScreen].navButtonList &&
+        Robot.bellyScreens[Robot.currentScreen].navButtonList.backButton &&
+        Robot.bellyScreens[Robot.currentScreen].navButtonList.backButton.lastPressed
+      ) {
+        buttonList.push(
+          Robot.bellyScreens[Robot.currentScreen].navButtonList.backButton
+        );
+      }
+      for (var i = 0; i < buttonList.length; i++) {
         var button = buttonList[i];
         var currentTime = date.getTime();
         var buttonTime = button.lastPressed;
-        if (buttonTime>currentTime) {
-          buttonPressed = buttonList[i].name
+        if (buttonTime > currentTime) {
+          buttonPressed = buttonList[i].name;
           waiting = false;
         }
       }

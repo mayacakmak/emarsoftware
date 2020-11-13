@@ -31,10 +31,39 @@ function Belly(robotId, scale, resizeAxis) {
   };
 
   Belly.infoButtonClicked = function (screenID) {
-    if (Belly.bellyScreens[screenID].informationButton && Belly.bellyScreens[screenID].informationButton.text) {
-      alert(Belly.bellyScreens[screenID].informationButton.text);
+    if (
+      Belly.bellyScreens[screenID].navButtonList &&
+      Belly.bellyScreens[screenID].navButtonList.faqButton &&
+      Belly.bellyScreens[screenID].navButtonList.faqButton.content
+    ) {
+      document.getElementById('modalBody').innerHTML =
+        Belly.bellyScreens[screenID].navButtonList.faqButton.content;
+      $('#faqModal').modal('show');
     }
-  }
+  };
+
+  Belly.exitButtonClicked = function (screenID) {
+    if (
+      Belly.bellyScreens[screenID].navButtonList &&
+      Belly.bellyScreens[screenID].navButtonList.exitButton
+    ) {
+      window.location.href = 'index.html';
+    }
+  };
+
+  Belly.backButtonClicked = function (screenID) {
+    if (
+      Belly.bellyScreens[screenID].navButtonList &&
+      Belly.bellyScreens[screenID].navButtonList.backButton
+    ) {
+      var date = new Date();
+      Belly.bellyScreens[screenID].navButtonList.backButton.lastPressed = date.getTime();
+      var dir = 'robots/' + Belly.robotId + '/customAPI/inputs/';
+      var dbRef = firebase.database().ref(dir);
+      var updates = { bellyScreens: Belly.bellyScreens };
+      dbRef.update(updates);
+    }
+  };
 
   Belly.bellyInputReceived = function (target, screenID, itemID) {
     // TODO: clean up the the non "list" parts of database once backwards compatibility issues are gone
@@ -101,22 +130,63 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     }
 
     /*********
-           Information Button
+           Navigation Buttons
           *********/
-    if (screen.informationButton && screen.informationButton.isShown) {
-      bellyHTML += `
-        <div style="position: absolute; top: 0; right: 0; padding-right: 10px; padding-top: 10px;">
-          <button type="button" class="btn btn-info" onclick="Belly.infoButtonClicked(
-        `
-        + Belly.currentScreen + 
-        `
-          )">
-        `
-        + (screen.informationButton.label ? screen.informationButton.label : "?") + 
-        `
-          </button>
-        </div>
-      `;
+    if (screen.navButtonList) {
+      // bellyHTML += `
+      //   <div style="position: absolute; top: 0; right: 0; padding-right: 10px; padding-top: 10px;">
+      //     <button type="button" class="btn btn-info" onclick="Belly.infoButtonClicked(
+      //   `
+      //   + Belly.currentScreen +
+      //   `
+      //     )">
+      //   `
+      //   + (screen.informationButton.label ? screen.informationButton.label : "?") +
+      //   `
+      //     </button>
+      //   </div>
+      // `;
+      bellyHTML += `<div style="position: absolute; top: 0; right: 0; padding-right: 10px; padding-top: 10px;">`;
+      if (
+        screen.navButtonList.backButton &&
+        screen.navButtonList.backButton.isShown
+      ) {
+        bellyHTML +=
+          `
+        <button type="button" class="btn btn-info" onclick="Belly.backButtonClicked(
+         ` +
+          Belly.currentScreen +
+          `
+          )">Go Back</button>
+        `;
+      }
+      if (
+        screen.navButtonList.faqButton &&
+        screen.navButtonList.faqButton.isShown
+      ) {
+        bellyHTML +=
+          `
+        <button type="button" class="btn btn-info" onclick="Belly.infoButtonClicked(
+         ` +
+          Belly.currentScreen +
+          `
+          )">Help</button>
+        `;
+      }
+      if (
+        screen.navButtonList.exitButton &&
+        screen.navButtonList.exitButton.isShown
+      ) {
+        bellyHTML +=
+          `
+        <button type="button" class="btn btn-info" onclick="Belly.exitButtonClicked(
+         ` +
+          Belly.currentScreen +
+          `
+          )">Exit</button>
+        `;
+      }
+      bellyHTML += `</div>`;
     }
 
     /*********

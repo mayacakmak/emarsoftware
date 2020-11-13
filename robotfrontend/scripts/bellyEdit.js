@@ -54,11 +54,33 @@ function renderSelectedBellyScreen(snapshot) {
   // bellySnapshot = snapshot;
   bellyScreens = snapshot.val();
   BellyScreenRenders = [];
-  let bellyHTML = "";
+  let bellyHTML = '';
   if (bellyScreens != undefined && bellyScreens.length > 0) {
     var bellyDiv = document.getElementById('bellyEdit');
     var screen = bellyScreens[selectedBellyScreen];
     var i = selectedBellyScreen;
+    var exitButtonChecked,
+      faqButtonChecked,
+      backButtonChecked, faqButtonContent = '';
+    if (screen.navButtonList) {
+      exitButtonChecked =
+        screen.navButtonList.exitButton !== undefined &&
+        screen.navButtonList.exitButton.isShown
+          ? 'checked'
+          : '';
+      faqButtonChecked =
+        screen.navButtonList.faqButton !== undefined &&
+        screen.navButtonList.faqButton.isShown
+          ? 'checked'
+          : '';
+      faqButtonContent = (screen.navButtonList.faqButton && screen.navButtonList.faqButton.content) ? screen.navButtonList.faqButton.content : '';
+      backButtonChecked =
+        screen.navButtonList.backButton !== undefined &&
+        screen.navButtonList.backButton.isShown
+          ? 'checked'
+          : '';
+    }
+    console.log(faqButtonChecked);
     bellyHTML =
       "<div class='left-aligned'> <input type='text' class='screen-name' name='name' onblur='changeScreenElement(this, " +
       i +
@@ -102,19 +124,42 @@ function renderSelectedBellyScreen(snapshot) {
           <button class="dropdown-item" onclick='setFontFamily("instructionSmall", this)'>Times</button>
         </div>
       </div>
-      <div>
+      <div style="display: flex; flex-direction: row;">
       <input type='color' onchange='setScreenColor(this)' name='backgroundColor'
       value='` +
       screen.backgroundColor +
       `'> <div class='mr-2'> Color </div>
       </div>
+      </div>
+      <div style="display: flex; flex-direction: row; margin-top: 4px; margin-bottom: 4px;">
+          <input type='checkbox' name='exitButton' id='exitButton' onchange='changeScreenElement(this, ` +
+      selectedBellyScreen +
+      `)' ` +
+      exitButtonChecked +
+      `> <div class='mr-2'>Exit Button</div>
+          <input type='checkbox' name='backButton' id='backButton' onchange='changeScreenElement(this, ` +
+      selectedBellyScreen +
+      `)' ` +
+      backButtonChecked +
+      `> <div class='mr-2'>Back Button</div>
+          <input type='checkbox' name='faqButton' id='faqButton' onchange='changeScreenElement(this, ` +
+      selectedBellyScreen +
+      `)' ` +
+      faqButtonChecked +
+      `> <div class='mr-2'>Question Button</div>
+      <div class='mr-2'>Question Button Content:</div>
+      <input type='text' name='faqButtonContent' onblur='changeScreenElement(this, ` +
+      i +
+      `)' value='` +
+      faqButtonContent +
+      `'>
       </div>`;
     var instructionLargeChecked = '';
     var instructionSmallChecked = '';
     var sliderChecked = '';
     var checkboxesChecked = '';
     var buttonsChecked = '';
-    var backgroundColor = '#ffffff';  
+    var backgroundColor = '#ffffff';
 
     if (screen.instructionLarge.isShown) instructionLargeChecked = 'checked';
     if (screen.instructionSmall.isShown) instructionSmallChecked = 'checked';
@@ -122,76 +167,7 @@ function renderSelectedBellyScreen(snapshot) {
     if (screen.checkboxes.isShown) checkboxesChecked = 'checked';
     if (screen.buttons.isShown) buttonsChecked = 'checked';
     if (screen.backgroundColor) backgroundColor = screen.backgroundColor;
-    // bellyHTML += "<div class='screen-checkboxes'>";
-    // bellyHTML +=
-    //   "<input type='checkbox' onclick='addRemoveScreenElements(this," +
-    //   i +
-    //   ")' name='instructionLarge' " +
-    //   instructionLargeChecked +
-    //   "> <div class='mr-2'> Large instruction </div>";
-    // bellyHTML +=
-    //   "<input type='checkbox' onclick='addRemoveScreenElements(this," +
-    //   i +
-    //   ")' name='instructionSmall'" +
-    //   instructionSmallChecked +
-    //   "> <div class='mr-2'> Small instruction </div>";
-    // bellyHTML +=
-    //   "<input type='checkbox' onclick='addRemoveScreenElements(this," +
-    //   i +
-    //   ")' name='slider'" +
-    //   sliderChecked +
-    //   "> <div class='mr-2'> Slider </div>";
-    // bellyHTML +=
-    //   "<input type='checkbox' onclick='addRemoveScreenElements(this," +
-    //   i +
-    //   ")' name='checkboxes'" +
-    //   checkboxesChecked +
-    //   "> <div class='mr-2'> Checkboxes </div>";
-    // bellyHTML +=
-    //   "<input type='checkbox' onclick='addRemoveScreenElements(this," +
-    //   i +
-    //   ")' name='buttons'" +
-    //   buttonsChecked +
-    //   "> <div class='mr-2'> Buttons </div>";
-    // bellyHTML +=
-    //   "<input type='color' onchange='addRemoveScreenElements(this," +
-    //   i +
-    //   ")' name='backgroundColor' value='" +
-    //   backgroundColor +
-    //   "'> <div class='mr-2'> Color </div>";
-    // Toolbar
-    // bellyHTML +=
-    //   `
-    // </div><div class="btn-toolbar screen-checkboxes" style="width: 100%;" role="toolbar" aria-label="Toolbar with button groups">
-    //   <div class="btn-group btn-group-sm mr-2" role="group" aria-label="First group">
-    //     <button name='buttonAddImage' type="button" class="btn btn-secondary" onclick='changeScreenElement(this, ` +
-    //   i +
-    //   `)' >Image Button</button>
-    //     <button name='buttonAdd' type="button" class="btn btn-secondary" onclick='changeScreenElement(this, ` +
-    //   i +
-    //   `)' >Description Button</button>
-    //     <button name='buttonAdd' type="button" class="btn btn-secondary" onclick='changeScreenElement(this, ` +
-    //   i +
-    //   `)' >Text Button</button>
-    //   </div>
-    //   <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Second group">
-    //     <button type="button" class="btn btn-secondary">Bold Title</button>
-    //     <button type="button" class="btn btn-secondary">Italic Title</button>
-    //   </div>
-    //   <div class="dropdown">
-    //     <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    //       Screen Layout
-    //     </button>
-    //     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    //       <button class="dropdown-item" onclick='setLayout(this)'>Text</button>
-    //       <button class="dropdown-item" onclick='setLayout(this)'>Slider</button>
-    //       <button class="dropdown-item" onclick='setLayout(this)'>Buttons</button>
-    //       <button class="dropdown-item" onclick='setLayout(this)'>Checkboxes</button>
-    //       <button class="dropdown-item" onclick='setLayout(this)'>Images</button>
-    //     </div>
-    //   </div>
-    // </div>
-    // `;
+
     bellyHTML +=
       "<div class='screen-box-outer mb-4' style='margin-bottom: 0rem !important; background-color: " +
       backgroundColor +
@@ -217,8 +193,13 @@ function renderSelectedBellyScreen(snapshot) {
 
     if (screen.textInput && screen.textInput.isShown) {
       bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
-      bellyHTML += '<textarea id="textInput" name="textInput" rows="4" cols="50"';
-      bellyHTML += ' placeholder="' + (screen.textInput.text ? screen.textInput.text : '' ) + '" ' + 'onchange="changeScreenElement(this, ' +
+      bellyHTML +=
+        '<textarea id="textInput" name="textInput" rows="4" cols="50"';
+      bellyHTML +=
+        ' placeholder="' +
+        (screen.textInput.text ? screen.textInput.text : '') +
+        '" ' +
+        'onchange="changeScreenElement(this, ' +
         i +
         ')"';
       bellyHTML += '></textarea>';
@@ -253,7 +234,13 @@ function renderSelectedBellyScreen(snapshot) {
         position += "'";
         console.log(index, index.toString(), typeof index);
         bellyHTML +=
-          "<label for='image" + index.toString() + "'><input id='image" + index.toString() + "' type='file' accept='image/*' style='display:none' onchange='uploadImage(this, " + index.toString() +  ")'/><div><img src='" +
+          "<label for='image" +
+          index.toString() +
+          "'><input id='image" +
+          index.toString() +
+          "' type='file' accept='image/*' style='display:none' onchange='uploadImage(this, " +
+          index.toString() +
+          ")'/><div><img src='" +
           element.path +
           "' style='border: none; " +
           position +
@@ -262,13 +249,13 @@ function renderSelectedBellyScreen(snapshot) {
           "' height='" +
           element.size.y * 0.6 +
           "'/></div>";
-          bellyHTML +=
-            "<div class='delete-btn-button'><button name='imageDelete' onclick='changeScreenElement(this, " +
-            selectedBellyScreen +
-            ',' +
-            index +
-            ")' class='btn btn-secondary btn-circle-sm'>X</button></div>";
-          bellyHTML += "</label>";
+        bellyHTML +=
+          "<div class='delete-btn-button'><button name='imageDelete' onclick='changeScreenElement(this, " +
+          selectedBellyScreen +
+          ',' +
+          index +
+          ")' class='btn btn-secondary btn-circle-sm'>X</button></div>";
+        bellyHTML += '</label>';
       });
       bellyHTML += '</div>';
     }
@@ -339,7 +326,7 @@ function renderSelectedBellyScreen(snapshot) {
             bellyHTML +=
               '<img  src=' +
               screen.buttons.list[j].url +
-              " width='40' height='40'/>";
+              " width='20' height='20'/>";
           }
           bellyHTML += '</button>';
 
@@ -366,13 +353,12 @@ function renderSelectedBellyScreen(snapshot) {
         ")' class='btn btn-primary btn-add'>Add button</button>";
       if (screen.images && screen.images.isShown) {
         bellyHTML +=
-        "<button name='imageAdd' onclick='changeScreenElement(this, " +
-        i +
-        ")' class='btn btn-primary btn-add'>Add Image</button>";
-        
+          "<button name='imageAdd' onclick='changeScreenElement(this, " +
+          i +
+          ")' class='btn btn-primary btn-add'>Add Image</button>";
       }
-      bellyHTML += "</div>";
-        
+      bellyHTML += '</div>';
+
       bellyHTML += '</div>';
     }
 
@@ -384,22 +370,41 @@ function renderSelectedBellyScreen(snapshot) {
   bellyDiv.innerHTML = bellyHTML;
 }
 
+function setNavButton(target) {
+  switch (target.name) {
+    case 'exitButton':
+      return;
+    case 'backButton':
+      return;
+    case 'faqButton':
+      return;
+    default:
+      return;
+  }
+}
+
 function uploadImage(target, index) {
   console.log(target, index);
   var file = document.querySelectorAll('input[type=file]')[index].files[0];
   var storageRef = firebase.storage().ref();
   var split = target.value.split('\\');
   console.log(db);
-  var ref = storageRef.child('images/' + db.uid + '/' + split[split.length - 1]);
+  var ref = storageRef.child(
+    'images/' + db.uid + '/' + split[split.length - 1]
+  );
   ref.put(file).then(async function (snapshot) {
     url = await snapshot.ref.getDownloadURL();
     // console.log('url', url);
     // Update Image
-    changeScreenElement({
-      index,
-      value: url,
-      name: 'images',
-    }, selectedBellyScreen, '');
+    changeScreenElement(
+      {
+        index,
+        value: url,
+        name: 'images',
+      },
+      selectedBellyScreen,
+      ''
+    );
   });
 }
 
@@ -407,7 +412,7 @@ function setScreenColor(element) {
   addRemoveScreenElements(element, selectedBellyScreen);
 }
 
-function setFontFamily(name,  element) {
+function setFontFamily(name, element) {
   var screenID = selectedBellyScreen;
   bellyScreens[screenID][name].fontFamily = element.innerHTML;
 
@@ -454,7 +459,7 @@ function setLayout(element) {
           {
             name: 'textInput',
             checked: false,
-          }
+          },
         ],
         selectedBellyScreen
       );
@@ -654,7 +659,7 @@ function setLayout(element) {
           {
             name: 'textInput',
             checked: true,
-          }
+          },
         ],
         selectedBellyScreen
       );
@@ -688,7 +693,7 @@ function renderBellyScreenList(snapshot) {
           ? 'border-style: solid; border-width: 5px; border-color: green;'
           : 'border-style: solid; border-width: 1px; border-color: black;';
       bellyHTML +=
-        "<div class='screen-box-inner-list overflow-auto' style='margin-top: 1.5rem; margin-bottom: 1.5rem; background-color: white; " +
+        "<div class='screen-box-inner-list overflow-auto' style='position: relative; margin-top: 1.5rem; margin-bottom: 1.5rem; background-color: white; " +
         selectedStyle +
         "' id='" +
         'screenDiv' +
@@ -726,21 +731,20 @@ function addRemoveScreenElements(target, screenID) {
 function addRemoveMultipleElements(targets, screenID) {
   targets.forEach((target) => {
     if (target.name.includes('backgroundColor'))
-    bellyScreens[screenID][target.name] = target.value;
+      bellyScreens[screenID][target.name] = target.value;
     if (target.checked) {
       if (bellyScreens[screenID][target.name]) {
         bellyScreens[screenID][target.name].isShown = 1;
       } else {
         bellyScreens[screenID][target.name] = {
-          isShown: 1
+          isShown: 1,
         };
       }
-    }
-    else {
+    } else {
       if (!bellyScreens[screenID][target.name]) {
         bellyScreens[screenID][target.name] = {};
       }
-        bellyScreens[screenID][target.name].isShown = 0;
+      bellyScreens[screenID][target.name].isShown = 0;
     }
   });
 
@@ -791,7 +795,7 @@ function changeScreenElement(target, screenID, itemID) {
       size: {
         x: 150,
         y: 150,
-      }
+      },
     });
   }
 
@@ -841,6 +845,57 @@ function changeScreenElement(target, screenID, itemID) {
     ).value;
   }
 
+  if (target.name == 'exitButton') {
+    if (!bellyScreens[screenID].navButtonList) {
+      bellyScreens[screenID].navButtonList = {};
+    }
+    bellyScreens[screenID].navButtonList = {
+      ...bellyScreens[screenID].navButtonList,
+      exitButton: {
+        isShown: document.getElementById(target.id).checked ? 1 : 0,
+      },
+    };
+  }
+
+  if (target.name == 'backButton') {
+    if (!bellyScreens[screenID].navButtonList) {
+      bellyScreens[screenID].navButtonList = {};
+    }
+    bellyScreens[screenID].navButtonList = {
+      ...bellyScreens[screenID].navButtonList,
+      backButton: {
+        isShown: document.getElementById(target.id).checked ? 1 : 0,
+        name: 'back',
+      },
+    };
+  }
+
+  if (target.name == 'faqButton') {
+    if (!bellyScreens[screenID].navButtonList) {
+      bellyScreens[screenID].navButtonList = {};
+    }
+    bellyScreens[screenID].navButtonList = {
+      ...bellyScreens[screenID].navButtonList,
+      faqButton: {
+        isShown: document.getElementById(target.id).checked ? 1 : 0,
+        content: '',
+      },
+    };
+  }
+
+  if (target.name == 'faqButtonContent') {
+    if (!bellyScreens[screenID].navButtonList) {
+      bellyScreens[screenID].navButtonList = {};
+    }
+    bellyScreens[screenID].navButtonList = {
+      ...bellyScreens[screenID].navButtonList,
+      faqButton: {
+        isShown: document.getElementById('faqButton').checked ? 1 : 0,
+        content: target.value,
+      },
+    };
+  }
+
   var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
   var dbRef = firebase.database().ref(dir);
   var updates = { bellyScreens: bellyScreens };
@@ -855,7 +910,10 @@ function removeScreen(index) {
   console.log('upding', bellyScreens.length);
   var dbRef = firebase.database().ref(dir);
   dbRef.update({ bellyScreens: bellyScreens });
-  changeSelectedBellyScreen(undefined, selectedBellyScreen > 0 ? selectedBellyScreen - 1 : 0);
+  changeSelectedBellyScreen(
+    undefined,
+    selectedBellyScreen > 0 ? selectedBellyScreen - 1 : 0
+  );
 }
 
 function addScreen() {
