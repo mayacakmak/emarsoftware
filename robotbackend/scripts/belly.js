@@ -157,7 +157,8 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
          ` +
           Belly.currentScreen +
           `
-          )">Go Back</button>
+          )"><img src='https://firebasestorage.googleapis.com/v0/b/emar-database.appspot.com/o/images%2Fnoun_back_2342730.png?alt=media&token=1f7d46d8-3efb-4835-b204-fb54f677ff64'
+          style='width: 20px; height: 20px;'/></button>
         `;
       }
       if (
@@ -170,7 +171,8 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
          ` +
           Belly.currentScreen +
           `
-          )">Help</button>
+          )"><img src='https://firebasestorage.googleapis.com/v0/b/emar-database.appspot.com/o/images%2Fnoun_Question_727762.png?alt=media&token=f511b8c6-347b-4f72-bd4e-03f6098e7dc0'
+          style='width: 20px; height: 20px;'/></button>
         `;
       }
       if (
@@ -183,7 +185,8 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
          ` +
           Belly.currentScreen +
           `
-          )">Exit</button>
+          )"><img src='https://firebasestorage.googleapis.com/v0/b/emar-database.appspot.com/o/images%2Fnoun_Power_3595741.png?alt=media&token=dad6aa73-1db3-4168-be23-6cbf7a3bbfed'
+          style='width: 20px; height: 20px;'/></button>
         `;
       }
       bellyHTML += `</div>`;
