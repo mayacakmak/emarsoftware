@@ -159,6 +159,25 @@ function Robot(robotId, apiDiv) {
       Robot.tactile = inputData.tactile;
   }
   
+  Robot.logData = async function(sliderValue, activity, location, scale) {
+      var currTime = Date.now();
+      var currDate = new Date().toDateString();
+      var dir =
+        'study_users/' +
+        firebase.auth().currentUser.displayName +
+        '/data/' +
+        activity +
+        '/' +
+        currDate; 
+      var dbRef = firebase.database().ref(dir);
+      dbRef.push().set({
+        time: currTime,
+        value: sliderValue,
+        location,
+        scale
+      });
+    }
+  
   this.getSliderValue = function() {
     var sliderValue = null;
     if (Robot.bellyScreens!=null && Robot.currentScreen>=0 
@@ -333,5 +352,10 @@ function Robot(robotId, apiDiv) {
   this.sleep = async function(milliseconds) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   }
+  
+  this.logData = async function (sliderValue, activity, location, scale) {
+    Robot.logData(sliderValue, activity, location, scale);
+  }
+  
   // TODO: Add other actions
 }
