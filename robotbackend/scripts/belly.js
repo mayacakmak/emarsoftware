@@ -283,7 +283,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           *********/
     if (screen.slider.isShown) {
       var sliderMin = screen.slider.min;
-      var sliderCurrent = screen.slider.current;
+//       var sliderCurrent = screen.slider.current;
+      // Start slider at middle
+      var sliderCurrent = (screen.slider.max + screen.slider.min) / 2;
       var sliderMax = screen.slider.max;
       bellyHTML += "<div class='screen-element mt-4'  style='z-index: 2'>";
       bellyHTML +=
