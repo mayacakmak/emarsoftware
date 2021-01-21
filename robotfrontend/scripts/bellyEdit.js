@@ -705,6 +705,8 @@ function renderBellyScreenList(snapshot) {
         "><span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span></div>";
     }
     bellyHTML += '</div>';
+    bellyHTML += '<div id="draggable-1" class="screen-draggable" draggable="true" ondragstart="onDragStart(event);">' + draggable + '</div>';
+    bellyHTML += '<div class="screen-dropzone" ondragover ="onDragOver(event) ondrop ="onDrop(event)">' + dropzone + '</div>'
     bellyCardDiv.innerHTML = bellyHTML;
     for (var i = 0; i < bellyScreens.length; i++) {
       belly.scale = 'small';
