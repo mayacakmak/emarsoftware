@@ -723,7 +723,6 @@ function onDragOver(event) {
 
 function onDragStart(event) {
   event.dataTransfer.setData("text", event.target.id);
-
   event.currentTarget.style.backgroundColor = 'yellow';
 }
 
