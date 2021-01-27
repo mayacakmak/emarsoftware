@@ -129,15 +129,14 @@ function deleteRobot(index) {
   }
 }
 
-// No write permissions for admininstrator sub-branch so removing this functionality
-// function addNewAdmin() {
-//   if (admins != null) {
-//     let nAdmins = admins.length;
-//     let newAdminIndex = Number(Object.keys(admins)[nAdmins-1]) + 1;
-//     let adminEmail = document.getElementById('adminEmail').value;
-//     let dbRef = firebase.database().ref("/administrators/");
-//     let updates = {};
-//     updates[newAdminIndex] = adminEmail;
-//     dbRef.update(updates);
-//   }
-// }
+function addNewAdmin() {
+  if (admins != null) {
+    let nAdmins = admins.length;
+    let newAdminIndex = Number(Object.keys(admins)[nAdmins-1]) + 1;
+    let adminEmail = document.getElementById('adminEmail').value;
+    let dbRef = firebase.database().ref("/administrators/");
+    let updates = {};
+    updates[newAdminIndex] = adminEmail;
+     dbRef.update(updates);
+  }
+}
