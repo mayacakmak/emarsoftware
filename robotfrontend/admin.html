@@ -34,6 +34,23 @@
     <div class="row mb-2">
       <div class="col">
         <div class="card">
+          <div class="card-header" id="newAdmin">
+            <button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseNewAdmin" aria-expanded="true" aria-controls="collapseNewAdmin">Add new admin</button>
+          </div>
+          <div class="collapse collapsed" aria-labelledby="newAdmin" id="collapseNewAdmin">
+            <div class="card-body">
+              <div class="mb-2 mb-1" id="newAdmin">New administrator's email:
+                <input class="large-text" type="text" name="adminEmail" id="adminEmail">
+                <button class="btn btn-success" onclick="addNewAdmin()">Add New Admin</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col">
+        <div class="card">
           <div class="card-header" id="headingSpeak">
             <button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#collapseNewRobot" aria-expanded="true" aria-controls="collapseNewRobot">Create new robot</button>
           </div>
