@@ -704,9 +704,9 @@ function renderBellyScreenList(snapshot) {
         ");'" +
         "><span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span></div>";
     }
-    bellyHTML += '<div class="screen-draggable" draggable="true" ondragstart="onDragStart(event);"></div>';
-    bellyHTML += '<div class="screen-dropzone" ondragover ="onDragOver(event) ondrop ="onDrop(event)"></div>';
-    bellyHTML += '</div>';
+    bellyHTML += "<div class='screen-draggable' draggable='true' ondragstart='onDragStart(event)'></div>";
+    bellyHTML += "<div class='screen-dropzone' ondragover =onDragOver(event)'' ondrop ='onDrop(event)'></div>";
+    bellyHTML += "</div>";
     bellyCardDiv.innerHTML = bellyHTML;
     for (var i = 0; i < bellyScreens.length; i++) {
       belly.scale = 'small';
