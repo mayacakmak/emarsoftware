@@ -704,8 +704,6 @@ function renderBellyScreenList(snapshot) {
         ");'" +
         "><span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span></div>";
     }
-    bellyHTML += "<div class='screen-draggable' draggable='true' ondragstart='onDragStart(event)'></div>";
-    bellyHTML += "<div class='screen-dropzone' ondragover =onDragOver(event)'' ondrop ='onDrop(event)'></div>";
     bellyHTML += "</div>";
     bellyCardDiv.innerHTML = bellyHTML;
     for (var i = 0; i < bellyScreens.length; i++) {
@@ -715,20 +713,6 @@ function renderBellyScreenList(snapshot) {
     }
   }
   Belly.updateRobotBelly(snapshot);
-}
-
-function onDragOver(event) {
-  event.preventDefault();
-}
-
-function onDragStart(event) {
-  event.dataTransfer.setData("text", event.target.id);
-  event.currentTarget.style.backgroundColor = 'yellow';
-}
-
-function onDrop(ev) {
-  var data = ev.dataTransfer.getData("text");
-  ev.target.appendChild(document.getElementById(data));
 }
 
 function addRemoveScreenElements(target, screenID) {
