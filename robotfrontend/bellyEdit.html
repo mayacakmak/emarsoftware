@@ -49,10 +49,6 @@
           </div>
           <div class="card-body h-scrollable green-scroll" style="height: 60vh;">
             <div class="top-aligned" id="bellyCard"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
-              <div class="drag-drop" id="bellyCard" ondrop="onDrop(event);" ondragover="onDragOver(event);">
-                <div class="drag-start" id="bellyCard" draggable="true" ondragstart="onDragStart(event);">
-                </div>
-              </div>
           </div>
         </div>
         <div class="p-1">
@@ -67,19 +63,7 @@
   <script src="https://mayacakmak.github.io/emarsoftware/robotbackend/scripts/config.js"></script>
   <script src="../databasejs/scripts/database.js"></script>
   <script type="text/javascript">
-  function onDragOver(event) {
-    event.preventDefault();
-  }
-  
-  function onDragStart(event) {
-    event.dataTransfer.setData("text", event.target.id);
-    event.currentTarget.style.backgroundColor = 'yellow';
-  }
-  
-  function onDrop(event) {
-    var data = event.dataTransfer.getData("text");
-    event.target.appendChild(document.getElementById(data));
-  }</script>
+  </script>
   <!-- <script src="scripts/facedata.js"></script> -->
   <script type="text/javascript" src="scripts/bellyEdit.js"></script>
   <!-- <script type="text/javascript" src="scripts/setup.js"></script> -->
