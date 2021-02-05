@@ -693,7 +693,7 @@ function renderBellyScreenList(snapshot) {
           ? 'border-style: solid; border-width: 5px; border-color: green;'
           : 'border-style: solid; border-width: 1px; border-color: black;';
       bellyHTML +=
-        "<div class='screen-box-inner-list overflow-auto' style='position: relative; margin-top: 1.5rem; margin-bottom: 1.5rem; background-color: white; " +
+        "<div draggable='true' ondrop='onDrop(event);' ondragover='onDragOver(event);' class='screen-box-inner-list overflow-auto' style='position: relative; margin-top: 1.5rem; margin-bottom: 1.5rem; background-color: white; " +
         selectedStyle +
         "' id='" +
         'screenDiv' +
@@ -704,7 +704,7 @@ function renderBellyScreenList(snapshot) {
         ");'" +
         "><span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span></div>";
     }
-    bellyHTML += '</div>';
+    bellyHTML += "</div>";
     bellyCardDiv.innerHTML = bellyHTML;
     for (var i = 0; i < bellyScreens.length; i++) {
       belly.scale = 'small';
@@ -931,4 +931,41 @@ function addScreen() {
   bellyScreens.push(blankScreen);
   var dbRef = firebase.database().ref(dir);
   dbRef.update({ bellyScreens: bellyScreens });
+}
+
+let dragTarget = null;
+let dropTarget = null;
+
+function onDragOver(event) {
+  if (dragTarget === null) {
+    // Store object being dragged
+    console.log("onDragOver", event.target);
+    dragTarget = event.target;
+    }
+  event.preventDefault();
+}
+
+function onDrop(event) {
+  if (dropTarget === null) {
+    // Store drop location
+    console.log("onDrop", event.target);
+    dropTarget = event.target;
+
+    // Switch position of drag and drop in array
+    dragId = dragTarget.id.split('screenDiv')[1];
+    dropId = dropTarget.id.split('screenDiv')[1];
+    if (dragId !== dropId) {
+      console.log("Switch ", dragId, "and", dropId);
+      let temp = bellyScreens[dragId];
+      bellyScreens[dragId] = bellyScreens[dropId];
+      bellyScreens[dropId] = temp; 
+      console.log(bellyScreens);
+      var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+      var dbRef = firebase.database().ref(dir);
+      var updates = { bellyScreens: bellyScreens };
+      dbRef.update(updates);
+    }
+    dropTarget = null;
+    dragTarget = null;
+  }
 }
