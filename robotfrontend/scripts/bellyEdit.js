@@ -124,6 +124,23 @@ function renderSelectedBellyScreen(snapshot) {
           <button class="dropdown-item" onclick='setFontFamily("instructionSmall", this)'>Times</button>
         </div>
       </div>
+      <div class="dropdown">   
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Icons 
+        </button>  
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">  
+              <a class="dropdown-item" href="#"> <i class="fa fa-at"></i> At </a>  
+              <a class="dropdown-item" href="#"> <i class="fa fa-address-book"></i> Contact </a>  
+              <a class="dropdown-item" href="#"> <i class="fa fa-asterisk"></i> Asterisk </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-book"></i> Book </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-hand-peace-o"></i> Victory </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-hand-paper-o"></i> Hand </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-up"></i> Up </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-down"></i> Down </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-left"></i> Left </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-right"></i> Right </a>  
+        </div>  
+      </div>  
       <div style="display: flex; flex-direction: row;">
       <input type='color' onchange='setScreenColor(this)' name='backgroundColor'
       value='` +
@@ -160,6 +177,17 @@ function renderSelectedBellyScreen(snapshot) {
     var checkboxesChecked = '';
     var buttonsChecked = '';
     var backgroundColor = '#ffffff';
+
+    var atChecked = ''
+    var contactChecked = ''
+    var asteriskChecked = ''
+    var bookChecked = ''
+    var victoryChecked = ''
+    var handChecked = ''
+    var upChecked = ''
+    var downChecked = ''
+    var leftChecked = ''
+    var rightChecked = ''
 
     if (screen.instructionLarge.isShown) instructionLargeChecked = 'checked';
     if (screen.instructionSmall.isShown) instructionSmallChecked = 'checked';
