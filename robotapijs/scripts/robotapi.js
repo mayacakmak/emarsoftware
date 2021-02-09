@@ -69,6 +69,14 @@ function Robot(robotId, apiDiv) {
                         (Robot.bellyScreens.length-1) + ", available screens are:" +
                         Robot._getScreenNames(),
                        "robot.setScreen(0);");
+      apiText += Robot._getAPICardHTML(
+        'robot.setScreenByName(screenName)',
+        "Sets the robot's belly screen to one of pre-designed screens.",
+        '<b>screenName</b> is an String. ' +
+          'Available screens are:' +
+          Robot._getScreenNames(),
+        'robot.setScreenByName("Screen-0");'
+      );
       apiText += Robot._getAPICardHTML("(sliderValue) robot.getSliderValue()",
                         "Obtains the current value of the slider on the screen.",
                        "<b>sliderValue</b> is an Integer between 0 and 100 indicating the current value of the slider.",
@@ -333,6 +341,17 @@ function Robot(robotId, apiDiv) {
       Robot._requestRobotState("currentBellyScreen", screenIndex);
     }
   }
+
+  this.setScreenByName = function (screenName) {
+    let screenIndex = Robot.bellyScreens.findIndex((screen) => screen.name === screenName);
+    console.log('Setting screen to ' + screenIndex);
+    if (screenIndex < 0 || screenIndex >= Robot.bellyScreens.length)
+      console.log('Wrong screen index.');
+    else {
+      Robot.currentScreen = screenIndex;
+      Robot._requestRobotState('currentBellyScreen', screenIndex);
+    }
+  };
   
   this.setEyes = function(value) {
     Robot._requestRobotState("currentEyes", value);
