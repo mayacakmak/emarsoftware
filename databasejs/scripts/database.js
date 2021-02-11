@@ -26,6 +26,7 @@ function Database(config, readyCallback) {
   */
   Database.initialize = async function() {
       Database.app = await firebase.initializeApp(Database.config);
+      console.log(Database.app);
       firebase.auth().onAuthStateChanged(Database.handleAuthStateChange);
       // Wait a little bit to see is we are already logged in
       // then attempt an anonymous sign in
@@ -40,9 +41,9 @@ function Database(config, readyCallback) {
   * initializing the database.
   */
   Database.nLibrariesLoaded = 0;
-  Database.libraryLoadCallbak = function(){
+  Database.libraryLoadCallback = function(){
     Database.nLibrariesLoaded++;
-    if (Database.nLibrariesLoaded == 3) {
+    if (Database.nLibrariesLoaded == 4) {
       Database.initialize();
     }
   }
@@ -51,8 +52,8 @@ function Database(config, readyCallback) {
       var js = document.createElement("script");
       js.type = "text/javascript";
       js.src = path;
-      js.onreadystatechange = Database.libraryLoadCallbak;
-      js.onload = Database.libraryLoadCallbak;
+      js.onreadystatechange = Database.libraryLoadCallback;
+      js.onload = Database.libraryLoadCallback;
       document.head.appendChild(js);
   }
 
