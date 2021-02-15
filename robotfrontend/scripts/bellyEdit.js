@@ -357,7 +357,7 @@ function renderSelectedBellyScreen(snapshot) {
               " width='20' height='20'/>";
           }
           bellyHTML += '</button>';
-
+          
           bellyHTML += '</div>';
           bellyHTML +=
             "<div class='delete-btn-button'><button name='buttonDelete'  onclick='changeScreenElement(this, " +
@@ -371,6 +371,7 @@ function renderSelectedBellyScreen(snapshot) {
       }
       bellyHTML += '</div>';
       bellyHTML += "<div class='screen-element justify-content-end mt-2'>";
+      bellyHTML += '<progress id="file" value="40" max="100"></progress>';
       bellyHTML +=
         "<div class='display-flex justify-content-space-between'><input type='text' class='right-aligned mr-1' id='buttonAdd" +
         i +
