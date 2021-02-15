@@ -357,7 +357,6 @@ function renderSelectedBellyScreen(snapshot) {
               " width='20' height='20'/>";
           }
           bellyHTML += '</button>';
-          
           bellyHTML += '</div>';
           bellyHTML +=
             "<div class='delete-btn-button'><button name='buttonDelete'  onclick='changeScreenElement(this, " +
