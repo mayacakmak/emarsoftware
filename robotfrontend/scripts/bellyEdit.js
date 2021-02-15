@@ -59,8 +59,9 @@ function renderSelectedBellyScreen(snapshot) {
     var bellyDiv = document.getElementById('bellyEdit');
     var screen = bellyScreens[selectedBellyScreen];
     var i = selectedBellyScreen;
+    progress = (i * 100)/bellyScreens.length;
     var exitButtonChecked,
-      faqButtonChecked,
+      faqButtonChecked, progressBarChecked,
       backButtonChecked, faqButtonContent = '';
     if (screen.navButtonList) {
       exitButtonChecked =
@@ -68,6 +69,11 @@ function renderSelectedBellyScreen(snapshot) {
         screen.navButtonList.exitButton.isShown
           ? 'checked'
           : '';
+      progressBarChecked =
+          screen.navButtonList.progressBar !== undefined &&
+          screen.navButtonList.progressBar.isShown
+            ? 'checked'
+            : '';
       faqButtonChecked =
         screen.navButtonList.faqButton !== undefined &&
         screen.navButtonList.faqButton.isShown
@@ -124,6 +130,23 @@ function renderSelectedBellyScreen(snapshot) {
           <button class="dropdown-item" onclick='setFontFamily("instructionSmall", this)'>Times</button>
         </div>
       </div>
+      <div class="dropdown">   
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Icons 
+        </button>  
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">  
+              <a class="dropdown-item" href="#"> <i class="fa fa-at"></i> At </a>  
+              <a class="dropdown-item" href="#"> <i class="fa fa-address-book"></i> Contact </a>  
+              <a class="dropdown-item" href="#"> <i class="fa fa-asterisk"></i> Asterisk </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-book"></i> Book </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-hand-peace-o"></i> Victory </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-hand-paper-o"></i> Hand </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-up"></i> Up </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-down"></i> Down </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-left"></i> Left </a>  
+              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-right"></i> Right </a>  
+        </div>  
+      </div>  
       <div style="display: flex; flex-direction: row;">
       <input type='color' onchange='setScreenColor(this)' name='backgroundColor'
       value='` +
@@ -142,6 +165,11 @@ function renderSelectedBellyScreen(snapshot) {
       `)' ` +
       backButtonChecked +
       `> <div class='mr-2'>Back Button</div>
+          <input type='checkbox' name='progressBar' id='progressBar' onchange='changeScreenElement(this, ` +
+      selectedBellyScreen +
+      `)' ` +
+      progressBarChecked +
+      `> <div class='mr-2'>Progress Bar</div>
           <input type='checkbox' name='faqButton' id='faqButton' onchange='changeScreenElement(this, ` +
       selectedBellyScreen +
       `)' ` +
@@ -375,6 +403,8 @@ function setNavButton(target) {
     case 'exitButton':
       return;
     case 'backButton':
+      return;
+    case 'progressBar':
       return;
     case 'faqButton':
       return;
@@ -693,7 +723,7 @@ function renderBellyScreenList(snapshot) {
           ? 'border-style: solid; border-width: 5px; border-color: green;'
           : 'border-style: solid; border-width: 1px; border-color: black;';
       bellyHTML +=
-        "<div draggable='true' ondrop='onDrop(event);' ondragover='onDragOver(event);' class='screen-box-inner-list overflow-auto' style='position: relative; margin-top: 1.5rem; margin-bottom: 1.5rem; background-color: white; " +
+        "<div draggable='true' ondrop='onDrop(event);' ondragover='onDragOver(event);' class='screen-box-inner-list overflow-auto' style='position: relative; margin-top: 1rem; margin-bottom: 1rem; background-color: white; " +
         selectedStyle +
         "' id='" +
         'screenDiv' +
@@ -866,6 +896,19 @@ function changeScreenElement(target, screenID, itemID) {
       backButton: {
         isShown: document.getElementById(target.id).checked ? 1 : 0,
         name: 'back',
+      },
+    };
+  }
+
+  if (target.name == 'progressBar') {
+    if (!bellyScreens[screenID].navButtonList) {
+      bellyScreens[screenID].navButtonList = {};
+    }
+    bellyScreens[screenID].navButtonList = {
+      ...bellyScreens[screenID].navButtonList,
+      progressBar: {
+        isShown: document.getElementById(target.id).checked ? 1 : 0,
+        name: 'progress',
       },
     };
   }

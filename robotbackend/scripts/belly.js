@@ -1,3 +1,5 @@
+var progress = 0;
+
 /*
  * Belly class for creating the user interface on the robot's belly tablet
  */
@@ -11,12 +13,14 @@ function Belly(robotId, scale, resizeAxis) {
   Belly.updateRobotBelly = function (snapshot) {
     var robotState = snapshot.val();
     var bellyHTML = '';
+    var len = Belly.bellyScreens.length;
 
     let newScreenIndex = robotState.currentBellyScreen;
 
     // Make sure it is a valid screen index
     if (newScreenIndex != undefined && Belly.bellyScreens != null) {
       newScreenIndex = Number(robotState.currentBellyScreen);
+      progress = (newScreenIndex * 100) / len;
       if (newScreenIndex >= 0 && newScreenIndex < Belly.bellyScreens.length) {
         bellyHTML += renderBellyScreen(newScreenIndex, this.Belly);
       } else {
@@ -39,6 +43,16 @@ function Belly(robotId, scale, resizeAxis) {
       document.getElementById('modalBody').innerHTML =
         Belly.bellyScreens[screenID].navButtonList.faqButton.content;
       $('#faqModal').modal('show');
+    }
+  };
+
+  Belly.progressBarClicked = function (screenID) {
+    if (
+      Belly.bellyScreens[screenID].navButtonList &&
+      Belly.bellyScreens[screenID].navButtonList.progressBar &&
+      Belly.bellyScreens[screenID].navButtonList.progressBar.content
+    ) {
+      window.location.href = 'index.html'; 
     }
   };
 
@@ -146,7 +160,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       //     </button>
       //   </div>
       // `;
-      bellyHTML += `<div style="position: absolute; top: 0; right: 0; padding-right: 10px; padding-top: 10px;">`;
+      bellyHTML += `<div style="position: absolute; top: 0; right: 0; padding-right: 6px; padding-top: 6px;">`;
       if (
         screen.navButtonList.backButton &&
         screen.navButtonList.backButton.isShown
@@ -159,6 +173,19 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           `
           )"><img src='https://firebasestorage.googleapis.com/v0/b/emar-database.appspot.com/o/images%2Fnoun_back_2342730.png?alt=media&token=1f7d46d8-3efb-4835-b204-fb54f677ff64'
           style='width: 20px; height: 20px;'/></button>
+        `;
+      }
+      if (
+        screen.navButtonList.progressBar &&
+        screen.navButtonList.progressBar.isShown
+      ) {
+        bellyHTML +=
+          `
+        <button type="button" class="btn btn-info" onclick="Belly.progressBarClicked(
+         ` +
+          Belly.currentScreen +
+          `
+          )"><progress id="file" value=` + progress + ` max="100"></progress></button>
         `;
       }
       if (
