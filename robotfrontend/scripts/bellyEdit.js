@@ -59,7 +59,7 @@ function renderSelectedBellyScreen(snapshot) {
     var bellyDiv = document.getElementById('bellyEdit');
     var screen = bellyScreens[selectedBellyScreen];
     var i = selectedBellyScreen;
-    progress = (i * 100)/bellyScreens.length;
+    progress = ((i + 1) * 100)/bellyScreens.length;
     var exitButtonChecked,
       faqButtonChecked, progressBarChecked,
       backButtonChecked, faqButtonContent = '';
