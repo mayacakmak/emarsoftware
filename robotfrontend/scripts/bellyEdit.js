@@ -188,14 +188,36 @@ function renderSelectedBellyScreen(snapshot) {
     var checkboxesChecked = '';
     var buttonsChecked = '';
     var backgroundColor = '#ffffff';
-
+/**** 
+    var atChecked = '';
+    var contactChecked = '';
+    var asteriskChecked = '';
+    var bookChecked = '';
+    var victoryChecked = '';
+    var handChecked = '';
+    var upChecked = '';
+    var downChecked = '';
+    var leftChecked = '';
+    var rightChecked = '';
+****/
     if (screen.instructionLarge.isShown) instructionLargeChecked = 'checked';
     if (screen.instructionSmall.isShown) instructionSmallChecked = 'checked';
     if (screen.slider.isShown) sliderChecked = 'checked';
     if (screen.checkboxes.isShown) checkboxesChecked = 'checked';
     if (screen.buttons.isShown) buttonsChecked = 'checked';
     if (screen.backgroundColor) backgroundColor = screen.backgroundColor;
-
+/***** 
+    if (screen.at.isShown) atChecked = 'checked';
+    if (screen.contact.isShown) contactChecked = 'checked';
+    if (screen.asterisk.isShown) asteriskChecked = 'checked';
+    if (screen.book.isShown) bookChecked = 'checked';
+    if (screen.victory.isShown) victoryChecked = 'checked';
+    if (screen.hand.isShown) handChecked = 'checked';
+    if (screen.up.isShown) upChecked = 'checked';
+    if (screen.down.isShown) downChecked = 'checked';
+    if (screen.left.isShown) leftChecked = 'checked';
+    if (screen.right.isShown) rightChecked = 'checked';
+****/
     bellyHTML +=
       "<div class='screen-box-outer mb-4' style='margin-bottom: 0rem !important; background-color: " +
       backgroundColor +
