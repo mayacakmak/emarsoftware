@@ -11,8 +11,9 @@ motor_values = [-1, -1]
 # Robot from database to listen to
 this_robot_id = 0
 # Firebase database parameters
+api_key = ""
 URL = "https://emar-database.firebaseio.com/"
-AUTH_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAisnI9BEW_Uc0-z1ad25nB6eNXEEQ_xQQ";
+AUTH_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + api_key;
 headers = {'Content-type': 'application/json'}
 auth_req_params = {"returnSecureToken":"true"}
 
