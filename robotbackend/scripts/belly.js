@@ -87,6 +87,56 @@ function Belly(robotId, scale, resizeAxis) {
       Belly.bellyScreens[screenID].slider.lastChanged = date.getTime();
     }
 
+    if (target.name == 'at') {
+      Belly.bellyScreens[screenID].at.current = target.value;
+      Belly.bellyScreens[screenID].at.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'contact') {
+      Belly.bellyScreens[screenID].contact.current = target.value;
+      Belly.bellyScreens[screenID].contact.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'asterisk') {
+      Belly.bellyScreens[screenID].asterisk.current = target.value;
+      Belly.bellyScreens[screenID].asterisk.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'book') {
+      Belly.bellyScreens[screenID].book.current = target.value;
+      Belly.bellyScreens[screenID].book.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'victory') {
+      Belly.bellyScreens[screenID].victory.current = target.value;
+      Belly.bellyScreens[screenID].victory.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'hand') {
+      Belly.bellyScreens[screenID].hand.current = target.value;
+      Belly.bellyScreens[screenID].hand.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'up') {
+      Belly.bellyScreens[screenID].up.current = target.value;
+      Belly.bellyScreens[screenID].up.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'down') {
+      Belly.bellyScreens[screenID].down.current = target.value;
+      Belly.bellyScreens[screenID].down.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'left') {
+      Belly.bellyScreens[screenID].left.current = target.value;
+      Belly.bellyScreens[screenID].left.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'right') {
+      Belly.bellyScreens[screenID].right.current = target.value;
+      Belly.bellyScreens[screenID].right.lastChanged = date.getTime();
+    }
+
     if (target.name == 'checkbox') {
       Belly.bellyScreens[screenID].checkboxes.list[itemID].value =
         target.checked;
@@ -330,6 +380,107 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       bellyHTML += "<div class='max-value screen-item'>" + sliderMax + '</div>';
       bellyHTML += '</div>';
     }
+
+    /*********
+     at
+    *********/
+    if (screen.at.isShown) {
+      var atCurrent = screen.at.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + atCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     contact
+    *********/
+   if (screen.contact.isShown) {
+      var contactCurrent = screen.contact.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + contactCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     asterisk
+    *********/
+   if (screen.asterisk.isShown) {
+      var asteriskCurrent = screen.asterisk.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + asteriskCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     book
+    *********/
+   if (screen.book.isShown) {
+      var bookCurrent = screen.book.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + bookCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     victory
+    *********/
+   if (screen.victory.isShown) {
+    var victoryCurrent = screen.victory.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + victoryCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     hand
+    *********/
+   if (screen.hand.isShown) {
+    var handCurrent = screen.hand.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + handCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     up
+    *********/
+   if (screen.up.isShown) {
+    var upCurrent = screen.up.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + upCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     down
+    *********/
+   if (screen.down.isShown) {
+    var downCurrent = screen.down.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + downCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+  /*********
+     left
+    *********/
+   if (screen.left.isShown) {
+    var leftCurrent = screen.left.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + leftCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     right
+    *********/
+   if (screen.right.isShown) {
+    var rightCurrent = screen.right.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + rightCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
 
     /*********
            Checkboxes

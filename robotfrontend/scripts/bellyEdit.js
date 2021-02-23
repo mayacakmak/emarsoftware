@@ -188,7 +188,7 @@ function renderSelectedBellyScreen(snapshot) {
     var checkboxesChecked = '';
     var buttonsChecked = '';
     var backgroundColor = '#ffffff';
-/**** 
+
     var atChecked = '';
     var contactChecked = '';
     var asteriskChecked = '';
@@ -199,14 +199,14 @@ function renderSelectedBellyScreen(snapshot) {
     var downChecked = '';
     var leftChecked = '';
     var rightChecked = '';
-****/
+
     if (screen.instructionLarge.isShown) instructionLargeChecked = 'checked';
     if (screen.instructionSmall.isShown) instructionSmallChecked = 'checked';
     if (screen.slider.isShown) sliderChecked = 'checked';
     if (screen.checkboxes.isShown) checkboxesChecked = 'checked';
     if (screen.buttons.isShown) buttonsChecked = 'checked';
     if (screen.backgroundColor) backgroundColor = screen.backgroundColor;
-/***** 
+
     if (screen.at.isShown) atChecked = 'checked';
     if (screen.contact.isShown) contactChecked = 'checked';
     if (screen.asterisk.isShown) asteriskChecked = 'checked';
@@ -217,7 +217,7 @@ function renderSelectedBellyScreen(snapshot) {
     if (screen.down.isShown) downChecked = 'checked';
     if (screen.left.isShown) leftChecked = 'checked';
     if (screen.right.isShown) rightChecked = 'checked';
-****/
+
     bellyHTML +=
       "<div class='screen-box-outer mb-4' style='margin-bottom: 0rem !important; background-color: " +
       backgroundColor +
@@ -307,6 +307,116 @@ function renderSelectedBellyScreen(snapshot) {
           ")' class='btn btn-secondary btn-circle-sm'>X</button></div>";
         bellyHTML += '</label>';
       });
+      bellyHTML += '</div>';
+    }
+
+    if (screen.at.isShown) {
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML +=
+        "<div class='at-value'> <input class='at-val' type='text' class='' name='atVal' onhange='changeScreenElement(this, " +
+        i +
+        ")' value='" +
+        screen.at.current +
+        "'></div>";
+      bellyHTML += '</div>';
+    }
+
+    if (screen.contact.isShown) {
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML +=
+        "<div class='contact-value'> <input class='contact-val' type='text' class='' name='contactVal' onhange='changeScreenElement(this, " +
+        i +
+        ")' value='" +
+        screen.contact.current +
+        "'></div>";
+      bellyHTML += '</div>';
+    }
+
+    if (screen.asterisk.isShown) {
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML +=
+        "<div class='asterisk-value'> <input class='asterisk-val' type='text' class='' name='asteriskVal' onhange='changeScreenElement(this, " +
+        i +
+        ")' value='" +
+        screen.asterisk.current +
+        "'></div>";
+      bellyHTML += '</div>';
+    }
+
+    if (screen.book.isShown) {
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML +=
+        "<div class='book-value'> <input class='book-val' type='text' class='' name='bookVal' onhange='changeScreenElement(this, " +
+        i +
+        ")' value='" +
+        screen.book.current +
+        "'></div>";
+      bellyHTML += '</div>';
+    }
+
+    if (screen.victory.isShown) {
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML +=
+        "<div class='victory-value'> <input class='victory-val' type='text' class='' name='victoryVal' onhange='changeScreenElement(this, " +
+        i +
+        ")' value='" +
+        screen.victory.current +
+        "'></div>";
+      bellyHTML += '</div>';
+    }
+
+    if (screen.hand.isShown) {
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML +=
+        "<div class='hand-value'> <input class='hand-val' type='text' class='' name='handVal' onhange='changeScreenElement(this, " +
+        i +
+        ")' value='" +
+        screen.hand.current +
+        "'></div>";
+      bellyHTML += '</div>';
+    }
+
+    if (screen.up.isShown) {
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML +=
+        "<div class='up-value'> <input class='up-val' type='text' class='' name='upVal' onhange='changeScreenElement(this, " +
+        i +
+        ")' value='" +
+        screen.up.current +
+        "'></div>";
+      bellyHTML += '</div>';
+    }
+
+    if (screen.down.isShown) {
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML +=
+        "<div class='down-value'> <input class='down-val' type='text' class='' name='downVal' onhange='changeScreenElement(this, " +
+        i +
+        ")' value='" +
+        screen.down.current +
+        "'></div>";
+      bellyHTML += '</div>';
+    }
+
+    if (screen.left.isShown) {
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML +=
+        "<div class='left-value'> <input class='left-val' type='text' class='' name='leftVal' onhange='changeScreenElement(this, " +
+        i +
+        ")' value='" +
+        screen.left.current +
+        "'></div>";
+      bellyHTML += '</div>';
+    }
+
+    if (screen.right.isShown) {
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML +=
+        "<div class='right-value'> <input class='right-val' type='text' class='' name='rightVal' onhange='changeScreenElement(this, " +
+        i +
+        ")' value='" +
+        screen.right.current +
+        "'></div>";
       bellyHTML += '</div>';
     }
 
@@ -474,6 +584,529 @@ function setFontFamily(name, element) {
   dbRef.update(updates);
 }
 
+function setIcon(element) {
+  switch (element.innerHTML) {
+    case 'at':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'at',
+            checked: true,
+          },
+          {
+            name: 'contact',
+            checked: true,
+          },
+          {
+            name: 'asterisk',
+            checked: false,
+          },
+          {
+            name: 'book',
+            checked: false,
+          },
+          {
+            name: 'victory',
+            checked: true,
+          },
+          {
+            name: 'hand',
+            checked: true,
+          },
+          {
+            name: 'up',
+            checked: false,
+          },
+          {
+            name: 'down',
+            checked: false,
+          },
+          {
+            name: 'left',
+            checked: false,
+          },
+          {
+            name: 'right',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+          case 'at':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'at',
+            checked: true,
+          },
+          {
+            name: 'contact',
+            checked: true,
+          },
+          {
+            name: 'asterisk',
+            checked: false,
+          },
+          {
+            name: 'book',
+            checked: false,
+          },
+          {
+            name: 'victory',
+            checked: true,
+          },
+          {
+            name: 'hand',
+            checked: true,
+          },
+          {
+            name: 'up',
+            checked: false,
+          },
+          {
+            name: 'down',
+            checked: false,
+          },
+          {
+            name: 'left',
+            checked: false,
+          },
+          {
+            name: 'right',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+    case 'contact':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'at',
+            checked: false,
+          },
+          {
+            name: 'contact',
+            checked: true,
+          },
+          {
+            name: 'asterisk',
+            checked: false,
+          },
+          {
+            name: 'book',
+            checked: false,
+          },
+          {
+            name: 'victory',
+            checked: true,
+          },
+          {
+            name: 'hand',
+            checked: true,
+          },
+          {
+            name: 'up',
+            checked: false,
+          },
+          {
+            name: 'down',
+            checked: false,
+          },
+          {
+            name: 'left',
+            checked: false,
+          },
+          {
+            name: 'right',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+    case 'asterisk':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'at',
+            checked: false,
+          },
+          {
+            name: 'contact',
+            checked: false,
+          },
+          {
+            name: 'asterisk',
+            checked: true,
+          },
+          {
+            name: 'book',
+            checked: false,
+          },
+          {
+            name: 'victory',
+            checked: true,
+          },
+          {
+            name: 'hand',
+            checked: true,
+          },
+          {
+            name: 'up',
+            checked: false,
+          },
+          {
+            name: 'down',
+            checked: false,
+          },
+          {
+            name: 'left',
+            checked: false,
+          },
+          {
+            name: 'right',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+    case 'book':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'at',
+            checked: false,
+          },
+          {
+            name: 'contact',
+            checked: false,
+          },
+          {
+            name: 'asterisk',
+            checked: false,
+          },
+          {
+            name: 'book',
+            checked: true,
+          },
+          {
+            name: 'victory',
+            checked: true,
+          },
+          {
+            name: 'hand',
+            checked: true,
+          },
+          {
+            name: 'up',
+            checked: false,
+          },
+          {
+            name: 'down',
+            checked: false,
+          },
+          {
+            name: 'left',
+            checked: false,
+          },
+          {
+            name: 'right',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+    case 'victory':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'at',
+            checked: false,
+          },
+          {
+            name: 'contact',
+            checked: false,
+          },
+          {
+            name: 'asterisk',
+            checked: false,
+          },
+          {
+            name: 'book',
+            checked: false,
+          },
+          {
+            name: 'victory',
+            checked: true,
+          },
+          {
+            name: 'hand',
+            checked: true,
+          },
+          {
+            name: 'up',
+            checked: false,
+          },
+          {
+            name: 'down',
+            checked: false,
+          },
+          {
+            name: 'left',
+            checked: false,
+          },
+          {
+            name: 'right',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+    case 'hand':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'at',
+            checked: false,
+          },
+          {
+            name: 'contact',
+            checked: false,
+          },
+          {
+            name: 'asterisk',
+            checked: false,
+          },
+          {
+            name: 'book',
+            checked: false,
+          },
+          {
+            name: 'victory',
+            checked: false,
+          },
+          {
+            name: 'hand',
+            checked: true,
+          },
+          {
+            name: 'up',
+            checked: false,
+          },
+          {
+            name: 'down',
+            checked: false,
+          },
+          {
+            name: 'left',
+            checked: false,
+          },
+          {
+            name: 'right',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+    case 'up':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'at',
+            checked: false,
+          },
+          {
+            name: 'contact',
+            checked: false,
+          },
+          {
+            name: 'asterisk',
+            checked: false,
+          },
+          {
+            name: 'book',
+            checked: false,
+          },
+          {
+            name: 'victory',
+            checked: false,
+          },
+          {
+            name: 'hand',
+            checked: false,
+          },
+          {
+            name: 'up',
+            checked: true,
+          },
+          {
+            name: 'down',
+            checked: false,
+          },
+          {
+            name: 'left',
+            checked: false,
+          },
+          {
+            name: 'right',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+case 'down':
+  addRemoveMultipleElements(
+    [
+      {
+        name: 'at',
+            checked: false,
+          },
+          {
+            name: 'contact',
+            checked: false,
+          },
+          {
+            name: 'asterisk',
+            checked: false,
+          },
+          {
+            name: 'book',
+            checked: false,
+          },
+          {
+            name: 'victory',
+            checked: true,
+          },
+          {
+            name: 'hand',
+            checked: false,
+          },
+          {
+            name: 'up',
+            checked: false,
+          },
+          {
+            name: 'down',
+            checked: true,
+          },
+          {
+            name: 'left',
+            checked: false,
+          },
+          {
+            name: 'right',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+    case 'left':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'at',
+            checked: false,
+          },
+          {
+            name: 'contact',
+            checked: false,
+          },
+          {
+            name: 'asterisk',
+            checked: false,
+          },
+          {
+            name: 'book',
+            checked: false,
+          },
+          {
+            name: 'victory',
+            checked: false,
+          },
+          {
+            name: 'hand',
+            checked: false,
+          },
+          {
+            name: 'up',
+            checked: false,
+          },
+          {
+            name: 'down',
+            checked: false,
+          },
+          {
+            name: 'left',
+            checked: true,
+          },
+          {
+            name: 'right',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+case 'right':
+  addRemoveMultipleElements(
+    [
+      {
+        name: 'at',
+            checked: false,
+          },
+          {
+            name: 'contact',
+            checked: false,
+          },
+          {
+            name: 'asterisk',
+            checked: false,
+          },
+          {
+            name: 'book',
+            checked: false,
+          },
+          {
+            name: 'victory',
+            checked: false,
+          },
+          {
+            name: 'hand',
+            checked: false,
+          },
+          {
+            name: 'up',
+            checked: false,
+          },
+          {
+            name: 'down',
+            checked: false,
+          },
+          {
+            name: 'left',
+            checked: false,
+          },
+          {
+            name: 'right',
+            checked: true,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+      default:
+      return;
+  }
+}
 function setLayout(element) {
   switch (element.innerHTML) {
     case 'Text':
@@ -808,6 +1441,26 @@ function addRemoveMultipleElements(targets, screenID) {
 
 function changeScreenElement(target, screenID, itemID) {
   if (target.name == 'name') bellyScreens[screenID].name = target.value;
+
+  if (target.name == 'at') bellyScreens[screenID].at.current = target.value;
+
+  if (target.name == 'contact') bellyScreens[screenID].conatct.current = target.value;
+
+  if (target.name == 'asterisk') bellyScreens[screenID].asterisk.current = target.value;
+
+  if (target.name == 'book') bellyScreens[screenID].book.current = target.value;
+
+  if (target.name == 'victory') bellyScreens[screenID].victory.current = target.value;
+
+  if (target.name == 'hand') bellyScreens[screenID].hand.current = target.value;
+
+  if (target.name == 'up') bellyScreens[screenID].up.current = target.value;
+
+  if (target.name == 'down') bellyScreens[screenID].down.current = target.value;
+
+  if (target.name == 'left') bellyScreens[screenID].left.current = target.value;
+
+  if (target.name == 'right') bellyScreens[screenID].right.current = target.value;
 
   if (target.name == 'instructionLarge')
     bellyScreens[screenID].instructionLarge.text = target.value;
