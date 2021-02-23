@@ -8,29 +8,34 @@ var robotAPI = null;
 var customAPI = null;
 
 function initializeControl() {
-  var robotParam = Config.getURLParameter("robot");
-  if (robotParam != null)
-    currentRobot = Number(robotParam);
-  console.log("currentRobot: " + currentRobot);
+  var robotParam = Config.getURLParameter('robot');
+  if (robotParam != null) currentRobot = Number(robotParam);
+  console.log('currentRobot: ' + currentRobot);
 
   robot = new Robot(currentRobot);
   Robot.initialize();
   face = new Face();
-  belly = new Belly(currentRobot, "small");
-  
+  belly = new Belly(currentRobot, 'small');
+
   /* Register all database callbacks */
 
   var dbAllSoundsRef = firebase.database().ref('/robotapi/');
-  dbAllSoundsRef.on("value", updateRobotAPI);
+  dbAllSoundsRef.on('value', updateRobotAPI);
 
-  var dbRobotRef = firebase.database().ref('/robots/' + currentRobot + "/customAPI/");
-  dbRobotRef.on("value", updateCustomRobotAPI);
+  var dbRobotRef = firebase
+    .database()
+    .ref('/robots/' + currentRobot + '/customAPI/');
+  dbRobotRef.on('value', updateCustomRobotAPI);
 
-  var dbRobotRef = firebase.database().ref('/robots/' + currentRobot + "/customAPI/states/faces/");
-  dbRobotRef.on("value", updateRobotFaceList);
+  var dbRobotRef = firebase
+    .database()
+    .ref('/robots/' + currentRobot + '/customAPI/states/faces/');
+  dbRobotRef.on('value', updateRobotFaceList);
 
-  var dbRobotStateRef = firebase.database().ref('/robots/' + currentRobot + "/state/");
-  dbRobotStateRef.on("value", updateRobotState); 
+  var dbRobotStateRef = firebase
+    .database()
+    .ref('/robots/' + currentRobot + '/state/');
+  dbRobotStateRef.on('value', updateRobotState);
 }
 
 function updateRobotAPI(snapshot) {
@@ -38,9 +43,7 @@ function updateRobotAPI(snapshot) {
 }
 
 function updateRobotState(snapshot) {
-  
   if (customAPI != null && robotAPI != null) {
-    
     var robotState = snapshot.val();
 
     // FACE
@@ -50,68 +53,112 @@ function updateRobotState(snapshot) {
     var faceList = customAPI.states.faces;
 
     // EYES
-    var div = document.getElementById("faceControls");
-    div.innerHTML = "";
-    createStateChangeInterface("faceControls", "Eyes",
-                               robotAPI.states.lookat, robotAPI.states.lookat, "lookatChanged",
-                               robotState.currentEyes);
+    var div = document.getElementById('faceControls');
+    div.innerHTML = '';
+    createStateChangeInterface(
+      'faceControls',
+      'Eyes',
+      robotAPI.states.lookat,
+      robotAPI.states.lookat,
+      'lookatChanged',
+      robotState.currentEyes
+    );
+    // EYES
+    var div = document.getElementById('motorControls');
+    motor0Value = 'value=' + (robotState.motor0 ? robotState.motor0 : 0);
+    motor1Value = 'value=' + (robotState.motor1 ? robotState.motor1 : 0);
+    div.innerHTML =
+      `
+      <div class="d-flex flex-row">
+        <h3 class="pr-2">Motor 0: <h3><input class="large-text" type="number" name="speakText" id="motor1" onchange="motorInputChanged(0, this)" ` +
+      motor0Value +
+      ` >
+      </div>
+      <div class="d-flex flex-row">
+        <h3 class="pr-2">Motor 1: <h3><input class="large-text" type="number" name="speakText" id="motor2" onchange="motorInputChanged(1, this)" ` +
+      motor1Value +
+      ` >
+      </div>
+    `;
 
     // BELLY
     Belly.updateRobotBelly(snapshot);
     var screens = customAPI.inputs.bellyScreens;
     var screenNames = [];
     var screenIndexes = [];
-    for (var i=0; i<screens.length; i++) {
+    for (var i = 0; i < screens.length; i++) {
       screenNames.push(screens[i].name);
       screenIndexes.push(i);
     }
-    createStateChangeInterface("screenControls", "Screens", 
-                               screenNames, screenIndexes, "bellyScreenChanged",
-                               screenNames[robotState.currentBellyScreen]);  
+    createStateChangeInterface(
+      'screenControls',
+      'Screens',
+      screenNames,
+      screenIndexes,
+      'bellyScreenChanged',
+      screenNames[robotState.currentBellyScreen]
+    );
   }
 }
 
 function updateCustomRobotAPI(snapshot) {
   customAPI = snapshot.val();
+  console.log('customAPI', customAPI);
   Belly.bellyScreens = customAPI.inputs.bellyScreens;
   Face.faces = customAPI.states.faces;
 
   if (customAPI.actions != undefined) {
     var presetSpeakList = customAPI.actions.presetSpeak;
-    
+
     if (presetSpeakList != null) {
-      var presetDiv = document.getElementById("presetSpeak");
-      var presetHTML = "";
-      for (var i=0; i<presetSpeakList.length; i++) {
+      var presetDiv = document.getElementById('presetSpeak');
+      var presetHTML = '';
+      for (var i = 0; i < presetSpeakList.length; i++) {
         presetHTML += "<button class='btn btn-info' onclick='sayPreset(this)'>";
-        presetHTML += presetSpeakList[i] + "</button>";
+        presetHTML += presetSpeakList[i] + '</button>';
       }
       presetDiv.innerHTML = presetHTML;
-    }    
+    }
   }
 }
 
-function createStateChangeInterface(divName, stateName, options, values, changeFunctionName, currentOption) {
+function createStateChangeInterface(
+  divName,
+  stateName,
+  options,
+  values,
+  changeFunctionName,
+  currentOption
+) {
   var div = document.getElementById(divName);
 
-  var optionHTML = "<div class='btn-group btn-group-toggle flex-wrap' data-toggle='buttons'>";
-  for (var i=0; i<options.length; i++) {
+  var optionHTML =
+    "<div class='btn-group btn-group-toggle flex-wrap' data-toggle='buttons'>";
+  for (var i = 0; i < options.length; i++) {
     optionHTML += "<label class='btn btn-secondary ";
-    if (options[i] == currentOption)
-      optionHTML += "active";
-    optionHTML += "'> <input type='radio' name='" + stateName + "' autocomplete='off' id='" + values[i] + "'";
-    if (options[i] == currentOption)
-      optionHTML += "checked";
-    optionHTML += "' onchange='" + changeFunctionName +"(this)'>" + options[i] + "</label>";
+    if (options[i] == currentOption) optionHTML += 'active';
+    optionHTML +=
+      "'> <input type='radio' name='" +
+      stateName +
+      "' autocomplete='off' id='" +
+      values[i] +
+      "'";
+    if (options[i] == currentOption) optionHTML += 'checked';
+    optionHTML +=
+      "' onchange='" +
+      changeFunctionName +
+      "(this)'>" +
+      options[i] +
+      '</label>';
   }
-  optionHTML += "</div>";
+  optionHTML += '</div>';
   div.innerHTML = optionHTML;
 }
 
 function neckValueChanged(target) {
-  const panElement = document.getElementById("pan");
+  const panElement = document.getElementById('pan');
   const pan = panElement.value;
-  const tiltElement = document.getElementById("tilt");
+  const tiltElement = document.getElementById('tilt');
   const tilt = tiltElement.value;
   robot.moveNeck(pan, tilt);
 }
@@ -124,9 +171,13 @@ function bellyScreenChanged(target) {
   robot.setScreen(target.id);
 }
 
+function motorInputChanged(id, target) {
+  robot.setMotor(id, parseInt(target.value));
+}
+
 /*Callback for dynamically created button*/
 function sayPreset(target) {
-  console.log("will say:" + target.innerHTML);
+  console.log('will say:' + target.innerHTML);
   robot.speak(target.innerHTML);
 }
 
@@ -134,7 +185,10 @@ function speakPressed() {
   var speakText = document.getElementById('speakText');
   var text = speakText.value;
   var newButtonsDiv = document.getElementById('userAdded');
-  newButtonsDiv.innerHTML += "<button class='btn btn-warning' onclick='sayPreset(this)'>" + text.replace("'", "") + "</button>";
+  newButtonsDiv.innerHTML +=
+    "<button class='btn btn-warning' onclick='sayPreset(this)'>" +
+    text.replace("'", '') +
+    '</button>';
   // requestRobotAction("speak", {text:text});
   robot.speak(text);
 }
@@ -146,5 +200,5 @@ function bubblePressed() {
 }
 
 function bubbleClear() {
-  robot.setSpeechBubble("");
+  robot.setSpeechBubble('');
 }

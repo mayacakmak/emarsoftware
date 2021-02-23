@@ -352,6 +352,11 @@ function Robot(robotId, apiDiv) {
       Robot._requestRobotState('currentBellyScreen', screenIndex);
     }
   };
+
+  this.setMotor = function (motorId, value) {
+    console.log('Setting motor ' + motorId + ' to ' + value);
+    Robot._requestRobotState('motor' + motorId, value);
+  }
   
   this.setEyes = function(value) {
     Robot._requestRobotState("currentEyes", value);
