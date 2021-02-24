@@ -207,7 +207,7 @@ function renderSelectedBellyScreen(snapshot) {
     if (screen.buttons.isShown) buttonsChecked = 'checked';
     if (screen.backgroundColor) backgroundColor = screen.backgroundColor;
 
-    if (screen.at.isShown) atChecked = 'checked';
+    if (screen.at && screen.at.isShown) atChecked = 'checked';
     if (screen.contact.isShown) contactChecked = 'checked';
     if (screen.asterisk.isShown) asteriskChecked = 'checked';
     if (screen.book.isShown) bookChecked = 'checked';
