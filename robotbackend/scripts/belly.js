@@ -22,7 +22,7 @@ function Belly(robotId, scale, resizeAxis) {
       newScreenIndex = Number(robotState.currentBellyScreen);
       progress = (newScreenIndex * 100) / len;
       if (newScreenIndex >= 0 && newScreenIndex < Belly.bellyScreens.length) {
-        bellyHTML += renderBellyScreen(newScreenIndex, this.Belly);
+        bellyHTML += renderBellyScreen(newScreenIndex, Belly);
       } else {
         console.log('Screen index out of range.');
       }

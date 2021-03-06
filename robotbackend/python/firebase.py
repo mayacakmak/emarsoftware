@@ -12,8 +12,9 @@ current_led_rgb = [255,255,255]
 
 # Robot and database info
 this_robot_id = 0
+api_key = ""
 URL = "https://emar-database.firebaseio.com/"
-AUTH_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAisnI9BEW_Uc0-z1ad25nB6eNXEEQ_xQQ";
+AUTH_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + api_key;
 headers = {'Content-type': 'application/json'}
 auth_req_params = {"returnSecureToken":"true"}
 
