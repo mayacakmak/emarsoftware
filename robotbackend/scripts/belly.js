@@ -384,7 +384,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
      at
     *********/
-    if (screen.at.isShown) {
+    if (screen.at && screen.at.isShown) {
       var atCurrent = screen.at.current;
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML += "<div class='value screen-item'>" + atCurrent + '</div>';
@@ -394,7 +394,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
      contact
     *********/
-   if (screen.contact.isShown) {
+   if (screen.contact && screen.contact.isShown) {
       var contactCurrent = screen.contact.current;
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML += "<div class='value screen-item'>" + contactCurrent + '</div>';
@@ -404,7 +404,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
      asterisk
     *********/
-   if (screen.asterisk.isShown) {
+   if (screen.asterisk && screen.asterisk.isShown) {
       var asteriskCurrent = screen.asterisk.current;
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML += "<div class='value screen-item'>" + asteriskCurrent + '</div>';
@@ -414,7 +414,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
      book
     *********/
-   if (screen.book.isShown) {
+   if (screen.book && screen.book.isShown) {
       var bookCurrent = screen.book.current;
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML += "<div class='value screen-item'>" + bookCurrent + '</div>';
@@ -424,7 +424,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
      victory
     *********/
-   if (screen.victory.isShown) {
+   if (screen.victory && screen.victory.isShown) {
     var victoryCurrent = screen.victory.current;
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML += "<div class='value screen-item'>" + victoryCurrent + '</div>';
@@ -434,7 +434,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
      hand
     *********/
-   if (screen.hand.isShown) {
+   if (screen.hand && screen.hand.isShown) {
     var handCurrent = screen.hand.current;
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML += "<div class='value screen-item'>" + handCurrent + '</div>';
@@ -444,7 +444,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
      up
     *********/
-   if (screen.up.isShown) {
+   if (screen.up && screen.up.isShown) {
     var upCurrent = screen.up.current;
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML += "<div class='value screen-item'>" + upCurrent + '</div>';
@@ -454,7 +454,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
      down
     *********/
-   if (screen.down.isShown) {
+   if (screen.down && screen.down.isShown) {
     var downCurrent = screen.down.current;
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML += "<div class='value screen-item'>" + downCurrent + '</div>';
@@ -464,7 +464,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
   /*********
      left
     *********/
-   if (screen.left.isShown) {
+   if (screen.left && screen.left.isShown) {
     var leftCurrent = screen.left.current;
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML += "<div class='value screen-item'>" + leftCurrent + '</div>';
@@ -474,7 +474,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
      right
     *********/
-   if (screen.right.isShown) {
+   if (screen.right && screen.right.isShown) {
     var rightCurrent = screen.right.current;
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML += "<div class='value screen-item'>" + rightCurrent + '</div>';

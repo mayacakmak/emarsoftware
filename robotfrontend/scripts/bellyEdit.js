@@ -207,16 +207,16 @@ function renderSelectedBellyScreen(snapshot) {
     if (screen.buttons.isShown) buttonsChecked = 'checked';
     if (screen.backgroundColor) backgroundColor = screen.backgroundColor;
 
-    if (screen.at.isShown) atChecked = 'checked';
-    if (screen.contact.isShown) contactChecked = 'checked';
-    if (screen.asterisk.isShown) asteriskChecked = 'checked';
-    if (screen.book.isShown) bookChecked = 'checked';
-    if (screen.victory.isShown) victoryChecked = 'checked';
-    if (screen.hand.isShown) handChecked = 'checked';
-    if (screen.up.isShown) upChecked = 'checked';
-    if (screen.down.isShown) downChecked = 'checked';
-    if (screen.left.isShown) leftChecked = 'checked';
-    if (screen.right.isShown) rightChecked = 'checked';
+    if (screen.at && screen.at.isShown) atChecked = 'checked';
+    if (screen.contact && screen.contact.isShown) contactChecked = 'checked';
+    if (screen.asterisk && screen.asterisk.isShown) asteriskChecked = 'checked';
+    if (screen.book && screen.book.isShown) bookChecked = 'checked';
+    if (screen.victory && screen.victory.isShown) victoryChecked = 'checked';
+    if (screen.hand && screen.hand.isShown) handChecked = 'checked';
+    if (screen.up && screen.up.isShown) upChecked = 'checked';
+    if (screen.down && screen.down.isShown) downChecked = 'checked';
+    if (screen.left && screen.left.isShown) leftChecked = 'checked';
+    if (screen.right && screen.right.isShown) rightChecked = 'checked';
 
     bellyHTML +=
       "<div class='screen-box-outer mb-4' style='margin-bottom: 0rem !important; background-color: " +
@@ -310,7 +310,7 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML += '</div>';
     }
 
-    if (screen.at.isShown) {
+    if (screen.at && screen.at.isShown) {
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML +=
         "<div class='at-value'> <input class='at-val' type='text' class='' name='atVal' onhange='changeScreenElement(this, " +
@@ -321,7 +321,7 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML += '</div>';
     }
 
-    if (screen.contact.isShown) {
+    if (screen.contact && screen.contact.isShown) {
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML +=
         "<div class='contact-value'> <input class='contact-val' type='text' class='' name='contactVal' onhange='changeScreenElement(this, " +
@@ -332,7 +332,7 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML += '</div>';
     }
 
-    if (screen.asterisk.isShown) {
+    if (screen.asterisk && screen.asterisk.isShown) {
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML +=
         "<div class='asterisk-value'> <input class='asterisk-val' type='text' class='' name='asteriskVal' onhange='changeScreenElement(this, " +
@@ -343,7 +343,7 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML += '</div>';
     }
 
-    if (screen.book.isShown) {
+    if (screen.book && screen.book.isShown) {
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML +=
         "<div class='book-value'> <input class='book-val' type='text' class='' name='bookVal' onhange='changeScreenElement(this, " +
@@ -354,7 +354,7 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML += '</div>';
     }
 
-    if (screen.victory.isShown) {
+    if (screen.victory && screen.victory.isShown) {
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML +=
         "<div class='victory-value'> <input class='victory-val' type='text' class='' name='victoryVal' onhange='changeScreenElement(this, " +
@@ -365,7 +365,7 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML += '</div>';
     }
 
-    if (screen.hand.isShown) {
+    if (screen.hand && screen.hand.isShown) {
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML +=
         "<div class='hand-value'> <input class='hand-val' type='text' class='' name='handVal' onhange='changeScreenElement(this, " +
@@ -376,7 +376,7 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML += '</div>';
     }
 
-    if (screen.up.isShown) {
+    if (screen.up && screen.up.isShown) {
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML +=
         "<div class='up-value'> <input class='up-val' type='text' class='' name='upVal' onhange='changeScreenElement(this, " +
@@ -387,7 +387,7 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML += '</div>';
     }
 
-    if (screen.down.isShown) {
+    if (screen.down && screen.down.isShown) {
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML +=
         "<div class='down-value'> <input class='down-val' type='text' class='' name='downVal' onhange='changeScreenElement(this, " +
@@ -398,7 +398,7 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML += '</div>';
     }
 
-    if (screen.left.isShown) {
+    if (screen.left && screen.left.isShown) {
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML +=
         "<div class='left-value'> <input class='left-val' type='text' class='' name='leftVal' onhange='changeScreenElement(this, " +
@@ -409,7 +409,7 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML += '</div>';
     }
 
-    if (screen.right.isShown) {
+    if (screen.right && screen.right.isShown) {
       bellyHTML += "<div class='screen-element mt-4'>";
       bellyHTML +=
         "<div class='right-value'> <input class='right-val' type='text' class='' name='rightVal' onhange='changeScreenElement(this, " +
