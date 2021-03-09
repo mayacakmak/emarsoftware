@@ -11,6 +11,7 @@ function Robot(robotId, apiDiv) {
   Robot.currentScreen = -1;
   Robot.sounds = null;
   Robot.tactile = null;
+  Robot.motors = null;
   
   Robot.setRobotId = function(robotId) {
     Robot.robotId = robotId;
@@ -353,9 +354,12 @@ function Robot(robotId, apiDiv) {
     }
   };
 
-  this.setMotor = function (motorId, value) {
-    console.log('Setting motor ' + motorId + ' to ' + value);
-    Robot._requestRobotState('motor' + motorId, value);
+  this.setMotor = function (index, name, value, motorState) {
+    console.log('Setting motor ' + name + ' to ' + value);
+    console.log('Motor state', motorState);
+    let newState =  [...motorState.slice(0, index), {...motorState[index], value }, ...motorState.slice(index + 1)];
+    console.log(newState);
+    Robot._requestRobotState('motors', newState);
   }
   
   this.setEyes = function(value) {

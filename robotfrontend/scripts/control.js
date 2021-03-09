@@ -6,6 +6,7 @@ var face;
 var belly;
 var robotAPI = null;
 var customAPI = null;
+var motorState = null;
 
 function initializeControl() {
   var robotParam = Config.getURLParameter('robot');
@@ -63,23 +64,26 @@ function updateRobotState(snapshot) {
       'lookatChanged',
       robotState.currentEyes
     );
-    // EYES
+    
     var div = document.getElementById('motorControls');
-    motor0Value = 'value=' + (robotState.motor0 ? robotState.motor0 : 0);
-    motor1Value = 'value=' + (robotState.motor1 ? robotState.motor1 : 0);
-    div.innerHTML =
-      `
-      <div class="d-flex flex-row">
-        <h3 class="pr-2">Motor 0: <h3><input class="large-text" type="number" name="speakText" id="motor1" onchange="motorInputChanged(0, this)" ` +
-      motor0Value +
-      ` >
-      </div>
-      <div class="d-flex flex-row">
-        <h3 class="pr-2">Motor 1: <h3><input class="large-text" type="number" name="speakText" id="motor2" onchange="motorInputChanged(1, this)" ` +
-      motor1Value +
-      ` >
-      </div>
-    `;
+    div.innerHTML = '';
+    console.log("???");
+    if (robotState.motors) {
+      motorState = robotState.motors;
+      robotState.motors.forEach((elem, index) => {
+        motorValue = 'value=' + (elem && elem.value ? elem.value : 0);
+        motorName = elem && elem.name ? elem.name : "Motor " + index;  
+        div.innerHTML += `
+          <div class="d-flex flex-row">
+            <h3 class="pr-2">` + motorName + `: <h3><input class="large-text" type="number" name="speakText" id="motor1" onchange="motorInputChanged(` +
+              index +
+              `,'` + motorName + `',this)" ` +
+              motorValue +
+              ` >
+          </div>
+        `;
+      });
+    }
 
     // BELLY
     Belly.updateRobotBelly(snapshot);
@@ -171,8 +175,8 @@ function bellyScreenChanged(target) {
   robot.setScreen(target.id);
 }
 
-function motorInputChanged(id, target) {
-  robot.setMotor(id, parseInt(target.value));
+function motorInputChanged(index, name, target) {
+  robot.setMotor(index, name, parseInt(target.value), motorState);
 }
 
 /*Callback for dynamically created button*/

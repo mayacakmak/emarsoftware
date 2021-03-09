@@ -6,7 +6,7 @@ import json
 
 # Dummy data for motors
 # Currently stored as an array corresponding to [motor 1, motor 2]
-motor_values = [-1, -1]
+motor_values = []
 
 # Robot from database to listen to
 this_robot_id = 0
@@ -37,7 +37,7 @@ while(True):
 	# Check if there is a new motor value in the database
 	##############
 	robot_state = robots[this_robot_id]["state"]
-	new_motor_values = [robot_state["motor0"], robot_state["motor1"]]
+	new_motor_values = robot_state["motors"]
 	if (motor_values != new_motor_values):
 		print("New motor values: " + str(new_motor_values))
 		# TODO: Do something with the new motor values
