@@ -71,15 +71,30 @@ function updateRobotState(snapshot) {
     if (robotState.motors) {
       motorState = robotState.motors;
       robotState.motors.forEach((elem, index) => {
+        console.log("elem", elem);
         motorValue = 'value=' + (elem && elem.value ? elem.value : 0);
-        motorName = elem && elem.name ? elem.name : "Motor " + index;  
-        div.innerHTML += `
+        motorName = elem && elem.name ? elem.name : 'Motor ' + index;
+        motorMin = (elem && elem.min != undefined) ? elem.min : 1500;
+        motorMax = (elem && elem.max != undefined) ? elem.max : 2500;
+        div.innerHTML +=
+          `
           <div class="d-flex flex-row">
-            <h3 class="pr-2">` + motorName + `: <h3><input class="large-text" type="number" name="speakText" id="motor1" onchange="motorInputChanged(` +
-              index +
-              `,'` + motorName + `',this)" ` +
-              motorValue +
-              ` >
+            <h3 class="pr-2">` +
+          motorName +
+          `: <h3><input type="range" min="` +
+          motorMin +
+          `" max="` +
+          motorMax +
+          `" "` +
+          motorValue +
+          `"
+          onchange="motorInputChanged(` +
+          index +
+          `,'` +
+          motorName +
+          `',this)" ` +
+          motorValue +
+          ` >
           </div>
         `;
       });
@@ -176,6 +191,7 @@ function bellyScreenChanged(target) {
 }
 
 function motorInputChanged(index, name, target) {
+  console.log("Input Changed", target);
   robot.setMotor(index, name, parseInt(target.value), motorState);
 }
 
