@@ -362,6 +362,19 @@ function Robot(robotId, apiDiv) {
     Robot._requestRobotState('motors', newState);
   }
   
+  this.setPose = function (index, name, poseState) {
+    console.log('Setting pose ' + name);
+    let newState = [
+      ...poseState.slice(0, index),
+      {
+        ...poseState[index],
+        lastPressed: Date.now(),
+      },
+      ...poseState.slice(index + 1),
+    ];
+    Robot._requestRobotState('poses', newState);
+  }
+  
   this.setEyes = function(value) {
     Robot._requestRobotState("currentEyes", value);
   }

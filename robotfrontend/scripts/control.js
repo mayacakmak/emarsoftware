@@ -64,18 +64,17 @@ function updateRobotState(snapshot) {
       'lookatChanged',
       robotState.currentEyes
     );
-    
+
+    // MOTOR CONTROLS
     var div = document.getElementById('motorControls');
     div.innerHTML = '';
-    console.log("???");
     if (robotState.motors) {
       motorState = robotState.motors;
       robotState.motors.forEach((elem, index) => {
-        console.log("elem", elem);
         motorValue = 'value=' + (elem && elem.value ? elem.value : 0);
         motorName = elem && elem.name ? elem.name : 'Motor ' + index;
-        motorMin = (elem && elem.min != undefined) ? elem.min : 1500;
-        motorMax = (elem && elem.max != undefined) ? elem.max : 2500;
+        motorMin = elem && elem.min != undefined ? elem.min : 1500;
+        motorMax = elem && elem.max != undefined ? elem.max : 2500;
         div.innerHTML +=
           `
           <div class="d-flex flex-row">
@@ -95,6 +94,24 @@ function updateRobotState(snapshot) {
           `',this)" ` +
           motorValue +
           ` >
+          </div>
+        `;
+      });
+    }
+
+    // POSE CONTROLS
+    var div = document.getElementById('poseControls');
+    div.innerHTML = '';
+    if (robotState.poses) {
+      poseState = robotState.poses;
+      poseState.forEach((elem, index) => {
+        poseName = elem && elem.name ? elem.name : 'Pose ' + index;
+        div.innerHTML +=
+          `
+          <div class="d-flex flex-row">
+            <button type="button" class="btn btn-info" onclick="poseChanged(` + index + `,'`+ poseName + `')">` +
+          poseName +
+          `</button>
           </div>
         `;
       });
@@ -191,8 +208,12 @@ function bellyScreenChanged(target) {
 }
 
 function motorInputChanged(index, name, target) {
-  console.log("Input Changed", target);
   robot.setMotor(index, name, parseInt(target.value), motorState);
+}
+
+function poseChanged(index, name) {
+  console.log("Pose changed", index, name);
+  robot.setPose(index, name, poseState);
 }
 
 /*Callback for dynamically created button*/
