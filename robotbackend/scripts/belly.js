@@ -222,6 +222,8 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
            Text instructions
           *********/
+    let largeTextScale = window.location.href.includes("bellyEdit") ? '50%' : '100%';
+    let smallTextScale = window.location.href.includes('bellyEdit') ? '43%' : '80%';
     if (screen.instructionLarge.isShown) {
       var largeInstruction = screen.instructionLarge.text;
       var fontFamily = ((fontFamily) => {
@@ -237,9 +239,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       bellyHTML +=
         "<div class='screen-element instruction-large' style='z-index: 2; " +
         fontFamily +
-        "'>" +
+        `'><p style="margin: 3px; background-color: rgba(255, 255, 255, 0.5); font-size: ` + largeTextScale + `; font-family: Courier New, serif;">` +
         largeInstruction +
-        '</div> ';
+        '</p></div> ';
     }
 
     if (screen.instructionSmall.isShown) {
@@ -257,9 +259,11 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       bellyHTML +=
         "<div class='screen-element instruction-small' style='z-index: 2; " +
         fontFamily +
-        "'>" +
+        `'><p style="background-color: rgba(255, 255, 255, 0.5); margin: 3%; font-size: ` +
+        smallTextScale +
+        `; font-family: Courier New, serif;">` +
         smallInstruction +
-        '</div>';
+        '</p></div>';
     }
 
     /*********
@@ -316,7 +320,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       var sliderMax = screen.slider.max;
       bellyHTML += "<div class='screen-element mt-4'  style='z-index: 2'>";
       bellyHTML +=
-        "<div class='min-value screen-item'  style='z-index: 2'>" +
+        `<div class='min-value screen-item'  style='z-index: 2'><p style="background-color: rgba(255, 255, 255, 0.5); margin: 3%;font-size: 100%; font-family: Courier New, serif;">` +
         sliderMin +
         '</div>';
       bellyHTML +=
@@ -327,7 +331,10 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
         " value='" +
         sliderCurrent +
         "' min='0' max='100'>";
-      bellyHTML += "<div class='max-value screen-item'>" + sliderMax + '</div>';
+      bellyHTML +=
+        `<div class='max-value screen-item'><p style="background-color: rgba(255, 255, 255, 0.5); margin: 3%;font-size: 100%; font-family: Courier New, serif;">` +
+        sliderMax +
+        '</div>';
       bellyHTML += '</div>';
     }
 
@@ -382,6 +389,11 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     if (screen.buttons.isShown) {
       bellyHTML +=
         "<div class='d-flex justify-content-center flex-wrap screen-element mt-4'  style='z-index: 2'>";
+      let buttonTextScale = window.location.href.includes('bellyEdit')
+        ? '1vw'
+        : '1.5vw';
+
+      console.log("buttonTextScale", buttonTextScale);
 
       if (screen.buttons.list != undefined) {
         for (var j = 0; j < screen.buttons.list.length; j++) {
@@ -400,13 +412,13 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
               ")' name='button'>" +
               '<div><img  src=' +
               url +
-              " width='60' height='60'/></div><p style='font-size:16;color:white'>" +
+              ` width='60' height='60'/></div><p style='font-size: ` + buttonTextScale +`;color:white'>` +
               name +
               '</p></button>';
             // Buttons with text
             if (screen.buttons.list[j].label) {
               bellyHTML +=
-                '<h2 style="max-width: 160px">' +
+                `<h2 style="max-width: 160px; font-size: ` + buttonTextScale +`;">` +
                 screen.buttons.list[j].label +
                 '</h2>';
             }
@@ -416,6 +428,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           // Buttons that have neither label nor image
           // TODO: Why is .name and .label a different thing?
           if (!screen.buttons.list[j].url && !screen.buttons.list[j].label) {
+            console.log("???")
             bellyHTML +=
               "<div class='mt-2'>" +
               "<button class='btn btn-secondary mx-2 screen-item' " +
@@ -423,7 +436,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
               Belly.currentScreen +
               ',' +
               j +
-              ")' name='button'>" +
+              `)' name='button' style="font-size: 0.5vw;">` +
               name +
               '</button></div>';
           }
@@ -447,8 +460,13 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           largeInstructionElements[i].style.fontSize = '3vw';
         for (var i = 0; i < smallInstructionElements.length; i++)
           smallInstructionElements[i].style.fontSize = '2vw';
-        for (var i = 0; i < otherElements.length; i++)
-          otherElements[i].style.fontSize = '1.5vw';
+        for (var i = 0; i < otherElements.length; i++) {
+          if (window.location.href.includes('bellyEdit')) {
+            otherElements[i].style.fontSize = '0.8vw';
+          } else {
+            otherElements[i].style.fontSize = '1.5vw';
+          }
+        }
       } else {
         for (var i = 0; i < largeInstructionElements.length; i++)
           largeInstructionElements[i].style.fontSize = '3vh';
