@@ -99,6 +99,14 @@ function updateRobotState(snapshot) {
       });
     }
 
+    var div = document.getElementById('headTouched');
+    // HEAD TOUCHED
+    if (robotState.headTouched && robotState.headTouched != 0) {
+      div.innerHTML = `<button type="button" class="btn btn-success">Head Touched!!</button>`;
+    } else {
+      div.innerHTML = ``;
+    }
+
     // POSE CONTROLS
     var div = document.getElementById('poseControls');
     div.innerHTML = '';

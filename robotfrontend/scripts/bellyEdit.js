@@ -99,7 +99,7 @@ function renderSelectedBellyScreen(snapshot) {
       <div class='center-aligned'>
       <div class="dropdown">
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Screen Layout
+          Templates
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <button class="dropdown-item" onclick='setLayout(this)'>Text</button>
