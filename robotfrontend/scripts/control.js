@@ -37,6 +37,12 @@ function initializeControl() {
     .database()
     .ref('/robots/' + currentRobot + '/state/');
   dbRobotStateRef.on('value', updateRobotState);
+
+  window.onbeforeunload = confirmExit;
+  function confirmExit() {
+    dbRobotStateRef.off();
+    dbRobotRef.off();
+  }
 }
 
 function updateRobotAPI(snapshot) {
@@ -147,7 +153,6 @@ function updateRobotState(snapshot) {
 
 function updateCustomRobotAPI(snapshot) {
   customAPI = snapshot.val();
-  console.log('customAPI', customAPI);
   Belly.bellyScreens = customAPI.inputs.bellyScreens;
   Face.faces = customAPI.states.faces;
 

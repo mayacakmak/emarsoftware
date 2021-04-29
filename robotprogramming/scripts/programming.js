@@ -142,7 +142,6 @@ function updateRobotList(snapshot) {
 }
 
 function programRobotChanged(robotId) {
-  console.log('Program Robot Changed???', robotId);
   setProgramRobot(robotId);
   if (currentProgramId != null) {
     saveProgram();

@@ -107,7 +107,8 @@ function renderSelectedBellyScreen(snapshot) {
           <button class="dropdown-item" onclick='setLayout(this)'>Buttons</button>
           <button class="dropdown-item" onclick='setLayout(this)'>Checkboxes</button>
           <button class="dropdown-item" onclick='setLayout(this)'>Images</button>
-          <button class="dropdown-item" onclick='setLayout(this)'>User Text Input</button>
+          <button class="dropdown-item" onclick='setLayout(this)'>Unsaved User Text Input</button>
+          <button class="dropdown-item" onclick='setLayout(this)'>Saved User Text Input</button>
         </div>
       </div>
       <div class="dropdown">
@@ -226,6 +227,21 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML +=
         ' placeholder="' +
         (screen.textInput.text ? screen.textInput.text : '') +
+        '" ' +
+        'onchange="changeScreenElement(this, ' +
+        i +
+        ')"';
+      bellyHTML += '></textarea>';
+      bellyHTML += '</div>';
+    }
+
+    if (screen.savedTextInput && screen.savedTextInput.isShown) {
+      bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
+      bellyHTML +=
+        '<textarea id="savedTextInput" name="savedTextInput" rows="4" cols="50"';
+      bellyHTML +=
+        ' placeholder="' +
+        (screen.savedTextInput.text ? screen.savedTextInput.text : '') +
         '" ' +
         'onchange="changeScreenElement(this, ' +
         i +
@@ -490,6 +506,11 @@ function setLayout(element) {
             name: 'textInput',
             checked: false,
           },
+          ,
+          {
+            name: 'savedTextInput',
+            checked: false,
+          },
         ],
         selectedBellyScreen
       );
@@ -528,6 +549,10 @@ function setLayout(element) {
           },
           {
             name: 'textInput',
+            checked: false,
+          },
+          {
+            name: 'savedTextInput',
             checked: false,
           },
         ],
@@ -570,6 +595,10 @@ function setLayout(element) {
             name: 'textInput',
             checked: false,
           },
+          {
+            name: 'savedTextInput',
+            checked: false,
+          },
         ],
         selectedBellyScreen
       );
@@ -608,6 +637,10 @@ function setLayout(element) {
           },
           {
             name: 'textInput',
+            checked: false,
+          },
+          {
+            name: 'savedTextInput',
             checked: false,
           },
         ],
@@ -650,11 +683,15 @@ function setLayout(element) {
             name: 'textInput',
             checked: false,
           },
+          {
+            name: 'savedTextInput',
+            checked: false,
+          },
         ],
         selectedBellyScreen
       );
       return;
-    case 'User Text Input':
+    case 'Unsaved User Text Input':
       addRemoveMultipleElements(
         [
           {
@@ -688,6 +725,54 @@ function setLayout(element) {
           },
           {
             name: 'textInput',
+            checked: true,
+          },
+          {
+            name: 'savedTextInput',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+    case 'Saved User Text Input':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'instructionLarge',
+            checked: true,
+          },
+          {
+            name: 'instructionSmall',
+            checked: true,
+          },
+          {
+            name: 'slider',
+            checked: false,
+            value: 50,
+          },
+          {
+            name: 'checkboxes',
+            checked: false,
+          },
+          {
+            name: 'buttons',
+            checked: true,
+          },
+          {
+            name: 'backgroundColor',
+            checked: true,
+          },
+          {
+            name: 'images',
+            checked: false,
+          },
+          {
+            name: 'textInput',
+            checked: false,
+          },
+          {
+            name: 'savedTextInput',
             checked: true,
           },
         ],
@@ -871,6 +956,12 @@ function changeScreenElement(target, screenID, itemID) {
 
   if (target.name == 'textInput') {
     bellyScreens[screenID].textInput.text = document.getElementById(
+      target.id
+    ).value;
+  }
+
+  if (target.name == 'savedTextInput') {
+    bellyScreens[screenID].savedTextInput.text = document.getElementById(
       target.id
     ).value;
   }

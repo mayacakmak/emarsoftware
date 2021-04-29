@@ -82,11 +82,17 @@ function Robot(robotId, apiDiv) {
                         "Obtains the current value of the slider on the screen.",
                        "<b>sliderValue</b> is an Integer between 0 and 100 indicating the current value of the slider.",
                        "var sliderValue = robot.getSliderValue();");
+      // apiText += Robot._getAPICardHTML(
+      //   '(textInputValue) robot.getTextInputValue()',
+      //   'Obtains the current text from the text area field on the screen.',
+      //   '<b>textInputValue</b> is an String indicating the current value of the text area field.',
+      //   'var textInputValue = robot.getTextInputValue();'
+      // );
       apiText += Robot._getAPICardHTML(
-        '(textInputValue) robot.getTextInputValue()',
-        'Obtains the current text from the text area field on the screen.',
+        '(textInputValue) robot.getScreenSavedTextInputValue(screenIndex)',
+        'Obtains the current text from the text area field on a specific screen, if it was stored in a saved text field.',
         '<b>textInputValue</b> is an String indicating the current value of the text area field.',
-        'var textInputValue = robot.getTextInputValue();'
+        'var textInputValue = robot.getScreenSavedTextInputValue(1);'
       );
       apiText += Robot._getAPICardHTML("(buttonName) robot.waitForButton()",
                         "Makes the robot wait until a button in the screen is pressed and returns the name of the pressed button.",
@@ -205,10 +211,26 @@ function Robot(robotId, apiDiv) {
       Robot.currentScreen < Robot.bellyScreens.length
     ) {
       if (Number(Robot.bellyScreens[Robot.currentScreen].textInput.isShown) == 1)
-        sliderValue = Robot.bellyScreens[Robot.currentScreen].textInput.value;
+        textInputValue =
+          Robot.bellyScreens[Robot.currentScreen].textInput.value;
     }
     return textInputValue;
   }
+
+  this.getScreenSavedTextInputValue = function (screenIndex) {
+    var textInputValue = null;
+    if (
+      Robot.bellyScreens != null &&
+      screenIndex >= 0 &&
+      screenIndex < Robot.bellyScreens.length && 
+      Robot.bellyScreens[screenIndex].savedTextInput &&
+      Robot.bellyScreens[screenIndex].savedTextInput.isShown
+    ) {
+      if (Number(Robot.bellyScreens[screenIndex].savedTextInput.isShown) == 1)
+        textInputValue = Robot.bellyScreens[screenIndex].savedTextInput.value;
+    }
+    return textInputValue;
+  };
 
   this.getTactileSensor = function(sensorName) {
     var sensorValue = null;

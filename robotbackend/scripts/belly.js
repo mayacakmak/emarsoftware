@@ -113,7 +113,13 @@ function Belly(robotId, scale, resizeAxis) {
     }
 
     if (target.name == 'textInput') {
-      Belly.bellyScreens[screenID].textInput.value = document.getElementById(
+      // Belly.bellyScreens[screenID].textInput.value = document.getElementById(
+      //   target.id
+      // ).value;
+    }
+
+    if (target.name == 'savedTextInput') {
+      Belly.bellyScreens[screenID].savedTextInput.value = document.getElementById(
         target.id
       ).value;
     }
@@ -185,7 +191,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
          ` +
           Belly.currentScreen +
           `
-          )"><progress id="file" value=` + progress + ` max="100"></progress></button>
+          )"><progress id="file" value=` +
+          progress +
+          ` max="100"></progress></button>
         `;
       }
       if (
@@ -222,8 +230,12 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
            Text instructions
           *********/
-    let largeTextScale = window.location.href.includes("bellyEdit") ? '50%' : '100%';
-    let smallTextScale = window.location.href.includes('bellyEdit') ? '43%' : '80%';
+    let largeTextScale = window.location.href.includes('bellyEdit')
+      ? '50%'
+      : '100%';
+    let smallTextScale = window.location.href.includes('bellyEdit')
+      ? '43%'
+      : '80%';
     if (screen.instructionLarge.isShown) {
       var largeInstruction = screen.instructionLarge.text;
       var fontFamily = ((fontFamily) => {
@@ -239,7 +251,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       bellyHTML +=
         "<div class='screen-element instruction-large' style='z-index: 2; " +
         fontFamily +
-        `'><p style="margin: 3px; background-color: rgba(255, 255, 255, 0.5); font-size: ` + largeTextScale + `; font-family: Courier New, serif;">` +
+        `'><p style="margin: 3px; background-color: rgba(255, 255, 255, 0.5); font-size: ` +
+        largeTextScale +
+        `; font-family: Courier New, serif;">` +
         largeInstruction +
         '</p></div> ';
     }
@@ -314,7 +328,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           *********/
     if (screen.slider.isShown) {
       var sliderMin = screen.slider.min;
-//       var sliderCurrent = screen.slider.current;
+      //       var sliderCurrent = screen.slider.current;
       // Start slider at middle
       var sliderCurrent = (screen.slider.max + screen.slider.min) / 2;
       var sliderMax = screen.slider.max;
@@ -384,6 +398,25 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     }
 
     /*********
+           SAVED Text input field
+          *********/
+    if (screen.savedTextInput && screen.savedTextInput.isShown === 1) {
+      bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
+      bellyHTML +=
+        '<textarea id="savedTextInput" name="savedTextInput" rows="4" cols="50"';
+      bellyHTML +=
+        ' placeholder="' +
+        (screen.savedTextInput.text ? screen.savedTextInput.text : '') +
+        '"';
+      bellyHTML +=
+        " onchange='Belly.bellyInputReceived(this," +
+        Belly.currentScreen +
+        ")'";
+      bellyHTML += '></textarea>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
            Buttons
           *********/
     if (screen.buttons.isShown) {
@@ -393,7 +426,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
         ? '1vw'
         : '1.5vw';
 
-      console.log("buttonTextScale", buttonTextScale);
+      console.log('buttonTextScale', buttonTextScale);
 
       if (screen.buttons.list != undefined) {
         for (var j = 0; j < screen.buttons.list.length; j++) {
@@ -412,13 +445,17 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
               ")' name='button'>" +
               '<div><img  src=' +
               url +
-              ` width='60' height='60'/></div><p style='font-size: ` + buttonTextScale +`;color:white'>` +
+              ` width='60' height='60'/></div><p style='font-size: ` +
+              buttonTextScale +
+              `;color:white'>` +
               name +
               '</p></button>';
             // Buttons with text
             if (screen.buttons.list[j].label) {
               bellyHTML +=
-                `<h2 style="max-width: 160px; font-size: ` + buttonTextScale +`;">` +
+                `<h2 style="max-width: 160px; font-size: ` +
+                buttonTextScale +
+                `;">` +
                 screen.buttons.list[j].label +
                 '</h2>';
             }
@@ -428,7 +465,6 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           // Buttons that have neither label nor image
           // TODO: Why is .name and .label a different thing?
           if (!screen.buttons.list[j].url && !screen.buttons.list[j].label) {
-            console.log("???")
             bellyHTML +=
               "<div class='mt-2'>" +
               "<button class='btn btn-secondary mx-2 screen-item' " +
