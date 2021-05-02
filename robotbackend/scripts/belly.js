@@ -232,10 +232,10 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           *********/
     let largeTextScale = window.location.href.includes('bellyEdit')
       ? '50%'
-      : '100%';
+      : '90%';
     let smallTextScale = window.location.href.includes('bellyEdit')
       ? '43%'
-      : '80%';
+      : '75%';
     if (screen.instructionLarge.isShown) {
       var largeInstruction = screen.instructionLarge.text;
       var fontFamily = ((fontFamily) => {
@@ -384,7 +384,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     if (screen.textInput && screen.textInput.isShown === 1) {
       bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
       bellyHTML +=
-        '<textarea id="textInput" name="textInput" rows="4" cols="50"';
+        '<textarea id="textInput" name="textInput" rows="3" cols="50"';
       bellyHTML +=
         ' placeholder="' +
         (screen.textInput.text ? screen.textInput.text : '') +
@@ -403,7 +403,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     if (screen.savedTextInput && screen.savedTextInput.isShown === 1) {
       bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
       bellyHTML +=
-        '<textarea id="savedTextInput" name="savedTextInput" rows="4" cols="50"';
+        '<textarea id="savedTextInput" name="savedTextInput" rows="3" cols="50"';
       bellyHTML +=
         ' placeholder="' +
         (screen.savedTextInput.text ? screen.savedTextInput.text : '') +
