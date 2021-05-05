@@ -22,26 +22,46 @@ function initializeControl() {
 
   var dbAllSoundsRef = firebase.database().ref('/robotapi/');
   dbAllSoundsRef.on('value', updateRobotAPI);
-
+  
   var dbRobotRef = firebase
     .database()
-    .ref('/robots/' + currentRobot + '/customAPI/');
-  dbRobotRef.on('value', updateCustomRobotAPI);
+    .ref('/robots/' + currentRobot);
+  dbRobotRef.on('value', updateHandler);
+  
+  // var dbRobotRef = firebase
+  //   .database()
+  //   .ref('/robots/' + currentRobot + '/customAPI/');
+  // dbRobotRef.on('value', updateCustomRobotAPI);
 
-  var dbRobotRef = firebase
-    .database()
-    .ref('/robots/' + currentRobot + '/customAPI/states/faces/');
-  dbRobotRef.on('value', updateRobotFaceList);
+  // var dbRobotRef = firebase
+  //   .database()
+  //   .ref('/robots/' + currentRobot + '/customAPI/states/faces/');
+  // dbRobotRef.on('value', updateRobotFaceList);
 
-  var dbRobotStateRef = firebase
-    .database()
-    .ref('/robots/' + currentRobot + '/state/');
-  dbRobotStateRef.on('value', updateRobotState);
+  // var dbRobotStateRef = firebase
+  //   .database()
+  //   .ref('/robots/' + currentRobot + '/state/');
+  // dbRobotStateRef.on('value', updateRobotState);
 
   window.onbeforeunload = confirmExit;
   function confirmExit() {
-    dbRobotStateRef.off();
+    // dbRobotStateRef.off();
     dbRobotRef.off();
+  }
+}
+
+function updateHandler(snapshot) {
+  let robotData = snapshot.val();
+  console.log("robotData", robotData);
+  if (robotData?.customAPI) {
+    updateCustomRobotAPI(robotData.customAPI);
+  }
+  if (robotData?.customAPI?.states?.faces) {
+    updateRobotFaceList(robotData.customAPI.states.faces);
+  }
+  if (robotData?.state) {
+    console.log("???")
+    updateRobotState(robotData.state);
   }
 }
 
@@ -50,8 +70,10 @@ function updateRobotAPI(snapshot) {
 }
 
 function updateRobotState(snapshot) {
+  console.log(">>", robotAPI)
   if (customAPI != null && robotAPI != null) {
-    var robotState = snapshot.val();
+    // var robotState = snapshot.val();
+    var robotState = snapshot;
 
     // FACE
     Face.updateRobotFace(snapshot);
@@ -105,6 +127,33 @@ function updateRobotState(snapshot) {
       });
     }
 
+    // MOTOR Pose CONTROLS
+    var div = document.getElementById('motorPoseControls');
+    div.innerHTML = '';
+    if (robotState.motors) {
+      motorState = robotState.motors;
+      robotState.motors.forEach((elem, index) => {
+        motorValue = 'value=' + (elem && elem.value ? elem.value : 0);
+        motorName = elem && elem.name ? elem.name : 'Motor ' + index;
+        motorMin = elem && elem.min != undefined ? elem.min : 1500;
+        motorMax = elem && elem.max != undefined ? elem.max : 2500;
+        div.innerHTML +=
+          `
+          <div class="d-flex flex-row">
+            <h3 class="pr-2">` +
+          motorName +
+          `: <h3><input id="poseControl` + index + `" type="range" min="` +
+          motorMin +
+          `" max="` +
+          motorMax +
+          `" ` +
+          motorValue +
+          `>
+          </div>
+        `;
+      });
+    }
+
     var div = document.getElementById('headTouched');
     // HEAD TOUCHED
     if (robotState.headTouched && robotState.headTouched != 0) {
@@ -123,7 +172,11 @@ function updateRobotState(snapshot) {
         div.innerHTML +=
           `
           <div class="d-flex flex-row">
-            <button type="button" class="btn btn-info" onclick="poseChanged(` + index + `,'`+ poseName + `')">` +
+            <button type="button" class="btn btn-info" onclick="poseChanged(` +
+          index +
+          `,'` +
+          poseName +
+          `')">` +
           poseName +
           `</button>
           </div>
@@ -152,7 +205,8 @@ function updateRobotState(snapshot) {
 }
 
 function updateCustomRobotAPI(snapshot) {
-  customAPI = snapshot.val();
+  // customAPI = snapshot.val();
+  customAPI = snapshot;
   Belly.bellyScreens = customAPI.inputs.bellyScreens;
   Face.faces = customAPI.states.faces;
 
@@ -224,8 +278,17 @@ function motorInputChanged(index, name, target) {
   robot.setMotor(index, name, parseInt(target.value), motorState);
 }
 
+function manualPoseChanged() {
+  let updatedMotorState = [...motorState ];
+  motorState.forEach((elem, index) => {
+    updatedMotorState[index] = { ...updatedMotorState[index], value: parseInt(document.getElementById("poseControl" + index).value)}
+  })
+  robot.setMotors(updatedMotorState);
+}
+
 function poseChanged(index, name) {
   console.log("Pose changed", index, name);
+  console.log(poseState);
   robot.setPose(index, name, poseState);
 }
 

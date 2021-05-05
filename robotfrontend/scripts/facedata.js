@@ -124,7 +124,7 @@ function updateRobotFaceList(snapshot) {
   if (robotFaceList != undefined)
     robotFaceList.innerHTML = "";
 
-  robotFaces = snapshot.val();
+  robotFaces = snapshot?.val ? snapshot.val() : snapshot;
 
   if (robotFaces != undefined) {
     

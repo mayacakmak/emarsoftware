@@ -94,6 +94,19 @@
         </div>
         <div class="card">
           <div class="card-header">
+            <h2>Set robot pose</h2>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md">
+                <div class="top-aligned" id="motorPoseControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+                <button type="button" class="btn btn-info" onclick="manualPoseChanged()">Send to Robot</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
             <h2>Robot poses</h2>
           </div>
           <div class="card-body">
@@ -133,8 +146,8 @@
   <script src="https://mayacakmak.github.io/emarsoftware/robotbackend/scripts/config.js"></script>
   <script src="https://mayacakmak.github.io/emarsoftware/databasejs/scripts/database.js"></script>
   <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
-  <script src="https://mayacakmak.github.io/emarsoftware/robotbackend/scripts/eyes.js"></script>
-  <script src="https://mayacakmak.github.io/emarsoftware/robotbackend/scripts/face.js"></script>
+  <script src="../robotbackend/scripts/eyes.js"></script>
+  <script src="../robotbackend/scripts/face.js"></script>
   <script src="../robotbackend/scripts/belly.js"></script>
   <script src="../robotapijs/scripts/robotapi.js"></script>
   <script src="scripts/facedata.js"></script>

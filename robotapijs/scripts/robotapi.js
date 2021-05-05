@@ -383,6 +383,10 @@ function Robot(robotId, apiDiv) {
     console.log(newState);
     Robot._requestRobotState('motors', newState);
   }
+
+  this.setMotors = function (updatedMotorState) {
+    Robot._requestRobotState('motors', updatedMotorState);
+  }
   
   this.setPose = function (index, name, poseState) {
     console.log('Setting pose ' + name);

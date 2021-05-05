@@ -11,7 +11,7 @@ function Belly(robotId, scale, resizeAxis) {
   Belly.resizeAxis = resizeAxis;
 
   Belly.updateRobotBelly = function (snapshot) {
-    var robotState = snapshot.val();
+    var robotState = snapshot?.val ? snapshot.val() : snapshot;
     var bellyHTML = '';
     var len = Belly.bellyScreens.length;
 
