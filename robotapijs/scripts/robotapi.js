@@ -337,6 +337,15 @@ function Robot(robotId, apiDiv) {
     dbRef.update(updates);
   }
 
+  Robot._requestRobotStates = function (stateNames, newStates) {
+    var dbRef = firebase.database().ref('/robots/' + Robot.robotId + '/state/');
+    var updates = {};
+    stateNames.forEach((elem, index) => {
+      updates[elem] = newStates[index];
+    })
+    dbRef.update(updates);
+  };
+
   this.speak = function(text) {
     console.log("Speaking");
     Robot._requestRobotAction("speak", {text:text});
@@ -388,7 +397,7 @@ function Robot(robotId, apiDiv) {
     Robot._requestRobotState('motors', updatedMotorState);
   }
   
-  this.setPose = function (index, name, poseState) {
+  this.setPose = function (index, name, poseState, motorState) {
     console.log('Setting pose ' + name);
     let newState = [
       ...poseState.slice(0, index),
@@ -398,7 +407,15 @@ function Robot(robotId, apiDiv) {
       },
       ...poseState.slice(index + 1),
     ];
-    Robot._requestRobotState('poses', newState);
+    let newMotorState = motorState;
+    poseState[index].motors.forEach((elem, index) => {
+      newMotorState[index].value = elem
+    });
+    Robot._requestRobotStates(['poses', 'motors'], [newState, newMotorState])
+  }
+
+  this.saveNewPose = function (newPoseState) {
+    Robot._requestRobotState('poses', newPoseState)
   }
   
   this.setEyes = function(value) {

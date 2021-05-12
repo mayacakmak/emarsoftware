@@ -29,14 +29,13 @@ auth_params = {'auth': auth_info["idToken"]}
 while(True):
 
 	# Sending get request and obtaining the response
-	get_request = connection.get(url = URL + "robots.json")
+	get_request = connection.get(url = URL + "robots/0/state.json")
 	# Extracting data in json format 
-	robots = get_request.json()
+	robot_state = get_request.json()
 	
 	##############
 	# Check if there is a new motor value in the database
 	##############
-	robot_state = robots[this_robot_id]["state"]
 	new_motor_values = robot_state["motors"]
 	if (motor_values != new_motor_values):
 		print("New motor values: " + str(new_motor_values))

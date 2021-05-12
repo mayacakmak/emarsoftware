@@ -52,7 +52,6 @@ function initializeControl() {
 
 function updateHandler(snapshot) {
   let robotData = snapshot.val();
-  console.log("robotData", robotData);
   if (robotData?.customAPI) {
     updateCustomRobotAPI(robotData.customAPI);
   }
@@ -60,7 +59,6 @@ function updateHandler(snapshot) {
     updateRobotFaceList(robotData.customAPI.states.faces);
   }
   if (robotData?.state) {
-    console.log("???")
     updateRobotState(robotData.state);
   }
 }
@@ -70,7 +68,6 @@ function updateRobotAPI(snapshot) {
 }
 
 function updateRobotState(snapshot) {
-  console.log(">>", robotAPI)
   if (customAPI != null && robotAPI != null) {
     // var robotState = snapshot.val();
     var robotState = snapshot;
@@ -164,25 +161,22 @@ function updateRobotState(snapshot) {
 
     // POSE CONTROLS
     var div = document.getElementById('poseControls');
-    div.innerHTML = '';
     if (robotState.poses) {
       poseState = robotState.poses;
+      div.innerHTML = '';
       poseState.forEach((elem, index) => {
         poseName = elem && elem.name ? elem.name : 'Pose ' + index;
         div.innerHTML +=
-          `
-          <div class="d-flex flex-row">
-            <button type="button" class="btn btn-info" onclick="poseChanged(` +
+          `<button type="button" class="btn btn-info" onclick="poseChanged(` +
           index +
           `,'` +
           poseName +
           `')">` +
           poseName +
-          `</button>
-          </div>
-        `;
+          `</button>`;
       });
     }
+    div.innerHTML = `<div class="preset-controls">` + div.innerHTML + '</div>';
 
     // BELLY
     Belly.updateRobotBelly(snapshot);
@@ -287,9 +281,19 @@ function manualPoseChanged() {
 }
 
 function poseChanged(index, name) {
-  console.log("Pose changed", index, name);
-  console.log(poseState);
-  robot.setPose(index, name, poseState);
+  robot.setPose(index, name, poseState, motorState);
+}
+
+function saveAsPose() {
+  let newPoseState = [ ...poseState ];
+  newPoseState.push({
+    lastPressed: 0,
+    motors: motorState.map((elem, index) =>
+      parseInt(document.getElementById('poseControl' + index).value)
+    ),
+    name: document.getElementById('savePoseText').value,
+  });
+  robot.saveNewPose(newPoseState)
 }
 
 /*Callback for dynamically created button*/

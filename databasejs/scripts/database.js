@@ -26,7 +26,6 @@ function Database(config, readyCallback) {
   */
   Database.initialize = async function() {
       Database.app = await firebase.initializeApp(Database.config);
-      console.log(Database.app);
       firebase.auth().onAuthStateChanged(Database.handleAuthStateChange);
       // Wait a little bit to see is we are already logged in
       // then attempt an anonymous sign in

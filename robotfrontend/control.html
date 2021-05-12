@@ -100,7 +100,11 @@
             <div class="row">
               <div class="col-md">
                 <div class="top-aligned" id="motorPoseControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
-                <button type="button" class="btn btn-info" onclick="manualPoseChanged()">Send to Robot</button>
+                <div class="preset-controls">
+                  <button type="button" class="btn btn-info" onclick="manualPoseChanged()">Send to Robot</button>
+                  <input class="large-text" type="text" name="savePoseText" id="savePoseText" placeholder="Pose name">
+                  <button type="button" class="btn btn-info" onclick="saveAsPose()">Save as Pose</button>
+                </div>
               </div>
             </div>
           </div>

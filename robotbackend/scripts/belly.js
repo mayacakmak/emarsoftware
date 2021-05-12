@@ -426,8 +426,6 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
         ? '1vw'
         : '1.5vw';
 
-      console.log('buttonTextScale', buttonTextScale);
-
       if (screen.buttons.list != undefined) {
         for (var j = 0; j < screen.buttons.list.length; j++) {
           var name = screen.buttons.list[j].name;
