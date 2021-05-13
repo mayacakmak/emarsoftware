@@ -225,13 +225,13 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML +=
         '<textarea id="textInput" name="textInput" rows="4" cols="50"';
       bellyHTML +=
-        ' placeholder="' +
-        (screen.textInput.text ? screen.textInput.text : '') +
-        '" ' +
         'onchange="changeScreenElement(this, ' +
         i +
         ')"';
-      bellyHTML += '></textarea>';
+      bellyHTML +=
+        '>' +
+        (screen.textInput.text ? screen.textInput.text : '') +
+        '</textarea>';
       bellyHTML += '</div>';
     }
 
@@ -240,13 +240,10 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML +=
         '<textarea id="savedTextInput" name="savedTextInput" rows="4" cols="50"';
       bellyHTML +=
-        ' placeholder="' +
-        (screen.savedTextInput.text ? screen.savedTextInput.text : '') +
-        '" ' +
         'onchange="changeScreenElement(this, ' +
         i +
         ')"';
-      bellyHTML += '></textarea>';
+      bellyHTML += '>' + (screen.savedTextInput.text ? screen.savedTextInput.text : '') + '</textarea>';
       bellyHTML += '</div>';
     }
 

@@ -241,9 +241,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       var fontFamily = ((fontFamily) => {
         switch (fontFamily) {
           case 'Courier':
-            return 'font-family: "Lucida Console", Courier, monospace;';
+            return `font-family: Courier New, serif;`;
           case 'Times':
-            return 'font-family: "Times New Roman", Times, serif;';
+            return `font-family: 'Times New Roman', Times, serif;`;
           default:
             return 'font-family: Arial, Helvetica, sans-serif;';
         }
@@ -253,7 +253,8 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
         fontFamily +
         `'><p style="margin: 3px; background-color: rgba(255, 255, 255, 0.5); font-size: ` +
         largeTextScale +
-        `; font-family: Courier New, serif;">` +
+        // `; font-family: Courier New, serif;">` +
+        `; ` + fontFamily +  `">` +
         largeInstruction +
         '</p></div> ';
     }
@@ -263,9 +264,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       var fontFamily = ((fontFamily) => {
         switch (fontFamily) {
           case 'Courier':
-            return 'font-family: "Lucida Console", Courier, monospace;';
+            return `font-family: Courier New, serif;`;
           case 'Times':
-            return 'font-family: "Times New Roman", Times, serif;';
+            return `font-family: 'Times New Roman', Times, serif;`;
           default:
             return 'font-family: Arial, Helvetica, sans-serif;';
         }
@@ -275,7 +276,10 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
         fontFamily +
         `'><p style="background-color: rgba(255, 255, 255, 0.5); margin: 3%; font-size: ` +
         smallTextScale +
-        `; font-family: Courier New, serif;">` +
+        // `; font-family: Courier New, serif;">` +
+        `; ` +
+        fontFamily +
+        `">` +
         smallInstruction +
         '</p></div>';
     }
