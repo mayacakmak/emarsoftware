@@ -92,62 +92,74 @@ function updateRobotState(snapshot) {
 
     // MOTOR CONTROLS
     var div = document.getElementById('motorControls');
-    div.innerHTML = '';
+    div.innerHTML =
+      '<div class="d-flex flex-row row"><div class="col" id="indivMotorLabels"></div><div class="col" id="indivMotorInputs"></div></div>';
+    var labelDiv = document.getElementById('indivMotorLabels');
+    var inputDiv = document.getElementById('indivMotorInputs');
     if (robotState.motors) {
       motorState = robotState.motors;
       robotState.motors.forEach((elem, index) => {
-        motorValue = 'value=' + (elem && elem.value ? elem.value : 0);
+        motorValue = 'value=' + (elem && elem.value ? parseInt(elem.value) : 0);
         motorName = elem && elem.name ? elem.name : 'Motor ' + index;
-        motorMin = elem && elem.min != undefined ? elem.min : 1500;
-        motorMax = elem && elem.max != undefined ? elem.max : 2500;
-        div.innerHTML +=
-          `
-          <div class="d-flex flex-row">
-            <h3 class="pr-2">` +
-          motorName +
-          `: <h3><input type="range" min="` +
+        motorMin = elem && elem.min != undefined ? parseInt(elem.min) : 1500;
+        motorMax = elem && elem.max != undefined ? parseInt(elem.max) : 2500;
+        labelDiv.innerHTML += `<h3 class="pr-2">` + motorName + `: </h3>`;
+        inputDiv.innerHTML +=
+          `<input style="height: 20%" type="range" min="` +
           motorMin +
           `" max="` +
           motorMax +
-          `" "` +
+          `"` +
           motorValue +
-          `"
+          `
           onchange="motorInputChanged(` +
           index +
           `,'` +
           motorName +
           `',this)" ` +
           motorValue +
-          ` >
-          </div>
-        `;
+          ` >`;
       });
     }
 
     // MOTOR Pose CONTROLS
     var div = document.getElementById('motorPoseControls');
-    div.innerHTML = '';
+    div.innerHTML =
+      '<div class="d-flex flex-row row"><div class="col" id="poseMotorLabels"></div><div class="col" id="poseMotorInputs"></div></div>';
+    var labelDiv = document.getElementById('poseMotorLabels');
+    var inputDiv = document.getElementById('poseMotorInputs');
     if (robotState.motors) {
       motorState = robotState.motors;
       robotState.motors.forEach((elem, index) => {
-        motorValue = 'value=' + (elem && elem.value ? elem.value : 0);
+        motorValue = 'value=' + (elem && elem.value ? parseInt(elem.value) : 0);
         motorName = elem && elem.name ? elem.name : 'Motor ' + index;
-        motorMin = elem && elem.min != undefined ? elem.min : 1500;
-        motorMax = elem && elem.max != undefined ? elem.max : 2500;
-        div.innerHTML +=
-          `
-          <div class="d-flex flex-row">
-            <h3 class="pr-2">` +
-          motorName +
-          `: <h3><input id="poseControl` + index + `" type="range" min="` +
+        motorMin = elem && elem.min != undefined ? parseInt(elem.min) : 1500;
+        motorMax = elem && elem.max != undefined ? parseInt(elem.max) : 2500;
+        labelDiv.innerHTML += `<h3 class="pr-2">` + motorName + `: </h3>`;
+        inputDiv.innerHTML +=
+          `<input style="height: 20%" id="poseControl` +
+          index +
+          `" type="range" min="` +
           motorMin +
           `" max="` +
           motorMax +
           `" ` +
           motorValue +
-          `>
-          </div>
-        `;
+          `>`;
+        // div.innerHTML +=
+        //   `
+        //   <div class="d-flex flex-row">
+        //     <h3 class="pr-2">` +
+        //   motorName +
+        //   `: <h3><input id="poseControl` + index + `" type="range" min="` +
+        //   motorMin +
+        //   `" max="` +
+        //   motorMax +
+        //   `" ` +
+        //   motorValue +
+        //   `>
+        //   </div>
+        // `;
       });
     }
 
