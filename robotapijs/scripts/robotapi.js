@@ -417,6 +417,15 @@ function Robot(robotId, apiDiv) {
   this.saveNewPose = function (newPoseState) {
     Robot._requestRobotState('poses', newPoseState)
   }
+
+  this.deletePose = function(index, poseState) {
+    if (index > -1 && index < poseState.length) { 
+      Robot._requestRobotState(
+        'poses',
+        poseState.filter((item, idx) => index !== idx)
+      );
+    }
+  }
   
   this.setEyes = function(value) {
     Robot._requestRobotState("currentEyes", value);

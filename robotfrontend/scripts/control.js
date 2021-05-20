@@ -22,12 +22,10 @@ function initializeControl() {
 
   var dbAllSoundsRef = firebase.database().ref('/robotapi/');
   dbAllSoundsRef.on('value', updateRobotAPI);
-  
-  var dbRobotRef = firebase
-    .database()
-    .ref('/robots/' + currentRobot);
+
+  var dbRobotRef = firebase.database().ref('/robots/' + currentRobot);
   dbRobotRef.on('value', updateHandler);
-  
+
   // var dbRobotRef = firebase
   //   .database()
   //   .ref('/robots/' + currentRobot + '/customAPI/');
@@ -93,7 +91,7 @@ function updateRobotState(snapshot) {
     // MOTOR CONTROLS
     var div = document.getElementById('motorControls');
     div.innerHTML =
-      '<div class="d-flex flex-row row"><div class="col" id="indivMotorLabels"></div><div class="col" id="indivMotorInputs"></div></div>';
+      '<div class="d-flex row flex-nowrap"><div class="col" id="indivMotorLabels"></div><div class="col-auto" id="indivMotorInputs"></div></div>';
     var labelDiv = document.getElementById('indivMotorLabels');
     var inputDiv = document.getElementById('indivMotorInputs');
     if (robotState.motors) {
@@ -103,9 +101,13 @@ function updateRobotState(snapshot) {
         motorName = elem && elem.name ? elem.name : 'Motor ' + index;
         motorMin = elem && elem.min != undefined ? parseInt(elem.min) : 1500;
         motorMax = elem && elem.max != undefined ? parseInt(elem.max) : 2500;
-        labelDiv.innerHTML += `<h3 class="pr-2">` + motorName + `: </h3>`;
+        labelDiv.innerHTML +=
+          `<h3 class="pr-2" style="padding-top: 5pt">` + motorName + `: </h3>`;
         inputDiv.innerHTML +=
-          `<input style="height: 20%" type="range" min="` +
+          `<div class="row"> <button class="btn btn-info" onclick="incrementMotor(` +
+          index +
+          `,` +
+          `-1)" style="font-size: 2"><<</button><input style="height: 20%" type="range" min="` +
           motorMin +
           `" max="` +
           motorMax +
@@ -118,14 +120,17 @@ function updateRobotState(snapshot) {
           motorName +
           `',this)" ` +
           motorValue +
-          ` >`;
+          ` ><button class="btn btn-info" onclick="incrementMotor(` +
+          index +
+          `,` +
+          `1)" style="font-size: 2">>></button></input></div>`;
       });
     }
 
     // MOTOR Pose CONTROLS
     var div = document.getElementById('motorPoseControls');
     div.innerHTML =
-      '<div class="d-flex flex-row row"><div class="col" id="poseMotorLabels"></div><div class="col" id="poseMotorInputs"></div></div>';
+      '<div class="d-flex flex-row row"><div class="col" id="poseMotorLabels"></div><div class="col" style="margin-bottom: 15pt" id="poseMotorInputs"></div></div>';
     var labelDiv = document.getElementById('poseMotorLabels');
     var inputDiv = document.getElementById('poseMotorInputs');
     if (robotState.motors) {
@@ -135,7 +140,7 @@ function updateRobotState(snapshot) {
         motorName = elem && elem.name ? elem.name : 'Motor ' + index;
         motorMin = elem && elem.min != undefined ? parseInt(elem.min) : 1500;
         motorMax = elem && elem.max != undefined ? parseInt(elem.max) : 2500;
-        labelDiv.innerHTML += `<h3 class="pr-2">` + motorName + `: </h3>`;
+        labelDiv.innerHTML += `<h3 class="pr-2" style="padding-top: 5pt">` + motorName + `: </h3>`;
         inputDiv.innerHTML +=
           `<input style="height: 20%" id="poseControl` +
           index +
@@ -146,21 +151,10 @@ function updateRobotState(snapshot) {
           `" ` +
           motorValue +
           `>`;
-        // div.innerHTML +=
-        //   `
-        //   <div class="d-flex flex-row">
-        //     <h3 class="pr-2">` +
-        //   motorName +
-        //   `: <h3><input id="poseControl` + index + `" type="range" min="` +
-        //   motorMin +
-        //   `" max="` +
-        //   motorMax +
-        //   `" ` +
-        //   motorValue +
-        //   `>
-        //   </div>
-        // `;
       });
+      labelDiv.innerHTML += `<h3 class="pr-2" style="padding-top: 5pt">Arousal:</h3>`;
+      inputDiv.innerHTML +=
+        `<input style="height: 20%; margin-bottom: 20pt" type="range" min="0" max="100" value="50"></input>`;
     }
 
     var div = document.getElementById('headTouched');
@@ -168,7 +162,7 @@ function updateRobotState(snapshot) {
     if (robotState.headTouched && robotState.headTouched != 0) {
       div.innerHTML = `<button type="button" class="btn btn-success">Head Touched!!</button>`;
     } else {
-      div.innerHTML = ``;
+      div.innerHTML = `<button type="button" class="btn btn-danger">Head Not Touched</button>`;
     }
 
     // POSE CONTROLS
@@ -179,13 +173,32 @@ function updateRobotState(snapshot) {
       poseState.forEach((elem, index) => {
         poseName = elem && elem.name ? elem.name : 'Pose ' + index;
         div.innerHTML +=
-          `<button type="button" class="btn btn-info" onclick="poseChanged(` +
+          `<div class='deletable-thumb'>
+            <div class='thumb-and-name'>
+              <button
+                type='button'
+                class='btn btn-info'
+                onclick="poseChanged(` +
           index +
           `,'` +
           poseName +
-          `')">` +
+          `')"
+              >
+                ` +
           poseName +
-          `</button>`;
+          `
+              </button></div>
+  <div class='delete-x-button'>
+    <button
+      type='button'
+      onclick='deletePose(` + index + `)'
+      class='btn btn-secondary btn-circle-sm'
+    >
+      X
+    </button>
+  </div>
+</div>
+              `;
       });
     }
     div.innerHTML = `<div class="preset-controls">` + div.innerHTML + '</div>';
@@ -280,15 +293,29 @@ function bellyScreenChanged(target) {
   robot.setScreen(target.id);
 }
 
+function incrementMotor(index, direction) {
+  delta = (motorState[index].max - motorState[index].min) * 0.1 * parseInt(direction);
+  if (motorState[index].value + delta < motorState[index].min) {
+    robot.setMotor(index, motorState[index].name, motorState[index].min, motorState);
+  } else if (motorState[index].value + delta > motorState[index].max) {
+    robot.setMotor(index, motorState[index].name, motorState[index].max, motorState);
+  } else {
+    robot.setMotor(index, motorState[index].name, motorState[index].value + delta, motorState);
+  }
+}
+
 function motorInputChanged(index, name, target) {
   robot.setMotor(index, name, parseInt(target.value), motorState);
 }
 
 function manualPoseChanged() {
-  let updatedMotorState = [...motorState ];
+  let updatedMotorState = [...motorState];
   motorState.forEach((elem, index) => {
-    updatedMotorState[index] = { ...updatedMotorState[index], value: parseInt(document.getElementById("poseControl" + index).value)}
-  })
+    updatedMotorState[index] = {
+      ...updatedMotorState[index],
+      value: parseInt(document.getElementById('poseControl' + index).value),
+    };
+  });
   robot.setMotors(updatedMotorState);
 }
 
@@ -297,7 +324,7 @@ function poseChanged(index, name) {
 }
 
 function saveAsPose() {
-  let newPoseState = [ ...poseState ];
+  let newPoseState = [...poseState];
   newPoseState.push({
     lastPressed: 0,
     motors: motorState.map((elem, index) =>
@@ -305,7 +332,11 @@ function saveAsPose() {
     ),
     name: document.getElementById('savePoseText').value,
   });
-  robot.saveNewPose(newPoseState)
+  robot.saveNewPose(newPoseState);
+}
+
+function deletePose(index) {
+  robot.deletePose(index, poseState);
 }
 
 /*Callback for dynamically created button*/
