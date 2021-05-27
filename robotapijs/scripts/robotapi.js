@@ -78,6 +78,20 @@ function Robot(robotId, apiDiv) {
           Robot._getScreenNames(),
         'robot.setScreenByName("Screen-0");'
       );
+      apiText += Robot._getAPICardHTML(
+        'robot.setLargeInstruction(screenIndex, text)',
+        "Sets the text of a specific robot belly screen.",
+        '<b>screenIndex</b> is an integer corresponding to a specific belly screen. ' +
+        '<b>text</b> is an String. ',
+        'robot.setLargeInstruction(0, "Hello!");'
+      );
+      apiText += Robot._getAPICardHTML(
+        'robot.setSmallInstruction(screenIndex, text)',
+        'Sets the small instruction text of a specific robot belly screen.',
+        '<b>screenIndex</b> is an integer corresponding to a specific belly screen. ' +
+          '<b>text</b> is an String. ',
+        'robot.setSmallInstruction(0, "Hello!");'
+      );
       apiText += Robot._getAPICardHTML("(sliderValue) robot.getSliderValue()",
                         "Obtains the current value of the slider on the screen.",
                        "<b>sliderValue</b> is an Integer between 0 and 100 indicating the current value of the slider.",
@@ -346,6 +360,11 @@ function Robot(robotId, apiDiv) {
     dbRef.update(updates);
   };
 
+  Robot._requestRobotScreen = function (screenIndex, newState) {
+    var dbRef = firebase.database().ref('/robots/' + Robot.robotId + '/customAPI/inputs/bellyScreens/' + screenIndex);
+    dbRef.update(newState);
+  }
+
   this.speak = function(text) {
     console.log("Speaking");
     Robot._requestRobotAction("speak", {text:text});
@@ -426,6 +445,26 @@ function Robot(robotId, apiDiv) {
       );
     }
   }
+
+  this.setLargeInstruction = function (screenIndex, text) {
+    if (screenIndex < 0 || screenIndex>=Robot.bellyScreens.length)
+      console.log("Wrong screen index.");
+    else {
+      updated = { ...Robot.bellyScreens[screenIndex] };
+      updated.instructionLarge.text = text;
+      Robot._requestRobotScreen(screenIndex, updated);
+    }
+  }
+
+  this.setSmallInstruction = function (screenIndex, text) {
+    if (screenIndex < 0 || screenIndex >= Robot.bellyScreens.length)
+      console.log('Wrong screen index.');
+    else {
+      updated = { ...Robot.bellyScreens[screenIndex] };
+      updated.instructionSmall.text = text;
+      Robot._requestRobotScreen(screenIndex, updated);
+    }
+  };
   
   this.setEyes = function(value) {
     Robot._requestRobotState("currentEyes", value);
