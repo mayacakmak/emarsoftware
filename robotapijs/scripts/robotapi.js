@@ -412,6 +412,10 @@ function Robot(robotId, apiDiv) {
     Robot._requestRobotState('motors', newState);
   }
 
+  this.setExcitement = function (value) {
+    Robot._requestRobotState('excitement', value);
+  }
+
   this.setMotors = function (updatedMotorState) {
     Robot._requestRobotState('motors', updatedMotorState);
   }

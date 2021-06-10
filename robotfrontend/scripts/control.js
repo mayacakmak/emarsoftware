@@ -7,6 +7,9 @@ var belly;
 var robotAPI = null;
 var customAPI = null;
 var motorState = null;
+var animations = [];
+var currAnimation = [];
+
 
 function initializeControl() {
   var robotParam = Config.getURLParameter('robot');
@@ -170,8 +173,8 @@ function updateRobotState(snapshot) {
     var labelDiv = document.getElementById('speedMotorLabels');
     var inputDiv = document.getElementById('speedMotorInputs');
     labelDiv.innerHTML += `<h3 class="pr-2" style="padding-top: 5pt">Excitement:</h3>`;
-    inputDiv.innerHTML += `<input style="height: 20%; margin-bottom: 20pt" type="range" min="0" max="100" value="50"></input>`;
-    
+    inputDiv.innerHTML += `<input style="height: 20%; margin-bottom: 20pt" type="range" min="0" max="100" value="` + robotState.excitement + `" onchange="excitementChanged(this)"></input>`;
+
     if (robotState.poses) {
       poseState = robotState.poses;
       var div = document.getElementById('poses');
@@ -197,15 +200,62 @@ function updateRobotState(snapshot) {
     <button
       type='button'
       onclick='deletePose(` +
-            index +
-            `)'
+          index +
+          `)'
       class='btn btn-secondary btn-circle-sm'
-      style='` + (!elem.delete && "visibility: hidden") + `'
+      style='` +
+          (!elem.delete && 'visibility: hidden') +
+          `'
     >
       X
     </button></div></div>`;
       });
     }
+    // div.innerHTML += '</div>';
+
+    // POSE CONTROLS
+    // var div = document.getElementById('animationControls');
+    // div.innerHTML =
+    //   '<div class="d-flex flex-row row"><div class="col" id="animationDelatMotorLabels"></div><div class="col" style="margin-bottom: 15pt" id="animationDelatMotorInputs"></div></div><div class="preset-controls" id="posesAnimation"></div><h3>Animation Sequence:</h3><div class="preset-controls" id="buildAnimation" style="display: inline-flex"></div>';
+    // var labelDiv = document.getElementById('animationDelatMotorLabels');
+    // var inputDiv = document.getElementById('animationDelatMotorInputs');
+    // labelDiv.innerHTML += `<h3 class="pr-2" style="padding-top: 1pt">Pose Delay:</h3>`;
+    // inputDiv.innerHTML += `<input style="height: 20%; margin-bottom: 10pt" type="range" min="0" max="100" value="50"></input>`;
+    // div.innerHTML +=
+    //   `<div class='thumb-and-name' style="padding-top: 5pt">
+    //           <button
+    //             type='button'
+    //             class='btn btn-success'
+    //             onclick="sentAnimationToRobot(` + `)"
+    //           >
+    //             ` +
+    //   'Send to Robot' +
+    //   `
+    //           </button></div>`;
+    // if (robotState.poses) {
+    //   poseState = robotState.poses;
+    //   var div = document.getElementById('posesAnimation');
+    //   // div.innerHTML += '<div class="preset-controls">';
+    //   poseState.forEach((elem, index) => {
+    //     poseName = elem && elem.name ? elem.name : 'Pose ' + index;
+    //     div.innerHTML +=
+    //       `
+    //         <div class='thumb-and-name'>
+    //           <button
+    //             type='button'
+    //             class='btn btn-info'
+    //             onclick="addToAnimation(` +
+    //       index +
+    //       `,'` +
+    //       poseName +
+    //       `')"
+    //           >
+    //             ` +
+    //       poseName +
+    //       `
+    //           </button></div>`;
+    //   });
+    // }
     // div.innerHTML += '</div>';
 
     // BELLY
@@ -298,6 +348,48 @@ function bellyScreenChanged(target) {
   robot.setScreen(target.id);
 }
 
+function addToAnimation(index, name) {
+  currAnimation.push(poseState[index]);
+  renderCurrentAnimation()
+}
+
+function renderCurrentAnimation() {
+  var div = document.getElementById('buildAnimation');
+  div.innerHTML = '';
+  currAnimation.forEach((elem, index) => {
+    poseName = elem && elem.name ? elem.name : 'Pose ' + index;
+    div.innerHTML +=
+      `<div class='deletable-thumb'>
+              <div class='thumb-and-name'>
+                <button
+                  type='button'
+                  class='btn btn-success'
+                  onclick="addToAnimation(` +
+      index +
+      `,'` +
+      poseName +
+      `')"
+                >
+                  ` +
+      poseName +
+      `
+                </button></div><div class='delete-x-button'>
+      <button
+        type='button'
+        onclick='deletePoseFromAnimation(` +
+      index +
+      `)'
+        class='btn btn-secondary btn-circle-sm'
+      >
+        X
+      </button></div></div>`;
+  });
+}
+
+function sendAnimationToRobot() {
+
+}
+
 function incrementMotor(index, direction) {
   delta =
     (motorState[index].max - motorState[index].min) * 0.1 * parseInt(direction);
@@ -334,6 +426,14 @@ function motorInputChanged(index, name, target) {
   robot.setMotor(index, name, parseInt(target.value), motorState);
 }
 
+function excitementChanged(target) {
+  value = target.value
+  if (value > 0 && value < 100) {
+    // console.log(value);
+    robot.setExcitement(target.value);
+  }
+}
+
 function manualPoseChanged() {
   let updatedMotorState = [...motorState];
   motorState.forEach((elem, index) => {
@@ -364,6 +464,11 @@ function saveAsPose() {
 
 function deletePose(index) {
   robot.deletePose(index, poseState);
+}
+
+function deletePoseFromAnimation(index) {
+  currAnimation = currAnimation.filter((item, idx) => index !== idx);
+  renderCurrentAnimation();
 }
 
 /*Callback for dynamically created button*/
