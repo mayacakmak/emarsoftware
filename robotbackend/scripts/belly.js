@@ -474,7 +474,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
               Belly.currentScreen +
               ',' +
               j +
-              `)' name='button' style="font-size: 0.5vw;">` +
+              `)' name='button'>` +
               name +
               '</button></div>';
           }
