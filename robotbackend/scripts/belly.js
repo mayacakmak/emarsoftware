@@ -477,7 +477,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
               `)' name='button' style="font-size: `
               + buttonTextScale + 
               `;">` +
-              name + ' TEST ' + Belly.scale + ' ' + Belly.resizeAxis + 
+              name +
               '</button></div>';
           }
         }
