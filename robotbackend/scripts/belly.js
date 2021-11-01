@@ -428,7 +428,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
         "<div class='d-flex justify-content-center flex-wrap screen-element mt-4'  style='z-index: 2'>";
       let buttonTextScale = window.location.href.includes('bellyEdit')
         ? '1vw'
-        : '1.5vw';
+        : '2.5vw';
 
       if (screen.buttons.list != undefined) {
         for (var j = 0; j < screen.buttons.list.length; j++) {
@@ -474,8 +474,10 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
               Belly.currentScreen +
               ',' +
               j +
-              `)' name='button' style="font-size: 0.5vw;">` +
-              name +
+              `)' name='button' style="font-size: `
+              + buttonTextScale + 
+              `;">` +
+              name + 
               '</button></div>';
           }
         }
