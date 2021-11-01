@@ -481,7 +481,29 @@ function Robot(robotId, apiDiv) {
   }
 
   this.moveNeck = function(pan, tilt) {
-    Robot._requestRobotAction("neck", {panAngle:pan, tiltAngle:tilt});
+    // Get current motorState and update
+    var dbRef = firebase.database().ref('/robots/' + Robot.robotId + '/state/motors/');
+    var newState = null
+    dbRef.on('value', (snapshot) => {
+      var currentState = snapshot.val();
+      newState = currentState;
+      currentState.forEach((elem, index) => {
+        if (elem.name == 'Left/Right Tilt' && pan != 0) {
+          if (pan > 0)
+            newState[index].value = Math.min(elem.max, elem.value + pan);
+          else
+            newState[index].value = Math.max(elem.min, elem.value + pan);
+        }
+        else if (elem.name == 'Up/Down Tilt' && tilt != 0) {
+          if (tilt > 0)
+            newState[index].value = Math.min(elem.max, elem.value + tilt);
+          else
+            newState[index].value = Math.max(elem.min, elem.value + tilt);
+        }
+      })
+    })
+    this.setMotors(newState);
+    console.log('MotorState values: L/R=' + newState[0].value + ', U/D=' + newState[1].value);
     //TODO: Implement callback for when action is done
   }
 
