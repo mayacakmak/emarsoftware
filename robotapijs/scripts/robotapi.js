@@ -40,11 +40,13 @@ function Robot(robotId, apiDiv) {
                         "Makes the robot speak the given text out loud.",
                        "<b>text</b> is a String within single or double quotes",
                        "robot.speak(\"Hello world\");");
-    apiText += Robot._getAPICardHTML("robot.moveNeck(pan, tilt)",
-                        "Makes the robot's neck move to the indicated pan/tilt angles.",
-                       "<b>pan</b> is an Integer representing the pan angle in degrees.<br>" +
-                       "<b>tilt</b> is an Integer representing the tilt angle in degrees.",
-                       "robot.moveNeck(0, -30);");
+    apiText += Robot._getAPICardHTML("robot.moveNeck(rotate, tilt, pan, turn)",
+                        "Increments the robot's neck move the indicated angles.",
+                       "<b>rotate</b> is an Integer representing the left/right tilt angle in degrees.<br>" +
+                       "<b>tilt</b> is an Integer representing the up/down tilt angle in degrees.<br>" +
+                       "<b>pan</b> is an Integer representing the horizontal movement in degrees.<br>" +
+                       "<b>turn</b> is an Integer representing the left/right rotation angle in degrees.",
+                       "robot.moveNeck(0, -30, 0, 0);");
     apiText += Robot._getAPICardHTML("robot.setSpeechBubble(text)",
                         "Sets the robot's speech bubble to the given text.",
                        "<b>text</b> is a String within single or double quotes",
@@ -480,7 +482,7 @@ function Robot(robotId, apiDiv) {
     //TODO: Implement callback for when action is done
   }
 
-  this.moveNeck = function(pan, tilt) {
+  this.moveNeck = function(rotate, tilt, pan, turn) {
     // Get current motorState and update
     var dbRef = firebase.database().ref('/robots/' + Robot.robotId + '/state/motors/');
     var newState = null
@@ -488,11 +490,11 @@ function Robot(robotId, apiDiv) {
       var currentState = snapshot.val();
       newState = currentState;
       currentState.forEach((elem, index) => {
-        if (elem.name == 'Left/Right Tilt' && pan != 0) {
-          if (pan > 0)
-            newState[index].value = Math.min(elem.max, elem.value + pan);
+        if (elem.name == 'Left/Right Tilt' && rotate != 0) {
+          if (rotate > 0)
+            newState[index].value = Math.min(elem.max, elem.value + rotate);
           else
-            newState[index].value = Math.max(elem.min, elem.value + pan);
+            newState[index].value = Math.max(elem.min, elem.value + rotate);
         }
         else if (elem.name == 'Up/Down Tilt' && tilt != 0) {
           if (tilt > 0)
@@ -500,10 +502,25 @@ function Robot(robotId, apiDiv) {
           else
             newState[index].value = Math.max(elem.min, elem.value + tilt);
         }
+        else if (elem.name == 'Neck' && pan != 0) {
+          if (pan > 0)
+            newState[index].value = Math.min(elem.max, elem.value + pan);
+          else
+            newState[index].value = Math.max(elem.min, elem.value + pan);
+        }
+        else if (elem.name == 'Rotate' && turn != 0) {
+          if (turn > 0)
+            newState[index].value = Math.min(elem.max, elem.value + turn);
+          else
+            newState[index].value = Math.max(elem.min, elem.value + turn);
+        }
       })
     })
     this.setMotors(newState);
-    console.log('MotorState values: L/R=' + newState[0].value + ', U/D=' + newState[1].value);
+    console.log('MotorState values: L/R=' + newState[0].value
+      + ', U/D=' + newState[1].value
+      + ', Neck=' + newState[2].value
+      + ', Rotate=' + newState[3].value);
     //TODO: Implement callback for when action is done
   }
 
