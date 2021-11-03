@@ -42,10 +42,10 @@ function Robot(robotId, apiDiv) {
                        "<b>text</b> is a String within single or double quotes",
                        "robot.speak(\"Hello world\");");
     apiText += Robot._getAPICardHTML("robot.moveNeck(rotate, tilt, pan, turn)",
-                        "Increments the robot's neck move the indicated angles.",
+                        "Increments the robot's neck to move the indicated amount.",
                        "<b>rotate</b> is an Integer representing the left/right tilt angle in degrees.<br>" +
                        "<b>tilt</b> is an Integer representing the up/down tilt angle in degrees.<br>" +
-                       "<b>pan</b> is an Integer representing the horizontal movement in degrees.<br>" +
+                       "<b>pan</b> is an Integer representing the vertical movement of the neck.<br>" +
                        "<b>turn</b> is an Integer representing the left/right rotation angle in degrees.",
                        "robot.moveNeck(0, -30, 0, 0);");
     if (Robot.poses != null && Robot.poses.length > 0)
