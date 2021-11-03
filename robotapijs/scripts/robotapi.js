@@ -477,6 +477,7 @@ function Robot(robotId, apiDiv) {
     newPoseState.forEach((elem, index) => {
       updates[index] = {name: elem.name ? elem.name : 'Pose ' + index};
     });
+    updates[newPoseState.length] = null;
     dbRef.update(updates);
   }
 
