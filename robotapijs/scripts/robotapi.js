@@ -12,6 +12,7 @@ function Robot(robotId, apiDiv) {
   Robot.sounds = null;
   Robot.tactile = null;
   Robot.motors = null;
+  Robot.poses = null;
   
   Robot.setRobotId = function(robotId) {
     Robot.robotId = robotId;
@@ -40,11 +41,20 @@ function Robot(robotId, apiDiv) {
                         "Makes the robot speak the given text out loud.",
                        "<b>text</b> is a String within single or double quotes",
                        "robot.speak(\"Hello world\");");
-    apiText += Robot._getAPICardHTML("robot.moveNeck(pan, tilt)",
-                        "Makes the robot's neck move to the indicated pan/tilt angles.",
-                       "<b>pan</b> is an Integer representing the pan angle in degrees.<br>" +
-                       "<b>tilt</b> is an Integer representing the tilt angle in degrees.",
-                       "robot.moveNeck(0, -30);");
+    apiText += Robot._getAPICardHTML("robot.moveNeck(rotate, tilt, pan, turn)",
+                        "Increments the robot's neck to move the indicated amount.",
+                       "<b>rotate</b> is an Integer representing the left/right tilt angle in degrees.<br>" +
+                       "<b>tilt</b> is an Integer representing the up/down tilt angle in degrees.<br>" +
+                       "<b>pan</b> is an Integer representing the vertical movement of the neck.<br>" +
+                       "<b>turn</b> is an Integer representing the left/right rotation angle in degrees.",
+                       "robot.moveNeck(0, -30, 0, 0);");
+    if (Robot.poses != null && Robot.poses.length > 0)
+      apiText += Robot._getAPICardHTML("robot.inputPose(poseIndex)",
+                        "Changes the robot's pose to one of its preset poses.",
+                      "<b>poseIndex</b> is an Integer between 0 and " +
+                        (Robot.poses.length-1) +  ", available poses are:" +
+                        Robot._getPoseNames(),
+                      "robot.inputPose(0);");
     apiText += Robot._getAPICardHTML("robot.setSpeechBubble(text)",
                         "Sets the robot's speech bubble to the given text.",
                        "<b>text</b> is a String within single or double quotes",
@@ -154,6 +164,10 @@ function Robot(robotId, apiDiv) {
     return Robot._getNames(Robot.faces);
   }
 
+  Robot._getPoseNames = function() {
+    return Robot._getNames(Robot.poses);
+  }
+
   Robot._getNames = function(objectList) {
     var namesText = "<ul>";
     for (var i=0; i<objectList.length; i++) {
@@ -172,10 +186,11 @@ function Robot(robotId, apiDiv) {
     var apiData = snapshot.val();
     if (apiData.states != undefined)
       Robot.faces = apiData.states.faces;
+      Robot.poses = apiData.states.poses;
     if (apiData.inputs != undefined)
       Robot.bellyScreens = apiData.inputs.bellyScreens;
     if (apiData.actions != undefined)
-      Robot.sounds = apiData.actions.sounds;
+      Robot.sounds = apiData.actions.sounds;      
 
     if (Robot.apiDiv != undefined) {
       Robot.apiDiv.innerHTML = Robot.getAPIHTML();
@@ -437,8 +452,38 @@ function Robot(robotId, apiDiv) {
     Robot._requestRobotStates(['poses', 'motors'], [newState, newMotorState])
   }
 
+  this.inputPose = function (index) {
+    var dbRefMotor = firebase.database().ref('/robots/' + Robot.robotId + '/state/motors/');
+    var currentMotorState = null;
+    dbRefMotor.on('value', (snapshot) => {
+      currentMotorState = snapshot.val();
+    })
+    var dbRefPose = firebase.database().ref('/robots/' + Robot.robotId + '/state/poses/');
+    var poseState = null;
+    var poseStateName = null;
+    dbRefPose.on('value', (snapshot) => {
+      poseState = snapshot.val();
+      poseStateName = poseState[index].name;
+    })
+    if (currentMotorState && poseState) {
+      console.log('Updating pose to ' + index + ': ' + poseStateName);
+      this.setPose(index, poseStateName, poseState, currentMotorState);
+    }
+  }
+
+  this.updatePoseAPI = function(newPoseState) {
+    var dbRef = firebase.database().ref('/robots/' + Robot.robotId + '/customAPI/states/poses/');
+    var updates = {};
+    newPoseState.forEach((elem, index) => {
+      updates[index] = {name: elem.name ? elem.name : 'Pose ' + index};
+    });
+    updates[newPoseState.length] = null;
+    dbRef.update(updates);
+  }
+
   this.saveNewPose = function (newPoseState) {
-    Robot._requestRobotState('poses', newPoseState)
+    Robot._requestRobotState('poses', newPoseState);
+    this.updatePoseAPI(newPoseState);
   }
 
   this.deletePose = function(index, poseState) {
@@ -447,6 +492,7 @@ function Robot(robotId, apiDiv) {
         'poses',
         poseState.filter((item, idx) => index !== idx)
       );
+      this.updatePoseAPI(poseState.filter((item, idx) => index !== idx));
     }
   }
 
@@ -480,7 +526,7 @@ function Robot(robotId, apiDiv) {
     //TODO: Implement callback for when action is done
   }
 
-  this.moveNeck = function(pan, tilt) {
+  this.moveNeck = function(rotate, tilt, pan, turn) {
     // Get current motorState and update
     var dbRef = firebase.database().ref('/robots/' + Robot.robotId + '/state/motors/');
     var newState = null
@@ -488,11 +534,11 @@ function Robot(robotId, apiDiv) {
       var currentState = snapshot.val();
       newState = currentState;
       currentState.forEach((elem, index) => {
-        if (elem.name == 'Left/Right Tilt' && pan != 0) {
-          if (pan > 0)
-            newState[index].value = Math.min(elem.max, elem.value + pan);
+        if (elem.name == 'Left/Right Tilt' && rotate != 0) {
+          if (rotate > 0)
+            newState[index].value = Math.min(elem.max, elem.value + rotate);
           else
-            newState[index].value = Math.max(elem.min, elem.value + pan);
+            newState[index].value = Math.max(elem.min, elem.value + rotate);
         }
         else if (elem.name == 'Up/Down Tilt' && tilt != 0) {
           if (tilt > 0)
@@ -500,10 +546,25 @@ function Robot(robotId, apiDiv) {
           else
             newState[index].value = Math.max(elem.min, elem.value + tilt);
         }
+        else if (elem.name == 'Neck' && pan != 0) {
+          if (pan > 0)
+            newState[index].value = Math.min(elem.max, elem.value + pan);
+          else
+            newState[index].value = Math.max(elem.min, elem.value + pan);
+        }
+        else if (elem.name == 'Rotate' && turn != 0) {
+          if (turn > 0)
+            newState[index].value = Math.min(elem.max, elem.value + turn);
+          else
+            newState[index].value = Math.max(elem.min, elem.value + turn);
+        }
       })
     })
     this.setMotors(newState);
-    console.log('MotorState values: L/R=' + newState[0].value + ', U/D=' + newState[1].value);
+    console.log('MotorState values: L/R=' + newState[0].value
+      + ', U/D=' + newState[1].value
+      + ', Neck=' + newState[2].value
+      + ', Rotate=' + newState[3].value);
     //TODO: Implement callback for when action is done
   }
 
