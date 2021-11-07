@@ -7,6 +7,8 @@ var bellyScreens = [];
 var selectedBellyScreen = 0;
 var bellySnapshot;
 
+var savedScreens = [];
+
 function initializeEdit(uid) {
   db.uid = uid;
   isEdit = true;
@@ -29,6 +31,8 @@ function initializeEdit(uid) {
 
   var dbUserRef = firebase.database().ref('/users/' + Database.uid + '/');
   dbUserRef.on('value', currentUserDataChanged);
+
+  displaySavedScreens();
 }
 
 function currentUserDataChanged(snapshot) {
@@ -133,7 +137,7 @@ function renderSelectedBellyScreen(snapshot) {
       </div>
       <div class="dropdown">   
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Icons 
+          Icons
         </button>  
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">  
               <a class="dropdown-item" onclick='setIcon(this)' href="#"> <i class="fa fa-at"></i> At </a>  
@@ -1773,5 +1777,77 @@ function onDrop(event) {
     }
     dropTarget = null;
     dragTarget = null;
+  }
+}
+
+// Save whatever screen is currently selected to the savedScreens list inside
+// localStorage
+function saveScreen() {
+  if (localStorage.getItem('savedScreens') !== null) {
+    savedScreens = JSON.parse(localStorage.getItem('savedScreens'));
+  } 
+
+  // Saving the currentRobot as a screen variable allows it to save
+  // and display what robot in came from even on other robot editors
+  screen_to_save = bellyScreens[selectedBellyScreen]
+  screen_to_save.robot = currentRobot
+  savedScreens.push(screen_to_save);
+
+  localStorage.setItem('savedScreens', JSON.stringify(savedScreens))
+  console.log(JSON.parse(localStorage.getItem('savedScreens')))
+
+  displaySavedScreens();
+}
+
+// Reads through the screens saved on local storage and displays them
+// on the belly editor, alongside paste and remove options for each one
+function displaySavedScreens() {
+  savedScreens = JSON.parse(localStorage.getItem('savedScreens'));
+  const parent = document.getElementById('list-screens');
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild)
+  }
+  for (let i = 0; i < savedScreens.length; i++) {
+    console.log(savedScreens[i])
+
+    const screen_panel = document.createElement("div");
+    screen_panel.style.display = "flex";
+    screen_panel.style.flexDirection = "row";
+    screen_panel.style.alignItems = "center";
+
+    const panel_text = document.createElement("h5");
+    panel_text.innerText = "Robot: " + savedScreens[i].robot + " | " + savedScreens[i].name
+    
+    const paste = document.createElement("button");
+    paste.type = "submit"
+    paste.class = "btn btn-primary mb-2"
+    paste.innerText = "Paste"
+    paste.style.margin = "5px"
+    paste.onclick = function() {
+      console.log(savedScreens[i])
+      new_screen = savedScreens[i]
+      new_screen.name = 'Screen-' + (bellyScreens.length + 1);
+      new_screen.robot = currentRobot;
+      bellyScreens.push(new_screen);
+      var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+      var dbRef = firebase.database().ref(dir);
+      dbRef.update({ bellyScreens: bellyScreens });
+    }
+
+    const remove = document.createElement("button");
+    remove.type = "submit"
+    remove.class = "btn btn-danger"
+    remove.innerText = "Remove"
+    remove.style.margin = "5px"
+    remove.onclick = function() {
+      savedScreens = savedScreens.filter(function(e) { return e !== savedScreens[i] });
+      localStorage.setItem('savedScreens', JSON.stringify(savedScreens));
+      displaySavedScreens();
+    }
+
+    screen_panel.append(panel_text)
+    screen_panel.append(paste)
+    screen_panel.append(remove)
+    parent.appendChild(screen_panel)
   }
 }
