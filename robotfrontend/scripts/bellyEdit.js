@@ -1783,15 +1783,17 @@ function onDrop(event) {
 // Save whatever screen is currently selected to the savedScreens list inside
 // localStorage
 function saveScreen() {
-  if (localStorage.getItem('savedScreens') !== null) {
-    savedScreens = JSON.parse(localStorage.getItem('savedScreens'));
-  } 
-
   // Saving the currentRobot as a screen variable allows it to save
   // and display what robot in came from even on other robot editors
-  screen_to_save = bellyScreens[selectedBellyScreen]
-  screen_to_save.robot = currentRobot
-  savedScreens.push(screen_to_save);
+  screen_to_save = bellyScreens[selectedBellyScreen];
+  screen_to_save.robot = currentRobot;
+
+  if (localStorage.getItem('savedScreens') !== null) {
+    savedScreens = JSON.parse(localStorage.getItem('savedScreens'));
+    savedScreens.push(screen_to_save);
+  } else {
+    savedScreens = [screen_to_save]
+  }
 
   localStorage.setItem('savedScreens', JSON.stringify(savedScreens))
   console.log(JSON.parse(localStorage.getItem('savedScreens')))
