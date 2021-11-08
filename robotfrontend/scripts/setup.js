@@ -384,6 +384,7 @@ function addRobotFace() {
 }
 
 function enableMotors() {
+  // Update db with motor and pose states, initialize with v7 values
   var dbRef = firebase.database().ref('robots/' + (currentRobot) + '/state/');
   var init_v7 = {
     'motors': {
@@ -410,6 +411,19 @@ function enableMotors() {
         'min': 1024,
         'name': 'Rotate',
         'value': 1937,
+      },
+    },
+    'poses': {
+      0: {
+        'delete': 0,
+        'lastPressed': -1,
+        'motors': {
+          0: 2037,
+          1: 2573,
+          2: 1634,
+          3: 1937,
+        },
+        'name': 'Reset',
       },
     },
   }
