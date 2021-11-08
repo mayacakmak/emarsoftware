@@ -33,6 +33,16 @@ function initializeSetup() {
   dbRobotSoundsRef.on("value", updateRobotSoundList);   
   window.onresize = Face.draw;
 
+  var dbRefMotor = firebase.database().ref('/robots/' + currentRobot + '/state/motors/');
+  var currentMotorState = null;
+  dbRefMotor.on('value', (snapshot) => {
+    if (snapshot.val() == null) {
+      console.log('No movement enabled for this robot. Activating button.');
+      var motorBtn = document.getElementById("enableMotorsBtn");
+      motorBtn.removeAttribute('disabled');
+      motorBtn.setAttribute('onclick', 'enableMotors()');
+    }
+  });
 }
 
 function updateRobotSoundList(snapshot) {
@@ -371,5 +381,40 @@ function addRobotFace() {
   selectedFaceParameters = selectedUserData.faces[selectedFace];
   updates[index] = selectedFaceParameters;
   dbRef.update(updates);
+}
+
+function enableMotors() {
+  var dbRef = firebase.database().ref('robots/' + (currentRobot) + '/state/');
+  var init_v7 = {
+    'motors': {
+      0: {
+        'max': 2381,
+        'min': 1707,
+        'name': 'Left/Right Tilt',
+        'value': 2037,
+      },
+      1: {
+        'max': 2787,
+        'min': 1536,
+        'name': 'Up/Down Tilt',
+        'value': 2573,
+      },
+      2: {
+        'max': 2227,
+        'min': 1380,
+        'name': 'Neck',
+        'value': 1634,
+      },
+      3: {
+        'max': 3072,
+        'min': 1024,
+        'name': 'Rotate',
+        'value': 1937,
+      },
+    },
+  }
+  dbRef.update(init_v7);
+  console.log("Updated robot " + currentRobot + "'s motor state in the db.");
+  document.getElementById('enableMotorsBtn').setAttribute('disabled', true);
 }
 
