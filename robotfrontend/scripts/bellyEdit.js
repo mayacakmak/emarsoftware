@@ -1194,7 +1194,7 @@ function printImageList() {
     fullscreen.innerText = "Fullscreen"
     fullscreen.style.margin = "5px"
     fullscreen.onclick = function(){
-      resizeImage(i-1, "100%", "100%")
+      resizeImage(i-1, "85%", "85%")
     }
 
 
