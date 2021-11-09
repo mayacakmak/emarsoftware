@@ -12,7 +12,9 @@ function Robot(robotId, apiDiv) {
   Robot.sounds = null;
   Robot.tactile = null;
   Robot.motors = null;
+  Robot.currentMotorState = null;
   Robot.poses = null;
+  Robot.poseState = null;
   
   Robot.setRobotId = function(robotId) {
     Robot.robotId = robotId;
@@ -30,6 +32,16 @@ function Robot(robotId, apiDiv) {
     var dbRefInput = firebase.database().ref(
       '/robots/' + Robot.robotId + '/inputs/');
     dbRefInput.on("value", Robot._updateRobotInput);
+
+    var dbRefMotor = firebase.database().ref('/robots/' + Robot.robotId + '/state/motors/');
+    dbRefMotor.on('value', (snapshot) => {
+      Robot.currentMotorState = snapshot.val();
+    })
+
+    var dbRefPose = firebase.database().ref('/robots/' + Robot.robotId + '/state/poses/');
+    dbRefPose.on('value', (snapshot) => {
+      Robot.poseState = snapshot.val();
+    })
 
     console.log("Robot initialized.");
   }
@@ -453,21 +465,11 @@ function Robot(robotId, apiDiv) {
   }
 
   this.inputPose = function (index) {
-    var dbRefMotor = firebase.database().ref('/robots/' + Robot.robotId + '/state/motors/');
-    var currentMotorState = null;
-    dbRefMotor.on('value', (snapshot) => {
-      currentMotorState = snapshot.val();
-    })
     var dbRefPose = firebase.database().ref('/robots/' + Robot.robotId + '/state/poses/');
-    var poseState = null;
-    var poseStateName = null;
-    dbRefPose.on('value', (snapshot) => {
-      poseState = snapshot.val();
-      poseStateName = poseState[index].name;
-    })
-    if (currentMotorState && poseState) {
+    var poseStateName = Robot.poseState[index].name;
+    if (Robot.currentMotorState && Robot.poseState) {
       console.log('Updating pose to ' + index + ': ' + poseStateName);
-      this.setPose(index, poseStateName, poseState, currentMotorState);
+      this.setPose(index, poseStateName, Robot.poseState, Robot.currentMotorState);
     }
   }
 
@@ -528,12 +530,9 @@ function Robot(robotId, apiDiv) {
 
   this.moveNeck = function(rotate, tilt, pan, turn) {
     // Get current motorState and update
-    var dbRef = firebase.database().ref('/robots/' + Robot.robotId + '/state/motors/');
-    var newState = null
-    dbRef.on('value', (snapshot) => {
-      var currentState = snapshot.val();
-      newState = currentState;
-      currentState.forEach((elem, index) => {
+    var newState = Robot.currentMotorState;
+    if (Robot.currentMotorState) {
+      Robot.currentMotorState.forEach((elem, index) => {
         if (elem.name == 'Left/Right Tilt' && rotate != 0) {
           if (rotate > 0)
             newState[index].value = Math.min(elem.max, elem.value + rotate);
@@ -559,12 +558,12 @@ function Robot(robotId, apiDiv) {
             newState[index].value = Math.max(elem.min, elem.value + turn);
         }
       })
-    })
-    this.setMotors(newState);
-    console.log('MotorState values: L/R=' + newState[0].value
-      + ', U/D=' + newState[1].value
-      + ', Neck=' + newState[2].value
-      + ', Rotate=' + newState[3].value);
+      this.setMotors(newState);
+      console.log('MotorState values: L/R=' + newState[0].value
+        + ', U/D=' + newState[1].value
+        + ', Neck=' + newState[2].value
+        + ', Rotate=' + newState[3].value);
+    }
     //TODO: Implement callback for when action is done
   }
 

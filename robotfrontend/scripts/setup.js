@@ -35,7 +35,7 @@ function initializeSetup() {
 
   var dbRefMotor = firebase.database().ref('/robots/' + currentRobot + '/state/motors/');
   var currentMotorState = null;
-  dbRefMotor.on('value', (snapshot) => {
+  dbRefMotor.once('value', (snapshot) => {
     if (snapshot.val() == null) {
       console.log('No movement enabled for this robot. Activating button.');
       var motorBtn = document.getElementById("enableMotorsBtn");
