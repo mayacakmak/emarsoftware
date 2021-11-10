@@ -14,7 +14,7 @@
   <div class="container-fluid px-sm-5 pb-4">
     <div class="row">
       <div class="col text-center">
-        <h1 class="display-4">Robot Controller</h1>
+        <h1 class="display-4" id="controlTitle">Robot Controller</h1>
       </div>
     </div>
     <div class="row">
@@ -33,6 +33,61 @@
     </div>
     <div class="row">
       <div class="col-sm-7">
+        <div class="card">
+          <div class="card-header row">
+            <h2 style="padding-left: 10pt">Set individual robot motors</h2>
+            <div class="col-md align-content-center" id="headTouched">
+              </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md">
+                <div class="top-aligned" id="motorControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Set multiple robot motors (at once)</h2>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md">
+                <div style="width: 50%" class="top-aligned" id="motorPoseControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+                <div class="preset-controls">
+                  <button type="button" class="btn btn-info" onclick="manualPoseChanged()">Send to Robot</button>
+                  <input class="large-text" type="text" name="savePoseText" id="savePoseText" placeholder="Pose name">
+                  <button type="button" class="btn btn-info" onclick="saveAsPose()">Save as Pose</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Robot poses</h2>
+          </div>
+          <div class="card-body">
+            <div class="top-aligned" id="poseControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Set robot screen</h2>
+          </div>
+          <div class="card-body">
+            <div class="top-aligned" id="screenControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Set robot eyes</h2>
+          </div>
+          <div class="card-body">
+            <div class="top-aligned" id="faceControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+          </div>
+        </div>
         <div class="card">
           <div class="card-header">
             <h2>Robot speech</h2>
@@ -60,62 +115,6 @@
               <button class="btn btn-success full-button" id="sendBubble" onclick="bubblePressed()">Send to speech bubble</button>
               <button class="btn btn-warning full-button" id="clearBubble" onclick="bubbleClear()">Clear speech bubble</button>
             </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <h2>Set robot screen</h2>
-          </div>
-          <div class="card-body">
-            <div class="top-aligned" id="screenControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <h2>Set robot eyes</h2>
-          </div>
-          <div class="card-body">
-            <div class="top-aligned" id="faceControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header row">
-            <h2 style="padding-left: 10pt">Set individual robot motors</h2>
-            <div class="col-md align-content-center" id="headTouched">
-              </div>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md">
-                <div class="top-aligned" id="motorControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <h2>Set multiple robot motors (at once)</h2>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md">
-                <div style="width: 50%" class="top-aligned" id="motorPoseControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
-                <div class="preset-controls">
-                  <button type="button" class="btn btn-info" onclick="manualPoseChanged()">Send to Robot</button>
-                  <input class="large-text" type="text" name="savePoseText" id="savePoseText" placeholder="Pose name">
-                  <button type="button" class="btn btn-info" onclick="saveAsPose()">Save as Pose</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <h2>Robot poses</h2>
-          </div>
-          <div class="card-body">
-            <div class="top-aligned" id="poseControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
           </div>
         </div>
         <!-- <div class="card">
