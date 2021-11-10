@@ -28,6 +28,7 @@ function initializeControl() {
 
   var dbRobotRef = firebase.database().ref('/robots/' + currentRobot);
   dbRobotRef.on('value', updateHandler);
+  dbRobotRef.once('value', updateHeader);
 
   // var dbRobotRef = firebase
   //   .database()
@@ -48,6 +49,14 @@ function initializeControl() {
   function confirmExit() {
     // dbRobotStateRef.off();
     dbRobotRef.off();
+  }
+}
+
+function updateHeader(snapshot) {
+  var robotData = snapshot.val();
+  if (robotData.name) {
+    var headerElmt = document.getElementById('controlTitle');
+    headerElmt.innerText += ': ' + robotData.name;
   }
 }
 
