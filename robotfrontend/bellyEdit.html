@@ -36,6 +36,22 @@
           </div>
         </div>
         
+         <!-- Saved Bellyscreens Panel
+          Lists every screen saved in local storage and allows editors to paste
+          them into the current robot or remove them from storage
+        -->
+        <div class="card">
+          <div class="card-header bg-light" style="display: flex; flex-direction: row;">
+            <h2 style="margin-right: 2rem;">Saved Screens</h2>
+              <button class="btn btn-success" type="button" onclick="saveScreen()">Save Screen</button>
+          </div>
+          <div class="card-body">
+            <div id='list-screens'>
+              <!-- Panels for saved bellyscreens get added here -->
+            </div>
+          </div>
+        </div>
+        
         <!-- Image Settings Panel 
           Lists every image on selected bellyscreen, allows them to be resized
           printImageList() function populates the list-group div with image settings
