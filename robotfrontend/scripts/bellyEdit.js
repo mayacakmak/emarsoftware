@@ -1198,6 +1198,21 @@ function printImageList() {
       resizeImage(i-1, 300, 300)
     }
 
+    const left_align = document.createElement("button")
+    left_align.type = "submit"
+    left_align.innerText = "L"
+    left_align.style.margin = "2px"
+
+    const center_align = document.createElement("button")
+    center_align.type = "submit"
+    center_align.innerText = "C"
+    center_align.style.margin = "2px"
+
+    const right_align = document.createElement("button")
+    right_align.type = "submit"
+    right_align.innerText = "R"
+    right_align.style.margin = "2px"
+
 
     image_panel.appendChild(x_label)
     image_panel.appendChild(x_input)
@@ -1207,12 +1222,30 @@ function printImageList() {
 
     image_panel.appendChild(submit)
     image_panel.appendChild(fullscreen)
-
     
+    // image_panel.appendChild(left_align)
+    // image_panel.appendChild(center_align)
+    // image_panel.appendChild(right_align)
+
     parent.appendChild(image_panel);
   }
 }
 
+// Saves all the screens on the current robot screen
+function saveAllScreens() {
+  savedRobotScreens = {"robot": currentRobot, "screens": bellyScreens}
+  if (localStorage.getItem('savedScreens') !== null) {
+    savedScreens = JSON.parse(localStorage.getItem('savedScreens'));
+    savedScreens.push(savedRobotScreens);
+    console.log(savedRobotScreens)
+  } else {
+    savedScreens = [savedRobotScreens]
+  }
+
+  localStorage.setItem('savedScreens', JSON.stringify(savedScreens))
+  // console.log(JSON.parse(localStorage.getItem('savedScreens')))
+  displaySavedScreens();
+}
 
 // Save whatever screen is currently selected to the savedScreens list inside
 // localStorage
@@ -1252,24 +1285,43 @@ function displaySavedScreens() {
     screen_panel.style.alignItems = "center";
 
     const panel_text = document.createElement("h5");
-    panel_text.innerText = "Robot: " + savedScreens[i].robot + " | " + savedScreens[i].name
-    
+
     const paste = document.createElement("button");
     paste.type = "submit"
     paste.class = "btn btn-primary mb-2"
     paste.innerText = "Paste"
     paste.style.margin = "5px"
-    paste.onclick = function() {
-      console.log(savedScreens[i])
-      new_screen = savedScreens[i]
-      new_screen.name = 'Screen-' + (bellyScreens.length + 1);
-      new_screen.robot = currentRobot;
-      bellyScreens.push(new_screen);
-      var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
-      var dbRef = firebase.database().ref(dir);
-      dbRef.update({ bellyScreens: bellyScreens });
-    }
 
+    // If the list item is a dictionary containing all the screens for a robot
+    if (savedScreens[i].hasOwnProperty("screens")) {
+      panel_text.innerText = "Robot: " + savedScreens[i]["robot"]
+
+      paste.onclick = function() {
+        for (screen in savedScreens[i]["screens"]) {
+          add_screen = savedScreens[i]["screens"][screen];
+          add_screen.name = 'Screen-' + (bellyScreens.length + 1);
+          add_screen.robot = currentRobot;
+          bellyScreens.push(add_screen);
+          var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+          var dbRef = firebase.database().ref(dir);
+          dbRef.update({ bellyScreens: bellyScreens });
+        }
+      }
+    } else { // If the list item is a single robot screen
+      panel_text.innerText = "Robot: " + savedScreens[i].robot + " | " + savedScreens[i].name
+
+      paste.onclick = function() {
+        console.log(savedScreens[i])
+        new_screen = savedScreens[i]
+        new_screen.name = 'Screen-' + (bellyScreens.length + 1);
+        new_screen.robot = currentRobot;
+        bellyScreens.push(new_screen);
+        var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+        var dbRef = firebase.database().ref(dir);
+        dbRef.update({ bellyScreens: bellyScreens });
+      }
+    }
+  
     const remove = document.createElement("button");
     remove.type = "submit"
     remove.class = "btn btn-danger"
