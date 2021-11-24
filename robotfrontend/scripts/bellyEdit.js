@@ -8,6 +8,10 @@ var selectedBellyScreen = 0;
 var bellySnapshot;
 
 function initializeEdit(uid) {
+  if (localStorage.getItem('savedScreens') !== null) {
+    displaySavedScreens()
+  }
+
   db.uid = uid;
   isEdit = true;
 
@@ -1106,7 +1110,8 @@ function onDrop(event) {
 
 // Takes an image id and sets the size for that image to the
 // given x and y values     
-function resizeImage(id, x, y) {
+function resizeImage(id, x, y, background) {
+  // bellyScreens[selectedBellyScreen].images.list[id].background = background
   console.log("resize image! " + id + " " + x + " " + y);
 
   console.log(bellyScreens[selectedBellyScreen].images.list[id])
@@ -1189,7 +1194,7 @@ function printImageList() {
     fullscreen.style.margin = "5px"
     fullscreen.onclick = function(){
       // resizeImage(i-1, "80%", "80%")
-      resizeImage(i-1, 300, 300)
+      resizeImage(i-1, 300, 300, false)
     }
 
     const left_align = document.createElement("button")

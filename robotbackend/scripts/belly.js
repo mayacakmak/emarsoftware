@@ -346,7 +346,6 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           element.location.position &&
           element.location.position === 'absolute'
         ) {
-          console.log("WHAT THE FUCK IS UP WITH THIS GARBAGE")
           position += 'position: absolute;';
           if (element.location.top !== undefined) {
             position += 'top: ' + element.location.top + '; ';
@@ -380,6 +379,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           element.size.x +
           "' height='" +
           element.size.y +
+          "' z-index = -1" +
           "'/>";
       });
       bellyHTML += '</div>';
