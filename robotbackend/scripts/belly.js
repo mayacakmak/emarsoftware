@@ -360,18 +360,26 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
             position += 'right: ' + element.location.right + '; ';
           }
         } else {
-          position += 'position: relative;';
+            position += 'position: relative;'
+          }
+        alignment = ''
+        if (element.alignment == 'left') {
+          alignment = 'left: -200px;'
+        } else if (element.alignment == 'right') {
+          alignment = 'left: 200px;'
         }
         position += "'";
         bellyHTML +=
           "<img src='" +
           element.path +
-          "' style='border: none; " +
-          position +
+          "' style='border: none;" +
+          alignment +
+          position + 
           "width='" +
           element.size.x +
           "' height='" +
           element.size.y +
+          "' z-index = -1" +
           "'/>";
       });
       bellyHTML += '</div>';

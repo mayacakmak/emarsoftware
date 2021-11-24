@@ -8,6 +8,10 @@ var selectedBellyScreen = 0;
 var bellySnapshot;
 
 function initializeEdit(uid) {
+  if (localStorage.getItem('savedScreens') !== null) {
+    displaySavedScreens()
+  }
+
   db.uid = uid;
   isEdit = true;
 
@@ -909,6 +913,8 @@ function changeScreenElement(target, screenID, itemID) {
         x: 150,
         y: 150,
       },
+      position: "relative",
+      alignment: ""
     });
   }
 
@@ -1104,33 +1110,26 @@ function onDrop(event) {
 
 // Takes an image id and sets the size for that image to the
 // given x and y values     
-function resizeImage(id, x, y) {
+function resizeImage(id, x, y, background) {
+  // bellyScreens[selectedBellyScreen].images.list[id].background = background
   console.log("resize image! " + id + " " + x + " " + y);
 
   console.log(bellyScreens[selectedBellyScreen].images.list[id])
 
-  // console.log(bellyScreens[selectedBellyScreen].images.list[id].style)
-
   bellyScreens[selectedBellyScreen].images.list[id].size.x = x;
   bellyScreens[selectedBellyScreen].images.list[id].size.y = y;
 
-  // bellyScreens[selectedBellyScreen].images.list[id].style.position = "absolute";
-  // bellyScreens[selectedBellyScreen].images.list[id].location.x = 200;
-
-  // bellyScreens[selectedBellyScreen].images.list[id].location.x = -200;
-  // bellyScreens[selectedBellyScreen].images.list[id].style.position = "absolute";
-  // bellyScreens[selectedBellyScreen].images.list[id].style.right = "200px";
-  // y_input.value = bellyScreens[selectedBellyScreen].images.list[i-1].size.y;
-
-  // var path = bellyScreens[selectedBellyScreen].images.list[id].path;
-  // var image_dom_element = document.querySelectorAll("[src=" + CSS.escape(path) + "]")[1];
-  // console.log(image_dom_element);
-  // image_dom_element.visible.style.position = "absolute";
-  // console.log(image_dom_element);
-
-  // bellyScreens[selectedBellyScreen].images.list[id].path
-
   console.log(bellyScreens[selectedBellyScreen].images.list[id])
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+}
+
+function alignImage(id, alignment) {
+  console.log(bellyScreens[selectedBellyScreen].images.list[id]);
+  bellyScreens[selectedBellyScreen].images.list[id].alignment = alignment;
 
   var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
   var dbRef = firebase.database().ref(dir);
@@ -1195,7 +1194,31 @@ function printImageList() {
     fullscreen.style.margin = "5px"
     fullscreen.onclick = function(){
       // resizeImage(i-1, "80%", "80%")
-      resizeImage(i-1, 300, 300)
+      resizeImage(i-1, 300, 300, false)
+    }
+
+    const left_align = document.createElement("button")
+    left_align.type = "submit"
+    left_align.innerText = "L"
+    left_align.style.margin = "2px"
+    left_align.onclick = function() {
+      alignImage(i-1, "left")
+    }
+
+    const center_align = document.createElement("button")
+    center_align.type = "submit"
+    center_align.innerText = "C"
+    center_align.style.margin = "2px"
+    center_align.onclick = function() {
+      alignImage(i-1, "center")
+    }
+
+    const right_align = document.createElement("button")
+    right_align.type = "submit"
+    right_align.innerText = "R"
+    right_align.style.margin = "2px"
+    right_align.onclick = function() {
+      alignImage(i-1, "right")
     }
 
 
@@ -1207,12 +1230,30 @@ function printImageList() {
 
     image_panel.appendChild(submit)
     image_panel.appendChild(fullscreen)
-
     
+    image_panel.appendChild(left_align)
+    image_panel.appendChild(center_align)
+    image_panel.appendChild(right_align)
+
     parent.appendChild(image_panel);
   }
 }
 
+// Saves all the screens on the current robot screen
+function saveAllScreens() {
+  savedRobotScreens = {"robot": currentRobot, "screens": bellyScreens}
+  if (localStorage.getItem('savedScreens') !== null) {
+    savedScreens = JSON.parse(localStorage.getItem('savedScreens'));
+    savedScreens.push(savedRobotScreens);
+    console.log(savedRobotScreens)
+  } else {
+    savedScreens = [savedRobotScreens]
+  }
+
+  localStorage.setItem('savedScreens', JSON.stringify(savedScreens))
+  // console.log(JSON.parse(localStorage.getItem('savedScreens')))
+  displaySavedScreens();
+}
 
 // Save whatever screen is currently selected to the savedScreens list inside
 // localStorage
@@ -1252,24 +1293,43 @@ function displaySavedScreens() {
     screen_panel.style.alignItems = "center";
 
     const panel_text = document.createElement("h5");
-    panel_text.innerText = "Robot: " + savedScreens[i].robot + " | " + savedScreens[i].name
-    
+
     const paste = document.createElement("button");
     paste.type = "submit"
     paste.class = "btn btn-primary mb-2"
     paste.innerText = "Paste"
     paste.style.margin = "5px"
-    paste.onclick = function() {
-      console.log(savedScreens[i])
-      new_screen = savedScreens[i]
-      new_screen.name = 'Screen-' + (bellyScreens.length + 1);
-      new_screen.robot = currentRobot;
-      bellyScreens.push(new_screen);
-      var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
-      var dbRef = firebase.database().ref(dir);
-      dbRef.update({ bellyScreens: bellyScreens });
-    }
 
+    // If the list item is a dictionary containing all the screens for a robot
+    if (savedScreens[i].hasOwnProperty("screens")) {
+      panel_text.innerText = "Robot: " + savedScreens[i]["robot"]
+
+      paste.onclick = function() {
+        for (screen in savedScreens[i]["screens"]) {
+          add_screen = savedScreens[i]["screens"][screen];
+          add_screen.name = 'Screen-' + (bellyScreens.length + 1);
+          add_screen.robot = currentRobot;
+          bellyScreens.push(add_screen);
+          var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+          var dbRef = firebase.database().ref(dir);
+          dbRef.update({ bellyScreens: bellyScreens });
+        }
+      }
+    } else { // If the list item is a single robot screen
+      panel_text.innerText = "Robot: " + savedScreens[i].robot + " | " + savedScreens[i].name
+
+      paste.onclick = function() {
+        console.log(savedScreens[i])
+        new_screen = savedScreens[i]
+        new_screen.name = 'Screen-' + (bellyScreens.length + 1);
+        new_screen.robot = currentRobot;
+        bellyScreens.push(new_screen);
+        var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+        var dbRef = firebase.database().ref(dir);
+        dbRef.update({ bellyScreens: bellyScreens });
+      }
+    }
+  
     const remove = document.createElement("button");
     remove.type = "submit"
     remove.class = "btn btn-danger"
