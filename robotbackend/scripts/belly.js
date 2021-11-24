@@ -346,6 +346,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           element.location.position &&
           element.location.position === 'absolute'
         ) {
+          console.log("WHAT THE FUCK IS UP WITH THIS GARBAGE")
           position += 'position: absolute;';
           if (element.location.top !== undefined) {
             position += 'top: ' + element.location.top + '; ';
@@ -360,14 +361,21 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
             position += 'right: ' + element.location.right + '; ';
           }
         } else {
-          position += 'position: relative;';
+            position += 'position: relative;'
+          }
+        alignment = ''
+        if (element.alignment == 'left') {
+          alignment = 'left: -200px;'
+        } else if (element.alignment == 'right') {
+          alignment = 'left: 200px;'
         }
         position += "'";
         bellyHTML +=
           "<img src='" +
           element.path +
-          "' style='border: none; " +
-          position +
+          "' style='border: none;" +
+          alignment +
+          position + 
           "width='" +
           element.size.x +
           "' height='" +

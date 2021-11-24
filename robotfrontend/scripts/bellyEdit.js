@@ -909,6 +909,8 @@ function changeScreenElement(target, screenID, itemID) {
         x: 150,
         y: 150,
       },
+      position: "relative",
+      alignment: ""
     });
   }
 
@@ -1109,28 +1111,20 @@ function resizeImage(id, x, y) {
 
   console.log(bellyScreens[selectedBellyScreen].images.list[id])
 
-  // console.log(bellyScreens[selectedBellyScreen].images.list[id].style)
-
   bellyScreens[selectedBellyScreen].images.list[id].size.x = x;
   bellyScreens[selectedBellyScreen].images.list[id].size.y = y;
 
-  // bellyScreens[selectedBellyScreen].images.list[id].style.position = "absolute";
-  // bellyScreens[selectedBellyScreen].images.list[id].location.x = 200;
-
-  // bellyScreens[selectedBellyScreen].images.list[id].location.x = -200;
-  // bellyScreens[selectedBellyScreen].images.list[id].style.position = "absolute";
-  // bellyScreens[selectedBellyScreen].images.list[id].style.right = "200px";
-  // y_input.value = bellyScreens[selectedBellyScreen].images.list[i-1].size.y;
-
-  // var path = bellyScreens[selectedBellyScreen].images.list[id].path;
-  // var image_dom_element = document.querySelectorAll("[src=" + CSS.escape(path) + "]")[1];
-  // console.log(image_dom_element);
-  // image_dom_element.visible.style.position = "absolute";
-  // console.log(image_dom_element);
-
-  // bellyScreens[selectedBellyScreen].images.list[id].path
-
   console.log(bellyScreens[selectedBellyScreen].images.list[id])
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+}
+
+function alignImage(id, alignment) {
+  console.log(bellyScreens[selectedBellyScreen].images.list[id]);
+  bellyScreens[selectedBellyScreen].images.list[id].alignment = alignment;
 
   var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
   var dbRef = firebase.database().ref(dir);
@@ -1202,16 +1196,25 @@ function printImageList() {
     left_align.type = "submit"
     left_align.innerText = "L"
     left_align.style.margin = "2px"
+    left_align.onclick = function() {
+      alignImage(i-1, "left")
+    }
 
     const center_align = document.createElement("button")
     center_align.type = "submit"
     center_align.innerText = "C"
     center_align.style.margin = "2px"
+    center_align.onclick = function() {
+      alignImage(i-1, "center")
+    }
 
     const right_align = document.createElement("button")
     right_align.type = "submit"
     right_align.innerText = "R"
     right_align.style.margin = "2px"
+    right_align.onclick = function() {
+      alignImage(i-1, "right")
+    }
 
 
     image_panel.appendChild(x_label)
@@ -1223,9 +1226,9 @@ function printImageList() {
     image_panel.appendChild(submit)
     image_panel.appendChild(fullscreen)
     
-    // image_panel.appendChild(left_align)
-    // image_panel.appendChild(center_align)
-    // image_panel.appendChild(right_align)
+    image_panel.appendChild(left_align)
+    image_panel.appendChild(center_align)
+    image_panel.appendChild(right_align)
 
     parent.appendChild(image_panel);
   }
