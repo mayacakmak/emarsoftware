@@ -171,8 +171,11 @@ function updateRobotState(snapshot) {
     // HEAD TOUCHED
     if (robotState.headTouched && robotState.headTouched != 0) {
       div.innerHTML = `<button type="button" class="btn btn-success">Head Touched!!</button>`;
+      document.getElementById('purrSound').play();
+      // incrementMotor(0, -1);
     } else {
       div.innerHTML = `<button type="button" class="btn btn-danger">Head Not Touched</button>`;
+      // incrementMotor(0, 1);
     }
 
     // POSE CONTROLS
