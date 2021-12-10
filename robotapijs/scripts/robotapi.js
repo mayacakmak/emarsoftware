@@ -199,9 +199,11 @@ function Robot(robotId, apiDiv) {
     if (apiData.states != undefined)
       Robot.faces = apiData.states.faces;
       Robot.poses = [];
-      Object.entries(apiData.states.poses).forEach((elem, index) => {
-        Robot.poses.push({'name': elem[1].name});
-      })
+      if (apiData.states.poses) {
+        Object.entries(apiData.states.poses).forEach((elem, index) => {
+          Robot.poses.push({'name': elem[1].name});
+        })
+      }
     if (apiData.inputs != undefined)
       Robot.bellyScreens = apiData.inputs.bellyScreens;
     if (apiData.actions != undefined)
