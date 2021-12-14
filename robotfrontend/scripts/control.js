@@ -170,12 +170,15 @@ function updateRobotState(snapshot) {
     var div = document.getElementById('headTouched');
     // HEAD TOUCHED
     if (robotState.headTouched && robotState.headTouched != 0) {
+      console.log("Petting");
       div.innerHTML = `<button type="button" class="btn btn-success">Head Touched!!</button>`;
-      document.getElementById('purrSound').play();
       // incrementMotor(0, -1);
     } else {
-      div.innerHTML = `<button type="button" class="btn btn-danger">Head Not Touched</button>`;
-      // incrementMotor(0, 1);
+      if (document.getElementById('noTouch') === null) {
+        // incrementMotor(0, 1);
+        console.log("Unpetting");
+      }
+      div.innerHTML = `<button type="button" class="btn btn-danger" id="noTouch">Head Not Touched</button>`;
     }
 
     // POSE CONTROLS

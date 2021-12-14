@@ -22,6 +22,7 @@ function RobotBackend(robotId, scale) {
     var dbRefState = firebase.database().ref(
       '/robots/' + RobotBackend.robotId + '/state/');
     dbRefState.on("value", Face.updateRobotFace);
+    dbRefState.on("value", RobotBackend.checkHaptics);
     
     var dbRefActions = firebase.database().ref(
       '/robots/' + RobotBackend.robotId + '/actions/');
@@ -111,6 +112,13 @@ function RobotBackend(robotId, scale) {
         if (newSounds != undefined && newSounds.length > 0)
           Sound.loadSounds(newSounds);
       }
+    }
+  }
+
+  RobotBackend.checkHaptics = function(snapshot) {
+    var robotState = snapshot?.val ? snapshot.val() : snapshot;
+    if (robotState.headTouched && robotState.headTouched > 0) {
+      Sound.makeSound(-1);
     }
   }
 }

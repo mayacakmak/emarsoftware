@@ -20,6 +20,8 @@ function Sound() {
       document.body.innerHTML += soundElementHTML;
       console.log("Loading sound " + Sound.sounds[i].name);
     }
+    var purrElementHTML = "<audio style='display: none;' id='sound-1' preload src='https://firebasestorage.googleapis.com/v0/b/emar-database.appspot.com/o/sounds%2F1220.wav?alt=media&token=9b989425-6c46-43a7-abe6-cce6384b4b51'></audio>";
+    document.body.innerHTML += purrElementHTML;
   }
 
   Sound.makeSound = function(soundIndex) {
