@@ -9,6 +9,7 @@ var customAPI = null;
 var motorState = null;
 var animations = [];
 var currAnimation = [];
+var isTouched = false;
 
 
 function initializeControl() {
@@ -169,16 +170,28 @@ function updateRobotState(snapshot) {
 
     var div = document.getElementById('headTouched');
     // HEAD TOUCHED
-    if (robotState.headTouched && robotState.headTouched != 0) {
-      console.log("Petting");
-      div.innerHTML = `<button type="button" class="btn btn-success">Head Touched!!</button>`;
-      // incrementMotor(0, -1);
-    } else {
-      if (document.getElementById('noTouch') === null) {
-        // incrementMotor(0, 1);
-        console.log("Unpetting");
+    if (robotState.headTouched != null) {
+      if (robotState.headTouched != 0) {
+        if (!isTouched) {
+          isTouched = true;
+          incrementMotor(0, -1);
+          console.log("Petting");
+          
+        }
+        div.innerHTML = `<button type="button" class="btn btn-success">Head Touched!!</button>`;
       }
-      div.innerHTML = `<button type="button" class="btn btn-danger" id="noTouch">Head Not Touched</button>`;
+      else {
+        if (isTouched) {
+          isTouched = false;
+          incrementMotor(0, 1);
+          console.log("Unpetting");
+          
+        }
+        div.innerHTML = `<button type="button" class="btn btn-danger">Head Not Touched</button>`;
+      }
+    }
+    else {
+      div.innerHTML = `<button type="button" class="btn btn-danger">Head Not Touched</button>`;
     }
 
     // POSE CONTROLS
