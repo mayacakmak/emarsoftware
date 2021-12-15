@@ -144,7 +144,7 @@ function renderSelectedBellyScreen(snapshot) {
               <a class="dropdown-item" onclick='uploadIcon("fa fa-address-book")'> <i class="fa fa-address-book"></i> Contact </a>  
               <a class="dropdown-item" onclick='uploadIcon("fa fa-asterisk")'> <i class="fa fa-asterisk"></i> Asterisk </a>  
               <a class="dropdown-item" onclick='uploadIcon("fa fa-book")'><i class="fa fa-book"></i> Book </a>  
-              <a class="dropdown-item" onclick='uploadIcon("fa fa-hand-peace")'><i class="fa fa-hand-peace-o"></i> Victory </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-hand-peace-o")'><i class="fa fa-hand-peace-o"></i> Victory </a>  
               <a class="dropdown-item" onclick='uploadIcon("fa fa-hand-paper-o")'><i class="fa fa-hand-paper-o"></i> Hand </a>  
               <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-up")'><i class="fa fa-arrow-circle-o-up"></i> Up </a>  
               <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-down")'><i class="fa fa-arrow-circle-o-down"></i> Down </a>  
