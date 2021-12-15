@@ -140,16 +140,16 @@ function renderSelectedBellyScreen(snapshot) {
           Icons 
         </button>  
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">  
-              <a class="dropdown-item" href="#"> <i class="fa fa-at"></i> At </a>  
-              <a class="dropdown-item" href="#"> <i class="fa fa-address-book"></i> Contact </a>  
-              <a class="dropdown-item" href="#"> <i class="fa fa-asterisk"></i> Asterisk </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-book"></i> Book </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-hand-peace-o"></i> Victory </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-hand-paper-o"></i> Hand </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-up"></i> Up </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-down"></i> Down </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-left"></i> Left </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-right"></i> Right </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-at")'> <i class="fa fa-at"></i> At </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-address-book")'> <i class="fa fa-address-book"></i> Contact </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-asterisk")'> <i class="fa fa-asterisk"></i> Asterisk </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-book")'><i class="fa fa-book"></i> Book </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-hand-peace")'><i class="fa fa-hand-peace-o"></i> Victory </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-hand-paper-o")'><i class="fa fa-hand-paper-o"></i> Hand </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-up")'><i class="fa fa-arrow-circle-o-up"></i> Up </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-down")'><i class="fa fa-arrow-circle-o-down"></i> Down </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-left")'><i class="fa fa-arrow-circle-o-left"></i> Left </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-right")'><i class="fa fa-arrow-circle-o-right"></i> Right </a>  
         </div>  
       </div>  
       <div style="display: flex; flex-direction: row;">
@@ -236,6 +236,7 @@ function renderSelectedBellyScreen(snapshot) {
         '>' +
         (screen.textInput.text ? screen.textInput.text : '') +
         '</textarea>';
+      
       bellyHTML += '</div>';
     }
 
@@ -314,7 +315,7 @@ function renderSelectedBellyScreen(snapshot) {
         screen.slider.min +
         "'></div>";
       bellyHTML +=
-        "<input type='range' class='screen-slider' name='slider' onchange='changeScreenElement(this, " +
+        "</i><input type='range' class='screen-slider' name='slider' onchange='changeScreenElement(this, " +
         i +
         ")' value='" +
         screen.slider.current +
@@ -898,6 +899,7 @@ function changeScreenElement(target, screenID, itemID) {
     });
   }
 
+
   if (target.name == 'imageAdd') {
     if (bellyScreens[screenID].images.list == undefined)
       bellyScreens[screenID].images.list = [];
@@ -1111,7 +1113,6 @@ function onDrop(event) {
 // Takes an image id and sets the size for that image to the
 // given x and y values     
 function resizeImage(id, x, y, background) {
-  // bellyScreens[selectedBellyScreen].images.list[id].background = background
   console.log("resize image! " + id + " " + x + " " + y);
 
   console.log(bellyScreens[selectedBellyScreen].images.list[id])
@@ -1220,7 +1221,6 @@ function printImageList() {
     right_align.onclick = function() {
       alignImage(i-1, "right")
     }
-
 
     image_panel.appendChild(x_label)
     image_panel.appendChild(x_input)
@@ -1347,3 +1347,166 @@ function displaySavedScreens() {
     parent.appendChild(screen_panel)
   }
 }
+
+function uploadIcon(icon) {
+  console.log("uploading " + icon);
+
+  if (!("icons" in bellyScreens[selectedBellyScreen])) {
+    bellyScreens[selectedBellyScreen]["icons"] = {list:[]}
+  }
+
+  // Upload just the name, not the whole tag
+  // Creating tag in backend makes it easier to edit size, position, etc.
+  icon_dict = {'type':icon, 'position':{x:0, y:0}, 'size': 16}
+  bellyScreens[selectedBellyScreen].icons.list.push(icon_dict)
+  // console.log(bellyScreens[selectedBellyScreen])
+  console.log(icon_dict)
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  dbRef.update({ bellyScreens: bellyScreens });
+}
+
+// Iterates through list of icons in selected bellyscreen and creates
+// a row of size settings for each one
+function printIconList() {
+  // Clears the icons settings from previous slides
+  const parent = document.getElementById('icon-settings');
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild)
+  }
+
+  // Create icon settings row for every image on screen
+  for (let i = 1; i < bellyScreens[selectedBellyScreen].icons.list.length + 1; i++) {
+    const icon_panel = document.createElement("div");
+    icon_panel.className = 'list-group-item form-inline';
+    icon_panel.innerText = bellyScreens[selectedBellyScreen].icons.list[i-1].type.substr(6) + ":  ";
+    icon_panel.style.display = "flex";
+    icon_panel.style.flexDirection = "row";
+    icon_panel.style.justifyContent = "flex-start";
+    icon_panel.style.alignItems = "center";
+
+    const x_label = document.createElement("h5");
+    x_label.innerText = "x position: "
+    x_label.style.margin = "5px"
+
+    const x_input = document.createElement("input");
+    x_input.type = 'range';
+    x_input.min = 0;
+    x_input.max = 620;
+    x_input.class = "form-control mb-2 mr-sm-2";
+    x_input.id = i;
+    x_input.name = "x" + i;
+    x_input.value = bellyScreens[selectedBellyScreen].icons.list[i-1].position.x;
+
+    const y_label = document.createElement("h5");
+    y_label.innerText = "y position: "
+    y_label.style.margin = "5px"
+
+    const y_input = document.createElement("input");
+    y_input.type = 'range';
+    y_input.min = 0;
+    y_input.max = 310;
+    y_input.class = "form-control mb-2 mr-sm-2";
+    y_input.id = i;
+    y_input.name = "y" + i;
+    y_input.value = bellyScreens[selectedBellyScreen].icons.list[i-1].position.y;
+
+    const submit = document.createElement("button")
+    submit.type = "submit"
+    submit.class = "btn btn-primary mb-2"
+    submit.innerText = "Move"
+    submit.style.margin = "5px"
+    submit.onclick = function(){
+      moveIcon(i-1, x_input.value, y_input.value)
+    }
+
+    const size_label = document.createElement("h5");
+    size_label.innerText = "Size: "
+    size_label.style.margin = "5px"
+
+    const size_input = document.createElement("input");
+    size_input.type = 'number';
+    size_input.class = "form-control mb-2 mr-sm-2";
+    size_input.id = i;
+    size_input.name = "size" + i;
+    size_input.value = bellyScreens[selectedBellyScreen].icons.list[i-1].size;
+
+    const resize = document.createElement("button")
+    resize.type = "submit"
+    resize.class = "btn btn-primary mb-2"
+    resize.innerText = "Resize Icon"
+    resize.style.margin = "5px"
+    resize.onclick = function(){
+      resizeIcon(i-1, size_input.value)
+    }
+
+    const del = document.createElement("button")
+    del.type = "submit"
+    del.class = "btn btn-primary mb-2"
+    del.innerText = "Delete"
+    del.style.margin = "5px"
+    del.onclick = function(){
+      deleteIcon(i-1)
+    }
+
+    icon_panel.appendChild(x_label)
+    icon_panel.appendChild(x_input)
+
+    icon_panel.appendChild(y_label)
+    icon_panel.appendChild(y_input)
+
+    icon_panel.appendChild(submit)
+
+    icon_panel.appendChild(size_input)
+    icon_panel.appendChild(resize)
+
+    icon_panel.appendChild(del)
+
+    parent.appendChild(icon_panel);
+  }
+}
+
+function moveIcon(id, x, y) {
+  console.log(bellyScreens[selectedBellyScreen].icons.list[id])
+
+  bellyScreens[selectedBellyScreen].icons.list[id].position.x = x;
+  bellyScreens[selectedBellyScreen].icons.list[id].position.y = y;
+
+  console.log(bellyScreens[selectedBellyScreen].icons.list[id])
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+}
+
+function resizeIcon(id, size) {
+  bellyScreens[selectedBellyScreen].icons.list[id].size = size
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+} 
+
+function deleteIcon(id) {
+  bellyScreens[selectedBellyScreen].icons.list.splice(id,1);
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+
+  printIconList()
+}
+
+//   screen_id = "screenDiv" + selectedBellyScreen.toString();
+  // console.log("belly screen id: " + screen_id)
+  // screen = document.getElementById(screen_id)
+  // const icon = document.createElement("i");
+  // icon.className = 'fa fa-address-book'
+  // screen.appendChild(icon)
+
+  // console.log("resize image! " + id + " " + x + " " + y);
+
+  
