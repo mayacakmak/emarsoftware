@@ -1397,6 +1397,9 @@ function printIconList() {
     x_input.id = i;
     x_input.name = "x" + i;
     x_input.value = bellyScreens[selectedBellyScreen].icons.list[i-1].position.x;
+    x_input.onchange = function(){
+      moveIcon(i-1, x_input.value, y_input.value)
+    }
 
     const y_label = document.createElement("h5");
     y_label.innerText = "y position: "
@@ -1410,13 +1413,7 @@ function printIconList() {
     y_input.id = i;
     y_input.name = "y" + i;
     y_input.value = bellyScreens[selectedBellyScreen].icons.list[i-1].position.y;
-
-    const submit = document.createElement("button")
-    submit.type = "submit"
-    submit.class = "btn btn-primary mb-2"
-    submit.innerText = "Move"
-    submit.style.margin = "5px"
-    submit.onclick = function(){
+    y_input.onchange = function(){
       moveIcon(i-1, x_input.value, y_input.value)
     }
 
@@ -1454,8 +1451,6 @@ function printIconList() {
 
     icon_panel.appendChild(y_label)
     icon_panel.appendChild(y_input)
-
-    icon_panel.appendChild(submit)
 
     icon_panel.appendChild(size_input)
     icon_panel.appendChild(resize)
