@@ -344,7 +344,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       // bellyHTML += "<div style='flex-direction: row'>";
       screen.icons.list.forEach((element) => {
         console.log(element);
-        bellyHTML += '<i class="' + element.type + '"style="position:absolute; top:' + element.position.y + 'px; left: ' + element.position.x + 'px; font-size: ' + element.size + 'px;"></i>'
+        bellyHTML += '<i class="' + element.type + '"style="position:absolute; top:' + element.position.y + '%; left: ' + element.position.x + '%; font-size: ' + element.size + 'px;"></i>'
         // <i class="fa fa-hand-peace-o"></i>
       })
       // bellyHTML += '</div>';

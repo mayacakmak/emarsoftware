@@ -1392,7 +1392,7 @@ function printIconList() {
     const x_input = document.createElement("input");
     x_input.type = 'range';
     x_input.min = 0;
-    x_input.max = 620;
+    x_input.max = 100;
     x_input.class = "form-control mb-2 mr-sm-2";
     x_input.id = i;
     x_input.name = "x" + i;
@@ -1408,7 +1408,7 @@ function printIconList() {
     const y_input = document.createElement("input");
     y_input.type = 'range';
     y_input.min = 0;
-    y_input.max = 310;
+    y_input.max = 100;
     y_input.class = "form-control mb-2 mr-sm-2";
     y_input.id = i;
     y_input.name = "y" + i;
@@ -1461,6 +1461,7 @@ function printIconList() {
   }
 }
 
+// document.getElementById
 function moveIcon(id, x, y) {
   console.log(bellyScreens[selectedBellyScreen].icons.list[id])
 
@@ -1477,6 +1478,7 @@ function moveIcon(id, x, y) {
 
 function resizeIcon(id, size) {
   bellyScreens[selectedBellyScreen].icons.list[id].size = size
+  // console.log(document.getElementById("screenDiv" + selectedBellyScreen).offsetWidth)
 
   var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
   var dbRef = firebase.database().ref(dir);
