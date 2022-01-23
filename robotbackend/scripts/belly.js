@@ -87,7 +87,7 @@ function Belly(robotId, scale, resizeAxis) {
       var timestamp = date.getTime();
       // Create a new JavaScript Date object based on the timestamp
       // multiplied by 1000 so that the argument is in milliseconds, not seconds.
-      var standardDate = new Date(timestamp * 1000);
+      var standardDate = new Date(timestamp);
       Belly.bellyScreens[screenID].slider.lastChanged = "Date: "+standardDate.getDate()+
                                                         "/"+(standardDate.getMonth()+1)+
                                                         "/"+standardDate.getFullYear()+
