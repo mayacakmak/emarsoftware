@@ -80,13 +80,13 @@ function Belly(robotId, scale, resizeAxis) {
   };
 
   Belly.bellyInputReceived = function (target, screenID, itemID) {
-    // TODO: clean up the the non "list" parts of database once backwards compatibility issues are gone
     var date = new Date();
     if (target.name == 'slider') {
       Belly.bellyScreens[screenID].slider.current = target.value;
       var timestamp = date.getTime();
-      // Create a new JavaScript Date object based on the timestamp
-      // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+      // convert JavaScript Date object in milliseconds to show the 
+      // Unix Timestamp into standard date/time format. For instance, 
+      // “1607110465663” will show up as “Date: 4/12/2020 19:34:25”. 
       var standardDate = new Date(timestamp);
       Belly.bellyScreens[screenID].slider.lastChanged = "Date: "+standardDate.getDate()+
                                                         "/"+(standardDate.getMonth()+1)+
