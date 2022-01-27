@@ -91,7 +91,8 @@ function playSound(elementId) {
 function addSound(soundIndex) {
   if (robotSounds == null)
     robotSounds = [];
-  robotSounds.push({name: ('Sound '+soundIndex), path:sounds[soundIndex]});
+  var soundName = sounds != null && sounds[soundIndex].name != null ? sounds[soundIndex].name : 'Sound ' + soundIndex
+  robotSounds.push({name: (soundName), path:sounds[soundIndex].path});
   var dir = 'robots/' + (currentRobot) + "/customAPI/actions/";
   var dbRef = firebase.database().ref(dir);
   var updates = {"sounds": robotSounds};
@@ -116,14 +117,14 @@ function updateSoundList(snapshot) {
       var allSoundsDiv = document.getElementById("allSoundsList");
       var allSoundsHTML = "";
       for (var i=0; i<sounds.length; i++) {
-        allSoundsHTML += "<a class='list-group-item list-group-item-action'> Sound " + i;
+        allSoundsHTML += "<a class='list-group-item list-group-item-action'> " + sounds[i].name;
         allSoundsHTML += "<button class='btn btn-success btn-delete' onclick=playSound('sound" 
           + i + "')> Play </button>";
         allSoundsHTML += "<button class='btn btn-primary btn-delete' onclick=addSound("
           + i + ")> Add </button>";
         var soundElementName = "sound" + i;
         allSoundsHTML += "<audio style='display: none;' id='" + soundElementName +
-            "' preload src='" + sounds[i] + "'>"
+            "' preload src='" + sounds[i].path + "'>"
         allSoundsHTML += "</a>";
       }
       allSoundsDiv.innerHTML = allSoundsHTML;
