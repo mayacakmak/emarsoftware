@@ -335,6 +335,24 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     }
 
     /*********
+           Icons
+          *********/
+
+    
+           
+    if (screen.icons && screen.icons.list) {
+      // bellyHTML += "<div style='flex-direction: row'>";
+      screen.icons.list.forEach((element) => {
+        console.log(element);
+        
+        bellyHTML += '<i class="' + element.type + '"style="position:absolute; top:' + element.position.y + '%; left: ' + element.position.x + '%; font-size: ' + element.size + 'px;"></i>'
+        // <i class="fa fa-hand-peace-o"></i>
+      })
+      // bellyHTML += '</div>';
+    }
+
+    
+    /*********
            Images
           *********/
     if (screen.images && screen.images.isShown && screen.images.list) {
