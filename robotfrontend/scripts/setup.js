@@ -5,6 +5,7 @@ var utterances = null;
 var bellyScreens;
 var sounds;
 var robotSounds;
+var poses;
 
 function initializeSetup() {
   isSetup = true;
@@ -30,9 +31,25 @@ function initializeSetup() {
   dbAllSoundsRef.on("value", updateSoundList);
 
   var dbRobotSoundsRef = firebase.database().ref('/robots/' + currentRobot + "/customAPI/actions/sounds/");
-  dbRobotSoundsRef.on("value", updateRobotSoundList);   
+  dbRobotSoundsRef.on("value", updateRobotSoundList);
   window.onresize = Face.draw;
 
+  var dbPoseRef = firebase.database().ref('/robots/' + currentRobot + "/state/poses/");
+  dbPoseRef.on("value", updatePoseList);
+
+  var dbRefMotor = firebase.database().ref('/robots/' + currentRobot + '/state/motors/');
+  var currentMotorState = null;
+  dbRefMotor.once('value', (snapshot) => {
+    if (snapshot.val() == null) {
+      console.log('No movement enabled for this robot. Activating button.');
+      var motorBtn = document.getElementById("enableMotorsBtn");
+      motorBtn.removeAttribute('disabled');
+      motorBtn.setAttribute('onclick', 'enableMotors()');
+    }
+  });
+
+  var dbRefRobots = firebase.database().ref('/robots/');
+  dbRefRobots.once('value', (snapshot) => updateRobotImportList(snapshot));
 }
 
 function updateRobotSoundList(snapshot) {
@@ -74,7 +91,8 @@ function playSound(elementId) {
 function addSound(soundIndex) {
   if (robotSounds == null)
     robotSounds = [];
-  robotSounds.push({name: ('Sound '+soundIndex), path:sounds[soundIndex]});
+  var soundName = sounds != null && sounds[soundIndex].name != null ? sounds[soundIndex].name : 'Sound ' + soundIndex
+  robotSounds.push({name: (soundName), path:sounds[soundIndex].path});
   var dir = 'robots/' + (currentRobot) + "/customAPI/actions/";
   var dbRef = firebase.database().ref(dir);
   var updates = {"sounds": robotSounds};
@@ -99,14 +117,14 @@ function updateSoundList(snapshot) {
       var allSoundsDiv = document.getElementById("allSoundsList");
       var allSoundsHTML = "";
       for (var i=0; i<sounds.length; i++) {
-        allSoundsHTML += "<a class='list-group-item list-group-item-action'> Sound " + i;
+        allSoundsHTML += "<a class='list-group-item list-group-item-action'> " + sounds[i].name;
         allSoundsHTML += "<button class='btn btn-success btn-delete' onclick=playSound('sound" 
           + i + "')> Play </button>";
         allSoundsHTML += "<button class='btn btn-primary btn-delete' onclick=addSound("
           + i + ")> Add </button>";
         var soundElementName = "sound" + i;
         allSoundsHTML += "<audio style='display: none;' id='" + soundElementName +
-            "' preload src='" + sounds[i] + "'>"
+            "' preload src='" + sounds[i].path + "'>"
         allSoundsHTML += "</a>";
       }
       allSoundsDiv.innerHTML = allSoundsHTML;
@@ -373,3 +391,104 @@ function addRobotFace() {
   dbRef.update(updates);
 }
 
+function enableMotors() {
+  // Update db with motor and pose states, initialize with v7 values
+  var dbRef = firebase.database().ref('robots/' + (currentRobot) + '/state/');
+  var init_v7 = {
+    'motors': {
+      0: {
+        'max': 2381,
+        'min': 1707,
+        'name': 'Left/Right Tilt',
+        'value': 2037,
+      },
+      1: {
+        'max': 2787,
+        'min': 1536,
+        'name': 'Up/Down Tilt',
+        'value': 2573,
+      },
+      2: {
+        'max': 2227,
+        'min': 1380,
+        'name': 'Neck',
+        'value': 1634,
+      },
+      3: {
+        'max': 3072,
+        'min': 1024,
+        'name': 'Rotate',
+        'value': 1937,
+      },
+    },
+    'poses': {
+      0: {
+        'delete': 0,
+        'lastPressed': -1,
+        'motors': {
+          0: 2037,
+          1: 2573,
+          2: 1634,
+          3: 1937,
+        },
+        'name': 'Reset',
+      },
+    },
+  }
+  dbRef.update(init_v7);
+  console.log("Updated robot " + currentRobot + "'s motor state in the db.");
+  document.getElementById('enableMotorsBtn').setAttribute('disabled', true);
+}
+
+function updateRobotImportList(snapshot) {
+  allRobots = snapshot.val();
+  console.log('Populating ' + allRobots.length + ' robots');
+  var robotSoundsDiv = document.getElementById("robotList");
+  if (allRobots != null && allRobots.length > 0) {
+    var robotListHTML = "<option value='-1'>Choose a Robot:</option>";
+    for (var i=0; i<allRobots.length; i++) {
+      robotListHTML += "<option value='" + i + "'>" + allRobots[i].name + "</option>";
+    }
+  }
+  robotSoundsDiv.innerHTML = robotListHTML;
+}
+
+function updatePoseList(snapshot) {
+  poses = snapshot.val();
+  console.log('POSES: ' + poses.length);
+  var dbRefAPI = firebase.database().ref('robots/' + currentRobot + '/customAPI/states/poses/');
+  var selectedRobotPoseNames = {};
+  for (var i=1; i<poses.length; i++) {
+    selectedRobotPoseNames[i] = {'name': poses[i].name};
+  }
+  dbRefAPI.update(selectedRobotPoseNames);
+}
+
+function importRobotPoses() {
+  var selectedRobot = parseInt(document.getElementById('robotList').value);
+  var motorBtn = document.getElementById("enableMotorsBtn");
+  if (selectedRobot >= 0) {
+    if (!motorBtn.disabled) {
+      enableMotors();
+    }
+    if (poses != null) {
+      var dbRefSelectedRobot = firebase.database().ref('/robots/' + selectedRobot + '/state/poses/');
+      var dbRefState = firebase.database().ref('robots/' + currentRobot + '/state/poses/');
+      var targetPoses = null;
+      dbRefSelectedRobot.once('value', (snapshot) => {
+        targetPoses = snapshot.val();
+        targetPoses.splice(0, 1);
+        for (var i=0; i<targetPoses.length; i++) {
+          targetPoses[i].name = '[' + selectedRobot + '] ' + targetPoses[i].name;
+        }
+        var newPoses = poses.concat(targetPoses);
+        var newPosesMap = {};
+        for (var i=0; i<newPoses.length; i++) {
+          newPosesMap[i] = newPoses[i];
+        }
+        dbRefState.update(newPosesMap);
+        console.log("Importing Robot " + selectedRobot + "'s poses into Robot " + currentRobot);
+      });
+    }
+  }
+}

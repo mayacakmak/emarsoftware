@@ -35,6 +35,56 @@
             </div>
           </div>
         </div>
+        
+         <!-- Saved Bellyscreens Panel
+          Lists every screen saved in local storage and allows editors to paste
+          them into the current robot or remove them from storage
+        -->
+        <div class="card">
+          <div class="card-header bg-light" style="display: flex; flex-direction: row;">
+            <h2 style="margin-right: 2rem;">Saved Screens</h2>
+              <button class="btn btn-success" type="button" onclick="saveScreen()">Save Screen</button>
+              <button class="btn btn-success" style="margin-left:5px" type="button" onclick="saveAllScreens()">Save ALL Screens</button>
+          </div>
+          <div class="card-body">
+            <div id='list-screens'>
+              <!-- Panels for saved bellyscreens get added here -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Image Settings Panel 
+          Lists every image on selected bellyscreen, allows them to be resized
+          printImageList() function populates the list-group div with image settings
+        -->
+        <div class="card">
+          <div class="card-header bg-light" style="display: flex; flex-direction: row;">
+            <h2 style="margin-right: 2rem;">Image Settings</h2>
+              <button class="btn btn-success" type="button" onclick="printImageList()">Edit Images of Selected Slide</button>
+          </div>
+          <div class="card-body">
+            <div class='list-group' id='image-settings'>
+              <!-- Image setting rows get added right here by javascript function -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Icon Settings Panel 
+          Lists every image on selected bellyscreen, allows them to be resized
+          printIconList() function populates the list-group div with image settings
+        -->
+        <div class="card">
+          <div class="card-header bg-light" style="display: flex; flex-direction: row;">
+            <h2 style="margin-right: 2rem;">Icon Settings</h2>
+              <button class="btn btn-success" type="button" onclick="printIconList()">Edit Icons on Selected Slide</button>
+          </div>
+          <div class="card-body">
+            <div class='list-group' id='icon-settings'>
+              <!-- Icon setting rows get added right here by javascript function -->
+            </div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-header bg-light">
             <h2>Belly Preview</h2>

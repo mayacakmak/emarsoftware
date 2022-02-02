@@ -8,6 +8,10 @@ var selectedBellyScreen = 0;
 var bellySnapshot;
 
 function initializeEdit(uid) {
+  if (localStorage.getItem('savedScreens') !== null) {
+    displaySavedScreens()
+  }
+
   db.uid = uid;
   isEdit = true;
 
@@ -99,7 +103,7 @@ function renderSelectedBellyScreen(snapshot) {
       <div class='center-aligned'>
       <div class="dropdown">
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Screen Layout
+          Templates
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <button class="dropdown-item" onclick='setLayout(this)'>Text</button>
@@ -107,7 +111,8 @@ function renderSelectedBellyScreen(snapshot) {
           <button class="dropdown-item" onclick='setLayout(this)'>Buttons</button>
           <button class="dropdown-item" onclick='setLayout(this)'>Checkboxes</button>
           <button class="dropdown-item" onclick='setLayout(this)'>Images</button>
-          <button class="dropdown-item" onclick='setLayout(this)'>User Text Input</button>
+          <button class="dropdown-item" onclick='setLayout(this)'>Unsaved User Text Input</button>
+          <button class="dropdown-item" onclick='setLayout(this)'>Saved User Text Input</button>
         </div>
       </div>
       <div class="dropdown">
@@ -135,16 +140,16 @@ function renderSelectedBellyScreen(snapshot) {
           Icons 
         </button>  
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">  
-              <a class="dropdown-item" href="#"> <i class="fa fa-at"></i> At </a>  
-              <a class="dropdown-item" href="#"> <i class="fa fa-address-book"></i> Contact </a>  
-              <a class="dropdown-item" href="#"> <i class="fa fa-asterisk"></i> Asterisk </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-book"></i> Book </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-hand-peace-o"></i> Victory </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-hand-paper-o"></i> Hand </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-up"></i> Up </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-down"></i> Down </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-left"></i> Left </a>  
-              <a class="dropdown-item" href="#"><i class="fa fa-arrow-circle-o-right"></i> Right </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-at")'> <i class="fa fa-at"></i> At </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-address-book")'> <i class="fa fa-address-book"></i> Contact </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-asterisk")'> <i class="fa fa-asterisk"></i> Asterisk </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-book")'><i class="fa fa-book"></i> Book </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-hand-peace-o")'><i class="fa fa-hand-peace-o"></i> Victory </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-hand-paper-o")'><i class="fa fa-hand-paper-o"></i> Hand </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-up")'><i class="fa fa-arrow-circle-o-up"></i> Up </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-down")'><i class="fa fa-arrow-circle-o-down"></i> Down </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-left")'><i class="fa fa-arrow-circle-o-left"></i> Left </a>  
+              <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-right")'><i class="fa fa-arrow-circle-o-right"></i> Right </a>  
         </div>  
       </div>  
       <div style="display: flex; flex-direction: row;">
@@ -224,13 +229,26 @@ function renderSelectedBellyScreen(snapshot) {
       bellyHTML +=
         '<textarea id="textInput" name="textInput" rows="4" cols="50"';
       bellyHTML +=
-        ' placeholder="' +
-        (screen.textInput.text ? screen.textInput.text : '') +
-        '" ' +
         'onchange="changeScreenElement(this, ' +
         i +
         ')"';
-      bellyHTML += '></textarea>';
+      bellyHTML +=
+        '>' +
+        (screen.textInput.text ? screen.textInput.text : '') +
+        '</textarea>';
+      
+      bellyHTML += '</div>';
+    }
+
+    if (screen.savedTextInput && screen.savedTextInput.isShown) {
+      bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
+      bellyHTML +=
+        '<textarea id="savedTextInput" name="savedTextInput" rows="4" cols="50"';
+      bellyHTML +=
+        'onchange="changeScreenElement(this, ' +
+        i +
+        ')"';
+      bellyHTML += '>' + (screen.savedTextInput.text ? screen.savedTextInput.text : '') + '</textarea>';
       bellyHTML += '</div>';
     }
 
@@ -297,7 +315,7 @@ function renderSelectedBellyScreen(snapshot) {
         screen.slider.min +
         "'></div>";
       bellyHTML +=
-        "<input type='range' class='screen-slider' name='slider' onchange='changeScreenElement(this, " +
+        "</i><input type='range' class='screen-slider' name='slider' onchange='changeScreenElement(this, " +
         i +
         ")' value='" +
         screen.slider.current +
@@ -490,6 +508,11 @@ function setLayout(element) {
             name: 'textInput',
             checked: false,
           },
+          ,
+          {
+            name: 'savedTextInput',
+            checked: false,
+          },
         ],
         selectedBellyScreen
       );
@@ -528,6 +551,10 @@ function setLayout(element) {
           },
           {
             name: 'textInput',
+            checked: false,
+          },
+          {
+            name: 'savedTextInput',
             checked: false,
           },
         ],
@@ -570,6 +597,10 @@ function setLayout(element) {
             name: 'textInput',
             checked: false,
           },
+          {
+            name: 'savedTextInput',
+            checked: false,
+          },
         ],
         selectedBellyScreen
       );
@@ -608,6 +639,10 @@ function setLayout(element) {
           },
           {
             name: 'textInput',
+            checked: false,
+          },
+          {
+            name: 'savedTextInput',
             checked: false,
           },
         ],
@@ -650,11 +685,15 @@ function setLayout(element) {
             name: 'textInput',
             checked: false,
           },
+          {
+            name: 'savedTextInput',
+            checked: false,
+          },
         ],
         selectedBellyScreen
       );
       return;
-    case 'User Text Input':
+    case 'Unsaved User Text Input':
       addRemoveMultipleElements(
         [
           {
@@ -688,6 +727,54 @@ function setLayout(element) {
           },
           {
             name: 'textInput',
+            checked: true,
+          },
+          {
+            name: 'savedTextInput',
+            checked: false,
+          },
+        ],
+        selectedBellyScreen
+      );
+      return;
+    case 'Saved User Text Input':
+      addRemoveMultipleElements(
+        [
+          {
+            name: 'instructionLarge',
+            checked: true,
+          },
+          {
+            name: 'instructionSmall',
+            checked: true,
+          },
+          {
+            name: 'slider',
+            checked: false,
+            value: 50,
+          },
+          {
+            name: 'checkboxes',
+            checked: false,
+          },
+          {
+            name: 'buttons',
+            checked: true,
+          },
+          {
+            name: 'backgroundColor',
+            checked: true,
+          },
+          {
+            name: 'images',
+            checked: false,
+          },
+          {
+            name: 'textInput',
+            checked: false,
+          },
+          {
+            name: 'savedTextInput',
             checked: true,
           },
         ],
@@ -812,6 +899,7 @@ function changeScreenElement(target, screenID, itemID) {
     });
   }
 
+
   if (target.name == 'imageAdd') {
     if (bellyScreens[screenID].images.list == undefined)
       bellyScreens[screenID].images.list = [];
@@ -823,9 +911,12 @@ function changeScreenElement(target, screenID, itemID) {
       path:
         'https://firebasestorage.googleapis.com/v0/b/emar-database.appspot.com/o/images%2Fnoun_Image_3565539.png?alt=media&token=a22bd7fd-677e-4b38-8913-76e74cf61bd2',
       size: {
+        // Changes new images
         x: 150,
         y: 150,
       },
+      position: "relative",
+      alignment: ""
     });
   }
 
@@ -871,6 +962,12 @@ function changeScreenElement(target, screenID, itemID) {
 
   if (target.name == 'textInput') {
     bellyScreens[screenID].textInput.text = document.getElementById(
+      target.id
+    ).value;
+  }
+
+  if (target.name == 'savedTextInput') {
+    bellyScreens[screenID].savedTextInput.text = document.getElementById(
       target.id
     ).value;
   }
@@ -1012,3 +1109,401 @@ function onDrop(event) {
     dragTarget = null;
   }
 }
+
+// Takes an image id and sets the size for that image to the
+// given x and y values     
+function resizeImage(id, x, y, background) {
+  console.log("resize image! " + id + " " + x + " " + y);
+
+  console.log(bellyScreens[selectedBellyScreen].images.list[id])
+
+  bellyScreens[selectedBellyScreen].images.list[id].size.x = x;
+  bellyScreens[selectedBellyScreen].images.list[id].size.y = y;
+
+  console.log(bellyScreens[selectedBellyScreen].images.list[id])
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+}
+
+function alignImage(id, alignment) {
+  console.log(bellyScreens[selectedBellyScreen].images.list[id]);
+  bellyScreens[selectedBellyScreen].images.list[id].alignment = alignment;
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+}
+
+// Iterates through list of images in selected bellyscreen and creates
+// a row of size settings for each one
+function printImageList() {
+  // Clears the image settings from previous slides
+  const parent = document.getElementById('image-settings');
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild)
+  }
+
+  // Create image settings row for every image on screen
+  for (let i = 1; i < bellyScreens[selectedBellyScreen].images.list.length + 1; i++) {
+    const image_panel = document.createElement("div");
+    image_panel.className = 'list-group-item form-inline';
+    image_panel.innerText = i + ":  ";
+    image_panel.style.display = "flex";
+    image_panel.style.flexDirection = "row";
+    image_panel.style.justifyContent = "flex-start";
+    image_panel.style.alignItems = "center";
+
+    const x_label = document.createElement("h5");
+    x_label.innerText = "x: "
+    x_label.style.margin = "5px"
+
+    const x_input = document.createElement("input");
+    x_input.type = 'number';
+    x_input.class = "form-control mb-2 mr-sm-2";
+    x_input.id = i;
+    x_input.id = "x" + i;
+    x_input.value = bellyScreens[selectedBellyScreen].images.list[i-1].size.x;
+
+    const y_label = document.createElement("h5");
+    y_label.innerText = "y: "
+    y_label.style.margin = "5px"
+
+    const y_input = document.createElement("input");
+    y_input.type = 'number';
+    y_input.class = "form-control mb-2 mr-sm-2";
+    y_input.id = i;
+    y_input.name = "y" + i;
+    y_input.value = bellyScreens[selectedBellyScreen].images.list[i-1].size.y;
+
+    const submit = document.createElement("button")
+    submit.type = "submit"
+    submit.class = "btn btn-primary mb-2"
+    submit.innerText = "Resize Image"
+    submit.style.margin = "5px"
+    submit.onclick = function(){
+      resizeImage(i-1, x_input.value, y_input.value)
+    }
+
+    const fullscreen = document.createElement("button")
+    fullscreen.type = "submit"
+    fullscreen.class = "btn btn-primary mb-2"
+    fullscreen.innerText = "Fullscreen"
+    fullscreen.style.margin = "5px"
+    fullscreen.onclick = function(){
+      // resizeImage(i-1, "80%", "80%")
+      resizeImage(i-1, 300, 300, false)
+    }
+
+    const left_align = document.createElement("button")
+    left_align.type = "submit"
+    left_align.innerText = "L"
+    left_align.style.margin = "2px"
+    left_align.onclick = function() {
+      alignImage(i-1, "left")
+    }
+
+    const center_align = document.createElement("button")
+    center_align.type = "submit"
+    center_align.innerText = "C"
+    center_align.style.margin = "2px"
+    center_align.onclick = function() {
+      alignImage(i-1, "center")
+    }
+
+    const right_align = document.createElement("button")
+    right_align.type = "submit"
+    right_align.innerText = "R"
+    right_align.style.margin = "2px"
+    right_align.onclick = function() {
+      alignImage(i-1, "right")
+    }
+
+    image_panel.appendChild(x_label)
+    image_panel.appendChild(x_input)
+
+    image_panel.appendChild(y_label)
+    image_panel.appendChild(y_input)
+
+    image_panel.appendChild(submit)
+    image_panel.appendChild(fullscreen)
+    
+    image_panel.appendChild(left_align)
+    image_panel.appendChild(center_align)
+    image_panel.appendChild(right_align)
+
+    parent.appendChild(image_panel);
+  }
+}
+
+// Saves all the screens on the current robot screen
+function saveAllScreens() {
+  savedRobotScreens = {"robot": currentRobot, "screens": bellyScreens}
+  if (localStorage.getItem('savedScreens') !== null) {
+    savedScreens = JSON.parse(localStorage.getItem('savedScreens'));
+    savedScreens.push(savedRobotScreens);
+    console.log(savedRobotScreens)
+  } else {
+    savedScreens = [savedRobotScreens]
+  }
+
+  localStorage.setItem('savedScreens', JSON.stringify(savedScreens))
+  // console.log(JSON.parse(localStorage.getItem('savedScreens')))
+  displaySavedScreens();
+}
+
+// Save whatever screen is currently selected to the savedScreens list inside
+// localStorage
+function saveScreen() {
+  // Saving the currentRobot as a screen variable allows it to save
+  // and display what robot in came from even on other robot editors
+  screen_to_save = bellyScreens[selectedBellyScreen];
+  screen_to_save.robot = currentRobot;
+
+  if (localStorage.getItem('savedScreens') !== null) {
+    savedScreens = JSON.parse(localStorage.getItem('savedScreens'));
+    savedScreens.push(screen_to_save);
+  } else {
+    savedScreens = [screen_to_save]
+  }
+
+  localStorage.setItem('savedScreens', JSON.stringify(savedScreens))
+  console.log(JSON.parse(localStorage.getItem('savedScreens')))
+
+  displaySavedScreens();
+}
+
+// Reads through the screens saved on local storage and displays them
+// on the belly editor, alongside paste and remove options for each one
+function displaySavedScreens() {
+  savedScreens = JSON.parse(localStorage.getItem('savedScreens'));
+  const parent = document.getElementById('list-screens');
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild)
+  }
+  for (let i = 0; i < savedScreens.length; i++) {
+    console.log(savedScreens[i])
+    
+    const screen_panel = document.createElement("div");
+    screen_panel.style.display = "flex";
+    screen_panel.style.flexDirection = "row";
+    screen_panel.style.alignItems = "center";
+
+    const panel_text = document.createElement("h5");
+
+    const paste = document.createElement("button");
+    paste.type = "submit"
+    paste.class = "btn btn-primary mb-2"
+    paste.innerText = "Paste"
+    paste.style.margin = "5px"
+
+    // If the list item is a dictionary containing all the screens for a robot
+    if (savedScreens[i].hasOwnProperty("screens")) {
+      panel_text.innerText = "Robot: " + savedScreens[i]["robot"]
+
+      paste.onclick = function() {
+        for (screen in savedScreens[i]["screens"]) {
+          add_screen = savedScreens[i]["screens"][screen];
+          add_screen.name = 'Screen-' + (bellyScreens.length + 1);
+          add_screen.robot = currentRobot;
+          bellyScreens.push(add_screen);
+          var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+          var dbRef = firebase.database().ref(dir);
+          dbRef.update({ bellyScreens: bellyScreens });
+        }
+      }
+    } else { // If the list item is a single robot screen
+      panel_text.innerText = "Robot: " + savedScreens[i].robot + " | " + savedScreens[i].name
+
+      paste.onclick = function() {
+        console.log(savedScreens[i])
+        new_screen = savedScreens[i]
+        new_screen.name = 'Screen-' + (bellyScreens.length + 1);
+        new_screen.robot = currentRobot;
+        bellyScreens.push(new_screen);
+        var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+        var dbRef = firebase.database().ref(dir);
+        dbRef.update({ bellyScreens: bellyScreens });
+      }
+    }
+  
+    const remove = document.createElement("button");
+    remove.type = "submit"
+    remove.class = "btn btn-danger"
+    remove.innerText = "Remove"
+    remove.style.margin = "5px"
+    remove.onclick = function() {
+      savedScreens = savedScreens.filter(function(e) { return e !== savedScreens[i] });
+      localStorage.setItem('savedScreens', JSON.stringify(savedScreens));
+      displaySavedScreens();
+    }
+
+    screen_panel.append(panel_text)
+    screen_panel.append(paste)
+    screen_panel.append(remove)
+    parent.appendChild(screen_panel)
+  }
+}
+
+function uploadIcon(icon) {
+  console.log("uploading " + icon);
+
+  if (!("icons" in bellyScreens[selectedBellyScreen])) {
+    bellyScreens[selectedBellyScreen]["icons"] = {list:[]}
+  }
+
+  // Upload just the name, not the whole tag
+  // Creating tag in backend makes it easier to edit size, position, etc.
+  icon_dict = {'type':icon, 'position':{x:0, y:0}, 'size': 16}
+  bellyScreens[selectedBellyScreen].icons.list.push(icon_dict)
+  // console.log(bellyScreens[selectedBellyScreen])
+  console.log(icon_dict)
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  dbRef.update({ bellyScreens: bellyScreens });
+}
+
+// Iterates through list of icons in selected bellyscreen and creates
+// a row of size settings for each one
+function printIconList() {
+  // Clears the icons settings from previous slides
+  const parent = document.getElementById('icon-settings');
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild)
+  }
+
+  // Create icon settings row for every image on screen
+  for (let i = 1; i < bellyScreens[selectedBellyScreen].icons.list.length + 1; i++) {
+    const icon_panel = document.createElement("div");
+    icon_panel.className = 'list-group-item form-inline';
+    icon_panel.innerText = bellyScreens[selectedBellyScreen].icons.list[i-1].type.substr(6) + ":  ";
+    icon_panel.style.display = "flex";
+    icon_panel.style.flexDirection = "row";
+    icon_panel.style.justifyContent = "flex-start";
+    icon_panel.style.alignItems = "center";
+
+    const x_label = document.createElement("h5");
+    x_label.innerText = "x position: "
+    x_label.style.margin = "5px"
+
+    const x_input = document.createElement("input");
+    x_input.type = 'range';
+    x_input.min = 0;
+    x_input.max = 100;
+    x_input.class = "form-control mb-2 mr-sm-2";
+    x_input.id = i;
+    x_input.name = "x" + i;
+    x_input.value = bellyScreens[selectedBellyScreen].icons.list[i-1].position.x;
+    x_input.onchange = function(){
+      moveIcon(i-1, x_input.value, y_input.value)
+    }
+
+    const y_label = document.createElement("h5");
+    y_label.innerText = "y position: "
+    y_label.style.margin = "5px"
+
+    const y_input = document.createElement("input");
+    y_input.type = 'range';
+    y_input.min = 0;
+    y_input.max = 100;
+    y_input.class = "form-control mb-2 mr-sm-2";
+    y_input.id = i;
+    y_input.name = "y" + i;
+    y_input.value = bellyScreens[selectedBellyScreen].icons.list[i-1].position.y;
+    y_input.onchange = function(){
+      moveIcon(i-1, x_input.value, y_input.value)
+    }
+
+    const size_label = document.createElement("h5");
+    size_label.innerText = "Size: "
+    size_label.style.margin = "5px"
+
+    const size_input = document.createElement("input");
+    size_input.type = 'number';
+    size_input.class = "form-control mb-2 mr-sm-2";
+    size_input.id = i;
+    size_input.name = "size" + i;
+    size_input.value = bellyScreens[selectedBellyScreen].icons.list[i-1].size;
+
+    const resize = document.createElement("button")
+    resize.type = "submit"
+    resize.class = "btn btn-primary mb-2"
+    resize.innerText = "Resize Icon"
+    resize.style.margin = "5px"
+    resize.onclick = function(){
+      resizeIcon(i-1, size_input.value)
+    }
+
+    const del = document.createElement("button")
+    del.type = "submit"
+    del.class = "btn btn-primary mb-2"
+    del.innerText = "Delete"
+    del.style.margin = "5px"
+    del.onclick = function(){
+      deleteIcon(i-1)
+    }
+
+    icon_panel.appendChild(x_label)
+    icon_panel.appendChild(x_input)
+
+    icon_panel.appendChild(y_label)
+    icon_panel.appendChild(y_input)
+
+    icon_panel.appendChild(size_input)
+    icon_panel.appendChild(resize)
+
+    icon_panel.appendChild(del)
+
+    parent.appendChild(icon_panel);
+  }
+}
+
+// document.getElementById
+function moveIcon(id, x, y) {
+  console.log(bellyScreens[selectedBellyScreen].icons.list[id])
+
+  bellyScreens[selectedBellyScreen].icons.list[id].position.x = x;
+  bellyScreens[selectedBellyScreen].icons.list[id].position.y = y;
+
+  console.log(bellyScreens[selectedBellyScreen].icons.list[id])
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+}
+
+function resizeIcon(id, size) {
+  bellyScreens[selectedBellyScreen].icons.list[id].size = size
+  // console.log(document.getElementById("screenDiv" + selectedBellyScreen).offsetWidth)
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+} 
+
+function deleteIcon(id) {
+  bellyScreens[selectedBellyScreen].icons.list.splice(id,1);
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+
+  printIconList()
+}
+
+//   screen_id = "screenDiv" + selectedBellyScreen.toString();
+  // console.log("belly screen id: " + screen_id)
+  // screen = document.getElementById(screen_id)
+  // const icon = document.createElement("i");
+  // icon.className = 'fa fa-address-book'
+  // screen.appendChild(icon)
+
+  // console.log("resize image! " + id + " " + x + " " + y);
+
+  

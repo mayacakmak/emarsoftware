@@ -11,7 +11,7 @@ function Belly(robotId, scale, resizeAxis) {
   Belly.resizeAxis = resizeAxis;
 
   Belly.updateRobotBelly = function (snapshot) {
-    var robotState = snapshot.val();
+    var robotState = snapshot?.val ? snapshot.val() : snapshot;
     var bellyHTML = '';
     var len = Belly.bellyScreens.length;
 
@@ -96,6 +96,56 @@ function Belly(robotId, scale, resizeAxis) {
                                                         ":"+standardDate.getSeconds();
     }
 
+    if (target.name == 'at') {
+      Belly.bellyScreens[screenID].at.current = target.value;
+      Belly.bellyScreens[screenID].at.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'contact') {
+      Belly.bellyScreens[screenID].contact.current = target.value;
+      Belly.bellyScreens[screenID].contact.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'asterisk') {
+      Belly.bellyScreens[screenID].asterisk.current = target.value;
+      Belly.bellyScreens[screenID].asterisk.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'book') {
+      Belly.bellyScreens[screenID].book.current = target.value;
+      Belly.bellyScreens[screenID].book.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'victory') {
+      Belly.bellyScreens[screenID].victory.current = target.value;
+      Belly.bellyScreens[screenID].victory.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'hand') {
+      Belly.bellyScreens[screenID].hand.current = target.value;
+      Belly.bellyScreens[screenID].hand.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'up') {
+      Belly.bellyScreens[screenID].up.current = target.value;
+      Belly.bellyScreens[screenID].up.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'down') {
+      Belly.bellyScreens[screenID].down.current = target.value;
+      Belly.bellyScreens[screenID].down.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'left') {
+      Belly.bellyScreens[screenID].left.current = target.value;
+      Belly.bellyScreens[screenID].left.lastChanged = date.getTime();
+    }
+
+    if (target.name == 'right') {
+      Belly.bellyScreens[screenID].right.current = target.value;
+      Belly.bellyScreens[screenID].right.lastChanged = date.getTime();
+    }
+
     if (target.name == 'checkbox') {
       Belly.bellyScreens[screenID].checkboxes.list[itemID].value =
         target.checked;
@@ -122,7 +172,13 @@ function Belly(robotId, scale, resizeAxis) {
     }
 
     if (target.name == 'textInput') {
-      Belly.bellyScreens[screenID].textInput.value = document.getElementById(
+      // Belly.bellyScreens[screenID].textInput.value = document.getElementById(
+      //   target.id
+      // ).value;
+    }
+
+    if (target.name == 'savedTextInput') {
+      Belly.bellyScreens[screenID].savedTextInput.value = document.getElementById(
         target.id
       ).value;
     }
@@ -194,7 +250,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
          ` +
           Belly.currentScreen +
           `
-          )"><progress id="file" value=` + progress + ` max="100"></progress></button>
+          )"><progress id="file" value=` +
+          progress +
+          ` max="100"></progress></button>
         `;
       }
       if (
@@ -231,14 +289,20 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     /*********
            Text instructions
           *********/
+    let largeTextScale = window.location.href.includes('bellyEdit')
+      ? '50%'
+      : '90%';
+    let smallTextScale = window.location.href.includes('bellyEdit')
+      ? '43%'
+      : '75%';
     if (screen.instructionLarge.isShown) {
       var largeInstruction = screen.instructionLarge.text;
       var fontFamily = ((fontFamily) => {
         switch (fontFamily) {
           case 'Courier':
-            return 'font-family: "Lucida Console", Courier, monospace;';
+            return `font-family: Courier New, serif;`;
           case 'Times':
-            return 'font-family: "Times New Roman", Times, serif;';
+            return `font-family: 'Times New Roman', Times, serif;`;
           default:
             return 'font-family: Arial, Helvetica, sans-serif;';
         }
@@ -246,9 +310,12 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       bellyHTML +=
         "<div class='screen-element instruction-large' style='z-index: 2; " +
         fontFamily +
-        "'>" +
+        `'><p style="margin: 3px; background-color: rgba(255, 255, 255, 0.5); font-size: ` +
+        largeTextScale +
+        // `; font-family: Courier New, serif;">` +
+        `; ` + fontFamily +  `">` +
         largeInstruction +
-        '</div> ';
+        '</p></div> ';
     }
 
     if (screen.instructionSmall.isShown) {
@@ -256,9 +323,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       var fontFamily = ((fontFamily) => {
         switch (fontFamily) {
           case 'Courier':
-            return 'font-family: "Lucida Console", Courier, monospace;';
+            return `font-family: Courier New, serif;`;
           case 'Times':
-            return 'font-family: "Times New Roman", Times, serif;';
+            return `font-family: 'Times New Roman', Times, serif;`;
           default:
             return 'font-family: Arial, Helvetica, sans-serif;';
         }
@@ -266,11 +333,34 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       bellyHTML +=
         "<div class='screen-element instruction-small' style='z-index: 2; " +
         fontFamily +
-        "'>" +
+        `'><p style="background-color: rgba(255, 255, 255, 0.5); margin: 3%; font-size: ` +
+        smallTextScale +
+        // `; font-family: Courier New, serif;">` +
+        `; ` +
+        fontFamily +
+        `">` +
         smallInstruction +
-        '</div>';
+        '</p></div>';
     }
 
+    /*********
+           Icons
+          *********/
+
+    
+           
+    if (screen.icons && screen.icons.list) {
+      // bellyHTML += "<div style='flex-direction: row'>";
+      screen.icons.list.forEach((element) => {
+        console.log(element);
+        
+        bellyHTML += '<i class="' + element.type + '"style="position:absolute; top:' + element.position.y + '%; left: ' + element.position.x + '%; font-size: ' + element.size + 'px;"></i>'
+        // <i class="fa fa-hand-peace-o"></i>
+      })
+      // bellyHTML += '</div>';
+    }
+
+    
     /*********
            Images
           *********/
@@ -297,18 +387,26 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
             position += 'right: ' + element.location.right + '; ';
           }
         } else {
-          position += 'position: relative;';
+            position += 'position: relative;'
+          }
+        alignment = ''
+        if (element.alignment == 'left') {
+          alignment = 'left: -200px;'
+        } else if (element.alignment == 'right') {
+          alignment = 'left: 200px;'
         }
         position += "'";
         bellyHTML +=
           "<img src='" +
           element.path +
-          "' style='border: none; " +
-          position +
+          "' style='border: none;" +
+          alignment +
+          position + 
           "width='" +
           element.size.x +
           "' height='" +
           element.size.y +
+          "' z-index = -1" +
           "'/>";
       });
       bellyHTML += '</div>';
@@ -319,13 +417,13 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           *********/
     if (screen.slider.isShown) {
       var sliderMin = screen.slider.min;
-//       var sliderCurrent = screen.slider.current;
+      //       var sliderCurrent = screen.slider.current;
       // Start slider at middle
       var sliderCurrent = (screen.slider.max + screen.slider.min) / 2;
       var sliderMax = screen.slider.max;
       bellyHTML += "<div class='screen-element mt-4'  style='z-index: 2'>";
       bellyHTML +=
-        "<div class='min-value screen-item'  style='z-index: 2'>" +
+        `<div class='min-value screen-item'  style='z-index: 2'><p style="background-color: rgba(255, 255, 255, 0.5); margin: 3%;font-size: 100%; font-family: Courier New, serif;">` +
         sliderMin +
         '</div>';
       bellyHTML +=
@@ -336,9 +434,113 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
         " value='" +
         sliderCurrent +
         "' min='0' max='100'>";
-      bellyHTML += "<div class='max-value screen-item'>" + sliderMax + '</div>';
+      bellyHTML +=
+        `<div class='max-value screen-item'><p style="background-color: rgba(255, 255, 255, 0.5); margin: 3%;font-size: 100%; font-family: Courier New, serif;">` +
+        sliderMax +
+        '</div>';
       bellyHTML += '</div>';
     }
+
+    /*********
+     at
+    *********/
+    if (screen.at && screen.at.isShown) {
+      var atCurrent = screen.at.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + atCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     contact
+    *********/
+   if (screen.contact && screen.contact.isShown) {
+      var contactCurrent = screen.contact.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + contactCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     asterisk
+    *********/
+   if (screen.asterisk && screen.asterisk.isShown) {
+      var asteriskCurrent = screen.asterisk.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + asteriskCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     book
+    *********/
+   if (screen.book && screen.book.isShown) {
+      var bookCurrent = screen.book.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + bookCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     victory
+    *********/
+   if (screen.victory && screen.victory.isShown) {
+    var victoryCurrent = screen.victory.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + victoryCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     hand
+    *********/
+   if (screen.hand && screen.hand.isShown) {
+    var handCurrent = screen.hand.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + handCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     up
+    *********/
+   if (screen.up && screen.up.isShown) {
+    var upCurrent = screen.up.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + upCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     down
+    *********/
+   if (screen.down && screen.down.isShown) {
+    var downCurrent = screen.down.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + downCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+  /*********
+     left
+    *********/
+   if (screen.left && screen.left.isShown) {
+    var leftCurrent = screen.left.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + leftCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+     right
+    *********/
+   if (screen.right && screen.right.isShown) {
+    var rightCurrent = screen.right.current;
+      bellyHTML += "<div class='screen-element mt-4'>";
+      bellyHTML += "<div class='value screen-item'>" + rightCurrent + '</div>';
+      bellyHTML += '</div>';
+    }
+
 
     /*********
            Checkboxes
@@ -372,10 +574,29 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     if (screen.textInput && screen.textInput.isShown === 1) {
       bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
       bellyHTML +=
-        '<textarea id="textInput" name="textInput" rows="4" cols="50"';
+        '<textarea id="textInput" name="textInput" rows="3" cols="50"';
       bellyHTML +=
         ' placeholder="' +
         (screen.textInput.text ? screen.textInput.text : '') +
+        '"';
+      bellyHTML +=
+        " onchange='Belly.bellyInputReceived(this," +
+        Belly.currentScreen +
+        ")'";
+      bellyHTML += '></textarea>';
+      bellyHTML += '</div>';
+    }
+
+    /*********
+           SAVED Text input field
+          *********/
+    if (screen.savedTextInput && screen.savedTextInput.isShown === 1) {
+      bellyHTML += "<div class='screen-element mt-4 style='z-index: 2'>";
+      bellyHTML +=
+        '<textarea id="savedTextInput" name="savedTextInput" rows="3" cols="50"';
+      bellyHTML +=
+        ' placeholder="' +
+        (screen.savedTextInput.text ? screen.savedTextInput.text : '') +
         '"';
       bellyHTML +=
         " onchange='Belly.bellyInputReceived(this," +
@@ -391,6 +612,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     if (screen.buttons.isShown) {
       bellyHTML +=
         "<div class='d-flex justify-content-center flex-wrap screen-element mt-4'  style='z-index: 2'>";
+      let buttonTextScale = window.location.href.includes('bellyEdit')
+        ? '1vw'
+        : '2.5vw';
 
       if (screen.buttons.list != undefined) {
         for (var j = 0; j < screen.buttons.list.length; j++) {
@@ -409,13 +633,17 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
               ")' name='button'>" +
               '<div><img  src=' +
               url +
-              " width='60' height='60'/></div><p style='font-size:16;color:white'>" +
+              ` width='60' height='60'/></div><p style='font-size: ` +
+              buttonTextScale +
+              `;color:white'>` +
               name +
               '</p></button>';
             // Buttons with text
             if (screen.buttons.list[j].label) {
               bellyHTML +=
-                '<h2 style="max-width: 160px">' +
+                `<h2 style="max-width: 160px; font-size: ` +
+                buttonTextScale +
+                `;">` +
                 screen.buttons.list[j].label +
                 '</h2>';
             }
@@ -432,7 +660,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
               Belly.currentScreen +
               ',' +
               j +
-              ")' name='button'>" +
+              `)' name='button' style="font-size: `
+              + buttonTextScale + 
+              `;">` +
               name +
               '</button></div>';
           }
@@ -456,8 +686,13 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
           largeInstructionElements[i].style.fontSize = '3vw';
         for (var i = 0; i < smallInstructionElements.length; i++)
           smallInstructionElements[i].style.fontSize = '2vw';
-        for (var i = 0; i < otherElements.length; i++)
-          otherElements[i].style.fontSize = '1.5vw';
+        for (var i = 0; i < otherElements.length; i++) {
+          if (window.location.href.includes('bellyEdit')) {
+            otherElements[i].style.fontSize = '0.8vw';
+          } else {
+            otherElements[i].style.fontSize = '1.5vw';
+          }
+        }
       } else {
         for (var i = 0; i < largeInstructionElements.length; i++)
           largeInstructionElements[i].style.fontSize = '3vh';

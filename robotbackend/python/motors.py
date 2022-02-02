@@ -6,7 +6,7 @@ import json
 
 # Dummy data for motors
 # Currently stored as an array corresponding to [motor 1, motor 2]
-motor_values = [-1, -1]
+motor_values = []
 
 # Robot from database to listen to
 this_robot_id = 0
@@ -29,15 +29,14 @@ auth_params = {'auth': auth_info["idToken"]}
 while(True):
 
 	# Sending get request and obtaining the response
-	get_request = connection.get(url = URL + "robots.json")
+	get_request = connection.get(url = URL + "robots/0/state.json")
 	# Extracting data in json format 
-	robots = get_request.json()
+	robot_state = get_request.json()
 	
 	##############
 	# Check if there is a new motor value in the database
 	##############
-	robot_state = robots[this_robot_id]["state"]
-	new_motor_values = [robot_state["motor0"], robot_state["motor1"]]
+	new_motor_values = robot_state["motors"]
 	if (motor_values != new_motor_values):
 		print("New motor values: " + str(new_motor_values))
 		# TODO: Do something with the new motor values

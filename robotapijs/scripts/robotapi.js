@@ -11,6 +11,10 @@ function Robot(robotId, apiDiv) {
   Robot.currentScreen = -1;
   Robot.sounds = null;
   Robot.tactile = null;
+  Robot.motors = null;
+  Robot.currentMotorState = null;
+  Robot.poses = null;
+  Robot.poseState = null;
   
   Robot.setRobotId = function(robotId) {
     Robot.robotId = robotId;
@@ -29,6 +33,16 @@ function Robot(robotId, apiDiv) {
       '/robots/' + Robot.robotId + '/inputs/');
     dbRefInput.on("value", Robot._updateRobotInput);
 
+    var dbRefMotor = firebase.database().ref('/robots/' + Robot.robotId + '/state/motors/');
+    dbRefMotor.on('value', (snapshot) => {
+      Robot.currentMotorState = snapshot.val();
+    })
+
+    var dbRefPose = firebase.database().ref('/robots/' + Robot.robotId + '/state/poses/');
+    dbRefPose.on('value', (snapshot) => {
+      Robot.poseState = snapshot.val();
+    })
+
     console.log("Robot initialized.");
   }
 
@@ -39,11 +53,20 @@ function Robot(robotId, apiDiv) {
                         "Makes the robot speak the given text out loud.",
                        "<b>text</b> is a String within single or double quotes",
                        "robot.speak(\"Hello world\");");
-    apiText += Robot._getAPICardHTML("robot.moveNeck(pan, tilt)",
-                        "Makes the robot's neck move to the indicated pan/tilt angles.",
-                       "<b>pan</b> is an Integer representing the pan angle in degrees.<br>" +
-                       "<b>tilt</b> is an Integer representing the tilt angle in degrees.",
-                       "robot.moveNeck(0, -30);");
+    apiText += Robot._getAPICardHTML("robot.moveNeck(rotate, tilt, pan, turn)",
+                        "Increments the robot's neck to move the indicated amount.",
+                       "<b>rotate</b> is an Integer representing the left/right tilt angle in degrees.<br>" +
+                       "<b>tilt</b> is an Integer representing the up/down tilt angle in degrees.<br>" +
+                       "<b>pan</b> is an Integer representing the vertical movement of the neck.<br>" +
+                       "<b>turn</b> is an Integer representing the left/right rotation angle in degrees.",
+                       "robot.moveNeck(0, -30, 0, 0);");
+    if (Robot.poses != null && Robot.poses.length > 0)
+      apiText += Robot._getAPICardHTML("robot.inputPose(poseIndex)",
+                        "Changes the robot's pose to one of its preset poses.",
+                      "<b>poseIndex</b> is an Integer between 0 and " +
+                        (Robot.poses.length-1) +  ", available poses are:" +
+                        Robot._getPoseNames(),
+                      "robot.inputPose(0);");
     apiText += Robot._getAPICardHTML("robot.setSpeechBubble(text)",
                         "Sets the robot's speech bubble to the given text.",
                        "<b>text</b> is a String within single or double quotes",
@@ -77,15 +100,35 @@ function Robot(robotId, apiDiv) {
           Robot._getScreenNames(),
         'robot.setScreenByName("Screen-0");'
       );
+      apiText += Robot._getAPICardHTML(
+        'robot.setLargeInstruction(screenIndex, text)',
+        "Sets the text of a specific robot belly screen.",
+        '<b>screenIndex</b> is an integer corresponding to a specific belly screen. ' +
+        '<b>text</b> is an String. ',
+        'robot.setLargeInstruction(0, "Hello!");'
+      );
+      apiText += Robot._getAPICardHTML(
+        'robot.setSmallInstruction(screenIndex, text)',
+        'Sets the small instruction text of a specific robot belly screen.',
+        '<b>screenIndex</b> is an integer corresponding to a specific belly screen. ' +
+          '<b>text</b> is an String. ',
+        'robot.setSmallInstruction(0, "Hello!");'
+      );
       apiText += Robot._getAPICardHTML("(sliderValue) robot.getSliderValue()",
                         "Obtains the current value of the slider on the screen.",
                        "<b>sliderValue</b> is an Integer between 0 and 100 indicating the current value of the slider.",
                        "var sliderValue = robot.getSliderValue();");
+      // apiText += Robot._getAPICardHTML(
+      //   '(textInputValue) robot.getTextInputValue()',
+      //   'Obtains the current text from the text area field on the screen.',
+      //   '<b>textInputValue</b> is an String indicating the current value of the text area field.',
+      //   'var textInputValue = robot.getTextInputValue();'
+      // );
       apiText += Robot._getAPICardHTML(
-        '(textInputValue) robot.getTextInputValue()',
-        'Obtains the current text from the text area field on the screen.',
+        '(textInputValue) robot.getScreenSavedTextInputValue(screenIndex)',
+        'Obtains the current text from the text area field on a specific screen, if it was stored in a saved text field.',
         '<b>textInputValue</b> is an String indicating the current value of the text area field.',
-        'var textInputValue = robot.getTextInputValue();'
+        'var textInputValue = robot.getScreenSavedTextInputValue(1);'
       );
       apiText += Robot._getAPICardHTML("(buttonName) robot.waitForButton()",
                         "Makes the robot wait until a button in the screen is pressed and returns the name of the pressed button.",
@@ -133,6 +176,10 @@ function Robot(robotId, apiDiv) {
     return Robot._getNames(Robot.faces);
   }
 
+  Robot._getPoseNames = function() {
+    return Robot._getNames(Robot.poses);
+  }
+
   Robot._getNames = function(objectList) {
     var namesText = "<ul>";
     for (var i=0; i<objectList.length; i++) {
@@ -151,10 +198,16 @@ function Robot(robotId, apiDiv) {
     var apiData = snapshot.val();
     if (apiData.states != undefined)
       Robot.faces = apiData.states.faces;
+      Robot.poses = [];
+      if (apiData.states.poses) {
+        Object.entries(apiData.states.poses).forEach((elem, index) => {
+          Robot.poses.push({'name': elem[1].name});
+        })
+      }
     if (apiData.inputs != undefined)
       Robot.bellyScreens = apiData.inputs.bellyScreens;
     if (apiData.actions != undefined)
-      Robot.sounds = apiData.actions.sounds;
+      Robot.sounds = apiData.actions.sounds;      
 
     if (Robot.apiDiv != undefined) {
       Robot.apiDiv.innerHTML = Robot.getAPIHTML();
@@ -204,10 +257,26 @@ function Robot(robotId, apiDiv) {
       Robot.currentScreen < Robot.bellyScreens.length
     ) {
       if (Number(Robot.bellyScreens[Robot.currentScreen].textInput.isShown) == 1)
-        sliderValue = Robot.bellyScreens[Robot.currentScreen].textInput.value;
+        textInputValue =
+          Robot.bellyScreens[Robot.currentScreen].textInput.value;
     }
     return textInputValue;
   }
+
+  this.getScreenSavedTextInputValue = function (screenIndex) {
+    var textInputValue = null;
+    if (
+      Robot.bellyScreens != null &&
+      screenIndex >= 0 &&
+      screenIndex < Robot.bellyScreens.length && 
+      Robot.bellyScreens[screenIndex].savedTextInput &&
+      Robot.bellyScreens[screenIndex].savedTextInput.isShown
+    ) {
+      if (Number(Robot.bellyScreens[screenIndex].savedTextInput.isShown) == 1)
+        textInputValue = Robot.bellyScreens[screenIndex].savedTextInput.value;
+    }
+    return textInputValue;
+  };
 
   this.getTactileSensor = function(sensorName) {
     var sensorValue = null;
@@ -314,6 +383,20 @@ function Robot(robotId, apiDiv) {
     dbRef.update(updates);
   }
 
+  Robot._requestRobotStates = function (stateNames, newStates) {
+    var dbRef = firebase.database().ref('/robots/' + Robot.robotId + '/state/');
+    var updates = {};
+    stateNames.forEach((elem, index) => {
+      updates[elem] = newStates[index];
+    })
+    dbRef.update(updates);
+  };
+
+  Robot._requestRobotScreen = function (screenIndex, newState) {
+    var dbRef = firebase.database().ref('/robots/' + Robot.robotId + '/customAPI/inputs/bellyScreens/' + screenIndex);
+    dbRef.update(newState);
+  }
+
   this.speak = function(text) {
     console.log("Speaking");
     Robot._requestRobotAction("speak", {text:text});
@@ -353,10 +436,92 @@ function Robot(robotId, apiDiv) {
     }
   };
 
-  this.setMotor = function (motorId, value) {
-    console.log('Setting motor ' + motorId + ' to ' + value);
-    Robot._requestRobotState('motor' + motorId, value);
+  this.setMotor = function (index, name, value, motorState) {
+    console.log('Setting motor ' + name + ' to ' + value);
+    console.log('Motor state', motorState);
+    let newState =  [...motorState.slice(0, index), {...motorState[index], value }, ...motorState.slice(index + 1)];
+    console.log(newState);
+    Robot._requestRobotState('motors', newState);
   }
+
+  this.setExcitement = function (value) {
+    Robot._requestRobotState('excitement', value);
+  }
+
+  this.setMotors = function (updatedMotorState) {
+    Robot._requestRobotState('motors', updatedMotorState);
+  }
+  
+  this.setPose = function (index, name, poseState, motorState) {
+    console.log('Setting pose ' + name);
+    let newState = [
+      ...poseState.slice(0, index),
+      {
+        ...poseState[index],
+        lastPressed: Date.now(),
+      },
+      ...poseState.slice(index + 1),
+    ];
+    let newMotorState = motorState;
+    poseState[index].motors.forEach((elem, index) => {
+      newMotorState[index].value = elem
+    });
+    Robot._requestRobotStates(['poses', 'motors'], [newState, newMotorState])
+  }
+
+  this.inputPose = function (index) {
+    var dbRefPose = firebase.database().ref('/robots/' + Robot.robotId + '/state/poses/');
+    var poseStateName = Robot.poseState[index].name;
+    if (Robot.currentMotorState && Robot.poseState) {
+      console.log('Updating pose to ' + index + ': ' + poseStateName);
+      this.setPose(index, poseStateName, Robot.poseState, Robot.currentMotorState);
+    }
+  }
+
+  this.updatePoseAPI = function(newPoseState) {
+    var dbRef = firebase.database().ref('/robots/' + Robot.robotId + '/customAPI/states/poses/');
+    var updates = {};
+    newPoseState.forEach((elem, index) => {
+      updates[index] = {name: elem.name ? elem.name : 'Pose ' + index};
+    });
+    updates[newPoseState.length] = null;
+    dbRef.update(updates);
+  }
+
+  this.saveNewPose = function (newPoseState) {
+    Robot._requestRobotState('poses', newPoseState);
+    this.updatePoseAPI(newPoseState);
+  }
+
+  this.deletePose = function(index, poseState) {
+    if (index > -1 && index < poseState.length) { 
+      Robot._requestRobotState(
+        'poses',
+        poseState.filter((item, idx) => index !== idx)
+      );
+      this.updatePoseAPI(poseState.filter((item, idx) => index !== idx));
+    }
+  }
+
+  this.setLargeInstruction = function (screenIndex, text) {
+    if (screenIndex < 0 || screenIndex>=Robot.bellyScreens.length)
+      console.log("Wrong screen index.");
+    else {
+      updated = { ...Robot.bellyScreens[screenIndex] };
+      updated.instructionLarge.text = text;
+      Robot._requestRobotScreen(screenIndex, updated);
+    }
+  }
+
+  this.setSmallInstruction = function (screenIndex, text) {
+    if (screenIndex < 0 || screenIndex >= Robot.bellyScreens.length)
+      console.log('Wrong screen index.');
+    else {
+      updated = { ...Robot.bellyScreens[screenIndex] };
+      updated.instructionSmall.text = text;
+      Robot._requestRobotScreen(screenIndex, updated);
+    }
+  };
   
   this.setEyes = function(value) {
     Robot._requestRobotState("currentEyes", value);
@@ -368,8 +533,42 @@ function Robot(robotId, apiDiv) {
     //TODO: Implement callback for when action is done
   }
 
-  this.moveNeck = function(pan, tilt) {
-    Robot._requestRobotAction("neck", {panAngle:pan, tiltAngle:tilt});
+  this.moveNeck = function(rotate, tilt, pan, turn) {
+    // Get current motorState and update
+    var newState = Robot.currentMotorState;
+    if (Robot.currentMotorState) {
+      Robot.currentMotorState.forEach((elem, index) => {
+        if (elem.name == 'Left/Right Tilt' && rotate != 0) {
+          if (rotate > 0)
+            newState[index].value = Math.min(elem.max, elem.value + rotate);
+          else
+            newState[index].value = Math.max(elem.min, elem.value + rotate);
+        }
+        else if (elem.name == 'Up/Down Tilt' && tilt != 0) {
+          if (tilt > 0)
+            newState[index].value = Math.min(elem.max, elem.value + tilt);
+          else
+            newState[index].value = Math.max(elem.min, elem.value + tilt);
+        }
+        else if (elem.name == 'Neck' && pan != 0) {
+          if (pan > 0)
+            newState[index].value = Math.min(elem.max, elem.value + pan);
+          else
+            newState[index].value = Math.max(elem.min, elem.value + pan);
+        }
+        else if (elem.name == 'Rotate' && turn != 0) {
+          if (turn > 0)
+            newState[index].value = Math.min(elem.max, elem.value + turn);
+          else
+            newState[index].value = Math.max(elem.min, elem.value + turn);
+        }
+      })
+      this.setMotors(newState);
+      console.log('MotorState values: L/R=' + newState[0].value
+        + ', U/D=' + newState[1].value
+        + ', Neck=' + newState[2].value
+        + ', Rotate=' + newState[3].value);
+    }
     //TODO: Implement callback for when action is done
   }
 

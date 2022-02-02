@@ -15,7 +15,7 @@ function Face() {
   Face.faces = null;
   
   Face.updateRobotFace = function(snapshot) {
-    var robotState = snapshot.val();
+    var robotState = snapshot?.val ? snapshot.val() : snapshot;
     var faceIndex = robotState.currentFace;
 
     if (Face.faces != null && Face.faces.length > 0) {

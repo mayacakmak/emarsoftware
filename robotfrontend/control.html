@@ -14,7 +14,7 @@
   <div class="container-fluid px-sm-5 pb-4">
     <div class="row">
       <div class="col text-center">
-        <h1 class="display-4">Robot Controller</h1>
+        <h1 class="display-4" id="controlTitle">Robot Controller</h1>
       </div>
     </div>
     <div class="row">
@@ -33,6 +33,61 @@
     </div>
     <div class="row">
       <div class="col-sm-7">
+        <div class="card">
+          <div class="card-header row">
+            <h2 style="padding-left: 10pt">Set individual robot motors</h2>
+            <div class="col-md align-content-center" id="headTouched">
+              </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md">
+                <div class="top-aligned" id="motorControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Set multiple robot motors (at once)</h2>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md">
+                <div style="width: 50%" class="top-aligned" id="motorPoseControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+                <div class="preset-controls">
+                  <button type="button" class="btn btn-info" onclick="manualPoseChanged()">Send to Robot</button>
+                  <input class="large-text" type="text" name="savePoseText" id="savePoseText" placeholder="Pose name">
+                  <button type="button" class="btn btn-info" onclick="saveAsPose()">Save as Pose</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Robot poses</h2>
+          </div>
+          <div class="card-body">
+            <div class="top-aligned" id="poseControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Set robot screen</h2>
+          </div>
+          <div class="card-body">
+            <div class="top-aligned" id="screenControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Set robot eyes</h2>
+          </div>
+          <div class="card-body">
+            <div class="top-aligned" id="faceControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+          </div>
+        </div>
         <div class="card">
           <div class="card-header">
             <h2>Robot speech</h2>
@@ -62,30 +117,14 @@
             </div>
           </div>
         </div>
-        <div class="card">
+        <!-- <div class="card">
           <div class="card-header">
-            <h2>Set robot screen</h2>
+            <h2>Robot Animations</h2>
           </div>
           <div class="card-body">
-            <div class="top-aligned" id="screenControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+            <div class="top-aligned" id="animationControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
           </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <h2>Set robot eyes</h2>
-          </div>
-          <div class="card-body">
-            <div class="top-aligned" id="faceControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <h2>Set robot motors</h2>
-          </div>
-          <div class="card-body">
-            <div class="top-aligned" id="motorControls"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
-          </div>
-        </div>
+        </div> -->
       </div>
       <div class="col-sm-5">
         <div class="card">
@@ -119,8 +158,8 @@
   <script src="https://mayacakmak.github.io/emarsoftware/robotbackend/scripts/config.js"></script>
   <script src="https://mayacakmak.github.io/emarsoftware/databasejs/scripts/database.js"></script>
   <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
-  <script src="https://mayacakmak.github.io/emarsoftware/robotbackend/scripts/eyes.js"></script>
-  <script src="https://mayacakmak.github.io/emarsoftware/robotbackend/scripts/face.js"></script>
+  <script src="../robotbackend/scripts/eyes.js"></script>
+  <script src="../robotbackend/scripts/face.js"></script>
   <script src="../robotbackend/scripts/belly.js"></script>
   <script src="../robotapijs/scripts/robotapi.js"></script>
   <script src="scripts/facedata.js"></script>
