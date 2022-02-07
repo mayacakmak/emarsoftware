@@ -85,6 +85,23 @@
           </div>
         </div>
 
+        <!-- Data Vis Settings Panel 
+          Lists every image on selected bellyscreen, allows them to be resized
+          printIconList() function populates the list-group div with image settings
+        -->
+        <div class="card">
+          <div class="card-header bg-light" style="display: flex; flex-direction: row;">
+            <h2 style="margin-right: 2rem;">Data Visualization</h2>
+            <button class="btn btn-success" type="button" onclick="static()">Static</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="dynamic()">Dynamic</button>
+          </div>
+          <div class="card-body">
+            <div class='list-group' id='data-vis-settings'>
+              <!-- Data Vis setting rows get added right here by javascript function -->
+            </div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-header bg-light">
             <h2>Belly Preview</h2>
