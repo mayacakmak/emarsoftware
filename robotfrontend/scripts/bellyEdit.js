@@ -431,6 +431,19 @@ function setNavButton(target) {
   }
 }
 
+function addStaticVis(pathToVis) {
+  // add static visualizations by adding them as an image, Path would be the link to the image in firebase
+  var static_vis = {'alignment':"", 'location':{x:0, y:0}, 'size': {x:150, y:150}, 'position': relative, 'path': pathToVis};
+  // take the dictionary with the image path wrote above and save it to the image list 
+  // on the currently selected screen. it will be added as an image, and appear on the image 
+  // settings panel where it can be modified
+  bellyScreens[selectedBellyScreen].images.list.push(static_vis);
+  // save changes to the database
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  dbRef.update({ bellyScreens: bellyScreens });
+}
+
 function uploadImage(target, index) {
   console.log(target, index);
   var file = document.querySelectorAll('input[type=file]')[index].files[0];
@@ -1374,6 +1387,23 @@ function printIconList() {
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild)
   }
+  
+// Iterates through list of static vis in selected bellyscreen and creates
+// a row of size settings for each one
+function printStaticList() {
+  document.getElementById('static-called');
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild)
+  }
+
+  // Iterates through list of dynamic vis in selected bellyscreen and creates
+// a row of size settings for each one
+function printDynamicList() {
+  document.getElementById('dynamic-called');
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild)
+  }
+
 
   // Create icon settings row for every image on screen
   for (let i = 1; i < bellyScreens[selectedBellyScreen].icons.list.length + 1; i++) {
