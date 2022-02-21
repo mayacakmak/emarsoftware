@@ -9,6 +9,7 @@
   <script type="text/javascript" src="../robotbackend/scripts/config.js"></script>
   <script type="text/javascript" src="../robotbackend/scripts/belly.js"></script>
   <script src="../databasejs/scripts/database.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-base.min.js"></script>
   <script type="text/javascript" src="../robotfrontend/scripts/bellyEdit.js"></script>
 </head>
 <body>
@@ -89,11 +90,52 @@
           Lists every image on selected bellyscreen, allows them to be resized
           printIconList() function populates the list-group div with image settings
         -->
+        <div id="container"></div>
+        <script>
+          // All the code for the JS line chart will come here
+          var moods = getWeeklyMoodData();
+          console.log(moods);
+          // create a data set on our data
+          var dataSet = anychart.data.set(moods);
+          // map data for the line chart,
+          // take x from the zero column and value from the first column
+          var seriesData = dataSet.mapAs({ x: 0, value: 1 });
+          // create a line chart
+          var chart = anychart.line();
+          // configure the chart title text settings
+          chart.title('Weekly Moods');
+          // set the x axis title
+          chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
+          // set the y axis title
+          chart.yAxis().title('Mood level in range 0-99: 0-33 => Low, 34-66 => Medium, 67-99 => High');
+          var lineChart = chart.line(seriesData);
+          // set the container id for the line chart
+          chart.container('container');
+          // draw the line chart
+          // below when weekly moods button is clicked
+          chart.draw();
+        </script>
+        
         <div class="card">
           <div class="card-header bg-light" style="display: flex; flex-direction: row;">
-            <h2 style="margin-right: 2rem;">Data Visualization</h2>
-            <button class="btn btn-success" type="button" onclick="printStaticList()">Static</button>
-            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="printDynamicList()">Dynamic</button>
+            <h2 style="margin-right: 2rem;">Static Viz</h2>
+            <button class="btn btn-success" type="button" onclick="addStaticVisCommunityS(pathToVis)">Community Stress</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisCommunityM(pathToVis)">Community Moods</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisWeeklyS(pathToVis)">Weekly Stress</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisWeeklyM()">Weekly Moods</button>
+          </div>
+          <div class="card-body">
+            <div class='list-group' id='data-vis-settings'>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header bg-light" style="display: flex; flex-direction: row;">
+            <h2 style="margin-right: 2rem;">Dynamic Viz</h2>
+            <button class="btn btn-success" type="button" onclick="addStaticVis(pathToVis)">Moods</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVis(pathToVis)">Stress</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVis(pathToVis)">Text</button>
           </div>
           <div class="card-body">
             <div class='list-group' id='data-vis-settings'>

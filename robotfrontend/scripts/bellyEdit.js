@@ -431,9 +431,20 @@ function setNavButton(target) {
   }
 }
 
+function getWeeklyMoodData() {
+  // get data from firebase
+  //firebase.database().ref('https://console.firebase.google.com/u/1/project/emar-database/database/emar-database/data/~2Frobotapi~2FweeklyMood').on('value', (snap)=>{
+  firebase.database().ref('robotapi/weeklyMood').on('value', (snap)=>{
+      // get value of that data
+      console.log(snap.val());
+  });
+}
+
 function addStaticVis(pathToVis) {
-  // add static visualizations by adding them as an image, Path would be the link to the image in firebase
-  var static_vis = {'alignment':"", 'location':{x:0, y:0}, 'size': {x:150, y:150}, 'position': relative, 'path': pathToVis};
+  // add static visualizations by adding them as an image, Path would be the link to the image in firebase 
+  var static_vis = {'alignment':"", 'location':{x:0, y:0}, 'size': {x:150, y:150}, 'position': 'relative', 'path': 'https://firebasestorage.googleapis.com/v0/b/emar-database.appspot.com/o/images%2FstaticFinalsWeek.png?alt=media&token=9c639465-44fb-46b5-bf3c-75206ffe53d7'};
+  console.log(pathToVis);
+  console.log(static_vis);
   // take the dictionary with the image path wrote above and save it to the image list 
   // on the currently selected screen. it will be added as an image, and appear on the image 
   // settings panel where it can be modified
@@ -442,6 +453,7 @@ function addStaticVis(pathToVis) {
   var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
   var dbRef = firebase.database().ref(dir);
   dbRef.update({ bellyScreens: bellyScreens });
+ //console.log(static_vis);
 }
 
 function uploadImage(target, index) {
@@ -1395,6 +1407,7 @@ function printStaticList() {
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild)
   }
+}
 
   // Iterates through list of dynamic vis in selected bellyscreen and creates
 // a row of size settings for each one
@@ -1403,7 +1416,7 @@ function printDynamicList() {
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild)
   }
-
+}
 
   // Create icon settings row for every image on screen
   for (let i = 1; i < bellyScreens[selectedBellyScreen].icons.list.length + 1; i++) {
@@ -1527,7 +1540,8 @@ function deleteIcon(id) {
   printIconList()
 }
 
-//   screen_id = "screenDiv" + selectedBellyScreen.toString();
+
+  //   screen_id = "screenDiv" + selectedBellyScreen.toString();
   // console.log("belly screen id: " + screen_id)
   // screen = document.getElementById(screen_id)
   // const icon = document.createElement("i");
@@ -1535,5 +1549,3 @@ function deleteIcon(id) {
   // screen.appendChild(icon)
 
   // console.log("resize image! " + id + " " + x + " " + y);
-
-  
