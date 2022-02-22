@@ -1511,24 +1511,6 @@ function printIconList() {
     parent.removeChild(parent.firstChild)
   }
   
-// Iterates through list of static vis in selected bellyscreen and creates
-// a row of size settings for each one
-function printStaticList() {
-  document.getElementById('static-called');
-  while (parent.firstChild) {
-    parent.removeChild(parent.firstChild)
-  }
-}
-
-  // Iterates through list of dynamic vis in selected bellyscreen and creates
-// a row of size settings for each one
-function printDynamicList() {
-  document.getElementById('dynamic-called');
-  while (parent.firstChild) {
-    parent.removeChild(parent.firstChild)
-  }
-}
-
   // Create icon settings row for every image on screen
   for (let i = 1; i < bellyScreens[selectedBellyScreen].icons.list.length + 1; i++) {
     const icon_panel = document.createElement("div");
