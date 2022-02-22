@@ -440,6 +440,30 @@ function getWeeklyMoodData() {
   });
 }
 
+function addStaticVisWeeklyM() {
+      var moods = getWeeklyMoodData();
+      console.log(moods);
+      // create a data set on our data
+      var dataSet = anychart.data.set(moods);
+      // map data for the line chart,
+      // take x from the zero column and value from the first column
+      var seriesData = dataSet.mapAs({ x: 0, value: 1 });
+      // create a line chart
+      var chart = anychart.line();
+      // configure the chart title text settings
+      chart.title('Weekly Moods');
+      // set the x axis title
+      chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
+      // set the y axis title
+      chart.yAxis().title('Mood level in range 0-99: 0-33 => Low, 34-66 => Medium, 67-99 => High');
+      var lineChart = chart.line(seriesData);
+      // set the container id for the line chart
+      chart.container('container');
+      // draw the line chart
+      // below when weekly moods button is clicked
+      chart.draw();
+    }
+
 function addStaticVis(pathToVis) {
   // add static visualizations by adding them as an image, Path would be the link to the image in firebase 
   var static_vis = {'alignment':"", 'location':{x:0, y:0}, 'size': {x:150, y:150}, 'position': 'relative', 'path': 'https://firebasestorage.googleapis.com/v0/b/emar-database.appspot.com/o/images%2FstaticFinalsWeek.png?alt=media&token=9c639465-44fb-46b5-bf3c-75206ffe53d7'};
