@@ -440,6 +440,106 @@ function getWeeklyMoodData() {
   });
 }
 
+function getWeeklyStressData() {
+  // get data from firebase
+  firebase.database().ref('robotapi/weeklyStress').on('value', (snap)=>{
+      // get value of that data
+      console.log(snap.val());
+      return snap.val();
+  });
+}
+
+function getCommunityStressData() {
+  // get data from firebase
+  firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
+      // get value of that data
+      console.log(snap.val());
+      return snap.val();
+  });
+}
+
+function getCommunityMoodData() {
+  // get data from firebase
+  firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
+      // get value of that data
+      console.log(snap.val());
+      return snap.val();
+  });
+}
+
+function addStaticVisCommunityS() {
+  anychart.onDocumentReady(function() {
+    var stressData = getCommunityStressData();
+      console.log(stressData);
+      // create a data set on our data
+      var dataSet = anychart.data.set(stressData);
+      console.log(dataSet);
+      // map data for the line chart,
+      // take x from the zero column and value from the first column
+      var seriesData = dataSet.mapAs({ x: 0, value: 1 });
+      console.log(seriesData);
+      // create the chart
+      var chart = anychart.pie();
+       // set the chart title
+        chart.title("Stress Levels by Community Percentage");
+        // add the data
+        chart.data(seriesData);
+        // display the chart in the container
+        chart.container('container');
+        chart.draw(); 
+  });
+}
+
+function addStaticVisCommunityM() {
+  anychart.onDocumentReady(function() {
+    var moodData = getCommunityMoodData();
+      console.log(moodData);
+      // create a data set on our data
+      var dataSet = anychart.data.set(moodData);
+      console.log(dataSet);
+      // map data for the line chart,
+      // take x from the zero column and value from the first column
+      var seriesData = dataSet.mapAs({ x: 0, value: 1 });
+      console.log(seriesData);
+      // create the chart
+      var chart = anychart.pie();
+       // set the chart title
+        chart.title("Mood Levels by Community Percentage");
+        // add the data
+        chart.data(seriesData);
+        // display the chart in the container
+        chart.container('container');
+        chart.draw(); 
+  });
+}
+
+function addStaticVisWeeklyS() {
+  var stress = getWeeklyStressData();
+  console.log(stress);
+  // create a data set on our data
+  var dataSet = anychart.data.set(stress);
+  console.log(dataSet);
+  // map data for the line chart,
+  // take x from the zero column and value from the first column
+  var seriesData = dataSet.mapAs({ x: 0, value: 1 });
+  console.log(seriesData);
+  // create a line chart
+  var chart = anychart.line();
+  console.log(chart);
+  // configure the chart title text settings
+  chart.title('Weekly Stress');
+  // set the x axis title
+  chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
+  // set the y axis title
+  chart.yAxis().title('Stress level in range 0-99: 0-33 => Low, 34-66 => Medium, 67-99 => High');
+  var lineChart = chart.line(seriesData);
+  // set the container id for the line chart
+  chart.container('container');
+  // draw the line chart
+  // below when weekly moods button is clicked
+  chart.draw();
+}
+
 function addStaticVisWeeklyM() {
       var moods = getWeeklyMoodData();
       console.log(moods);
@@ -466,22 +566,6 @@ function addStaticVisWeeklyM() {
       // below when weekly moods button is clicked
       chart.draw();
     }
-
-function addStaticVis(pathToVis) {
-  // add static visualizations by adding them as an image, Path would be the link to the image in firebase 
-  var static_vis = {'alignment':"", 'location':{x:0, y:0}, 'size': {x:150, y:150}, 'position': 'relative', 'path': 'https://firebasestorage.googleapis.com/v0/b/emar-database.appspot.com/o/images%2FstaticFinalsWeek.png?alt=media&token=9c639465-44fb-46b5-bf3c-75206ffe53d7'};
-  console.log(pathToVis);
-  console.log(static_vis);
-  // take the dictionary with the image path wrote above and save it to the image list 
-  // on the currently selected screen. it will be added as an image, and appear on the image 
-  // settings panel where it can be modified
-  bellyScreens[selectedBellyScreen].images.list.push(static_vis);
-  // save changes to the database
-  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
-  var dbRef = firebase.database().ref(dir);
-  dbRef.update({ bellyScreens: bellyScreens });
- //console.log(static_vis);
-}
 
 function uploadImage(target, index) {
   console.log(target, index);

@@ -10,11 +10,13 @@
   <script type="text/javascript" src="../robotbackend/scripts/belly.js"></script>
   <script src="../databasejs/scripts/database.js"></script>
   <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-base.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
   <script type="text/javascript" src="../robotfrontend/scripts/bellyEdit.js"></script>
 </head>
 <body>
   <div class="topbar">
-    <div class="topbar-left" id="topLeft"><a class="btn btn-info" href="index.html"><<</a></div>
+    <div class="topbar-left" id="topLeft"><a class="btn btn-info" href="index.html"></a></div>
     <div class="topbar-right" id="top"></div>
   </div>
   <div class="container-fluid px-sm-5 pb-4">
@@ -95,9 +97,9 @@
         <div class="card">
           <div class="card-header bg-light" style="display: flex; flex-direction: row;">
             <h2 style="margin-right: 2rem;">Static Viz</h2>
-            <button class="btn btn-success" type="button" onclick="addStaticVisCommunityS(pathToVis)">Community Stress</button>
-            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisCommunityM(pathToVis)">Community Moods</button>
-            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisWeeklyS(pathToVis)">Weekly Stress</button>
+            <button class="btn btn-success" type="button" onclick="addStaticVisCommunityS()">Community Stress</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisCommunityM()">Community Moods</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisWeeklyS()">Weekly Stress</button>
             <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisWeeklyM()">Weekly Moods</button>
           </div>
           <div class="card-body">
