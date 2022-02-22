@@ -433,10 +433,10 @@ function setNavButton(target) {
 
 function getWeeklyMoodData() {
   // get data from firebase
-  //firebase.database().ref('https://console.firebase.google.com/u/1/project/emar-database/database/emar-database/data/~2Frobotapi~2FweeklyMood').on('value', (snap)=>{
   firebase.database().ref('robotapi/weeklyMood').on('value', (snap)=>{
       // get value of that data
       console.log(snap.val());
+      return snap.val();
   });
 }
 
@@ -445,11 +445,14 @@ function addStaticVisWeeklyM() {
       console.log(moods);
       // create a data set on our data
       var dataSet = anychart.data.set(moods);
+      console.log(dataSet);
       // map data for the line chart,
       // take x from the zero column and value from the first column
       var seriesData = dataSet.mapAs({ x: 0, value: 1 });
+      console.log(seriesData);
       // create a line chart
       var chart = anychart.line();
+      console.log(chart);
       // configure the chart title text settings
       chart.title('Weekly Moods');
       // set the x axis title
