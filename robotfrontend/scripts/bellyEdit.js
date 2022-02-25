@@ -431,6 +431,73 @@ function setNavButton(target) {
   }
 }
 
+function addStaticVisCommunityMood() {
+  firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
+      console.log("PIE DICTIONARY")
+      // create a pie chart and set the data
+      chart = anychart.pie(snap.val());
+      // set title
+      chart.title("Mood Levels by Community Percentage");
+      // set the container id
+      chart.container("container");
+      // initiate drawing the chart
+      chart.draw();
+    });
+  }
+
+  function addStaticVisCommunityStress() {
+    firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
+        console.log("PIE DICTIONARY")
+        // create a pie chart and set the data
+        chart = anychart.pie(snap.val());
+        // set title
+        chart.title("Stress Levels by Community Percentage");
+        // set the container id
+        chart.container("container");
+        // initiate drawing the chart
+        chart.draw();
+      });
+    }
+
+function addStaticVisWeeklyStress() {
+    // get data from firebase
+    firebase.database().ref('robotapi/weeklyStress').on('value', (snap)=>{
+      console.log(snap.val())
+      // create a line chart and set the data
+      chart = anychart.line(snap.val());
+      // set title
+      chart.title('Weekly Stress');
+      // set the x axis title
+      chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
+      // set the y axis title
+      chart.yAxis().title('Stress levels');
+      // set the container id
+      chart.container("container");
+      // initiate drawing the chart
+      chart.draw();
+    });
+}
+
+function addStaticVisWeeklyMood() {
+    // get data from firebase
+    firebase.database().ref('robotapi/weeklyMood').on('value', (snap)=>{
+      console.log("CHART DICTIONARY")
+      console.log(snap.val())
+      // create a line chart and set the data
+      chart = anychart.line(snap.val());
+      // set title
+      chart.title('Weekly Moods');
+      // set the x axis title
+      chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
+      // set the y axis title
+      chart.yAxis().title('Mood levels');
+      // set the container id
+      chart.container("container");
+      // initiate drawing the chart
+      chart.draw();
+    });
+  }
+
 function uploadImage(target, index) {
   console.log(target, index);
   var file = document.querySelectorAll('input[type=file]')[index].files[0];
@@ -1374,7 +1441,7 @@ function printIconList() {
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild)
   }
-
+  
   // Create icon settings row for every image on screen
   for (let i = 1; i < bellyScreens[selectedBellyScreen].icons.list.length + 1; i++) {
     const icon_panel = document.createElement("div");
@@ -1497,7 +1564,8 @@ function deleteIcon(id) {
   printIconList()
 }
 
-//   screen_id = "screenDiv" + selectedBellyScreen.toString();
+
+  //   screen_id = "screenDiv" + selectedBellyScreen.toString();
   // console.log("belly screen id: " + screen_id)
   // screen = document.getElementById(screen_id)
   // const icon = document.createElement("i");
@@ -1505,5 +1573,3 @@ function deleteIcon(id) {
   // screen.appendChild(icon)
 
   // console.log("resize image! " + id + " " + x + " " + y);
-
-  
