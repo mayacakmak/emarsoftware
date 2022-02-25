@@ -431,141 +431,72 @@ function setNavButton(target) {
   }
 }
 
-function getWeeklyMoodData() {
-  // get data from firebase
-  firebase.database().ref('robotapi/weeklyMood').on('value', (snap)=>{
-      // get value of that data
-      console.log(snap.val());
-      return snap.val();
-  });
-}
-
-function getWeeklyStressData() {
-  // get data from firebase
-  firebase.database().ref('robotapi/weeklyStress').on('value', (snap)=>{
-      // get value of that data
-      console.log(snap.val());
-      return snap.val();
-  });
-}
-
-function getCommunityStressData() {
-  // get data from firebase
-  firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
-      // get value of that data
-      console.log(snap.val());
-      return snap.val();
-  });
-}
-
-function getCommunityMoodData() {
-  // get data from firebase
+function addStaticVisCommunityMood() {
   firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
-      // get value of that data
-      console.log(snap.val());
-      return snap.val();
-  });
-}
+      console.log("PIE DICTIONARY")
+      // create a pie chart and set the data
+      chart = anychart.pie(snap.val());
+      // set title
+      chart.title("Mood Levels by Community Percentage");
+      // set the container id
+      chart.container("container");
+      // initiate drawing the chart
+      chart.draw();
+    });
+  }
 
-function addStaticVisCommunityS() {
-  anychart.onDocumentReady(function() {
-    var stressData = getCommunityStressData();
-      console.log(stressData);
-      // create a data set on our data
-      var dataSet = anychart.data.set(stressData);
-      console.log(dataSet);
-      // map data for the line chart,
-      // take x from the zero column and value from the first column
-      var seriesData = dataSet.mapAs({ x: 0, value: 1 });
-      console.log(seriesData);
-      // create the chart
-      var chart = anychart.pie();
-       // set the chart title
+  function addStaticVisCommunityStress() {
+    firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
+        console.log("PIE DICTIONARY")
+        // create a pie chart and set the data
+        chart = anychart.pie(snap.val());
+        // set title
         chart.title("Stress Levels by Community Percentage");
-        // add the data
-        chart.data(seriesData);
-        // display the chart in the container
-        chart.container('container');
-        chart.draw(); 
-  });
+        // set the container id
+        chart.container("container");
+        // initiate drawing the chart
+        chart.draw();
+      });
+    }
+
+function addStaticVisWeeklyStress() {
+    // get data from firebase
+    firebase.database().ref('robotapi/weeklyStress').on('value', (snap)=>{
+      console.log(snap.val())
+      // create a line chart and set the data
+      chart = anychart.line(snap.val());
+      // set title
+      chart.title('Weekly Stress');
+      // set the x axis title
+      chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
+      // set the y axis title
+      chart.yAxis().title('Stress levels');
+      // set the container id
+      chart.container("container");
+      // initiate drawing the chart
+      chart.draw();
+    });
 }
 
-function addStaticVisCommunityM() {
-  anychart.onDocumentReady(function() {
-    var moodData = getCommunityMoodData();
-      console.log(moodData);
-      // create a data set on our data
-      var dataSet = anychart.data.set(moodData);
-      console.log(dataSet);
-      // map data for the line chart,
-      // take x from the zero column and value from the first column
-      var seriesData = dataSet.mapAs({ x: 0, value: 1 });
-      console.log(seriesData);
-      // create the chart
-      var chart = anychart.pie();
-       // set the chart title
-        chart.title("Mood Levels by Community Percentage");
-        // add the data
-        chart.data(seriesData);
-        // display the chart in the container
-        chart.container('container');
-        chart.draw(); 
-  });
-}
-
-function addStaticVisWeeklyS() {
-  var stress = getWeeklyStressData();
-  console.log(stress);
-  // create a data set on our data
-  var dataSet = anychart.data.set(stress);
-  console.log(dataSet);
-  // map data for the line chart,
-  // take x from the zero column and value from the first column
-  var seriesData = dataSet.mapAs({ x: 0, value: 1 });
-  console.log(seriesData);
-  // create a line chart
-  var chart = anychart.line();
-  console.log(chart);
-  // configure the chart title text settings
-  chart.title('Weekly Stress');
-  // set the x axis title
-  chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
-  // set the y axis title
-  chart.yAxis().title('Stress level in range 0-99: 0-33 => Low, 34-66 => Medium, 67-99 => High');
-  var lineChart = chart.line(seriesData);
-  // set the container id for the line chart
-  chart.container('container');
-  // draw the line chart
-  // below when weekly moods button is clicked
-  chart.draw();
-}
-
-function addStaticVisWeeklyM() {
-      var moods = getWeeklyMoodData();
-      console.log(moods);
-      // create a data set on our data
-      var dataSet = anychart.data.set(moods);
-      console.log(dataSet);
-      // map data for the line chart,
-      // take x from the zero column and value from the first column
-      var seriesData = dataSet.mapAs({ x: 0, value: 1 });
-      console.log(seriesData);
-      // create a line chart
-      var chart = anychart.line();
-      console.log(chart);
-      // configure the chart title text settings
+function addStaticVisWeeklyMood() {
+    // get data from firebase
+    firebase.database().ref('robotapi/weeklyMood').on('value', (snap)=>{
+      console.log("CHART DICTIONARY")
+      console.log(snap.val())
+      // create a line chart and set the data
+      chart = anychart.line(snap.val());
+      // set title
       chart.title('Weekly Moods');
       // set the x axis title
       chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
       // set the y axis title
-      chart.yAxis().title('Mood level in range 0-99: 0-33 => Low, 34-66 => Medium, 67-99 => High');
-      var lineChart = chart.line(seriesData);
-      // set the container id for the line chart
-      chart.container('container');
-      // draw the line chart
-      // below when weekly moods button is clicked
+      chart.yAxis().title('Mood levels');
+      // set the container id
+      chart.container("container");
+      // initiate drawing the chart
       chart.draw();
-    }
+    });
+  }
 
 function uploadImage(target, index) {
   console.log(target, index);
