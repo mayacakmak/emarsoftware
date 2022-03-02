@@ -498,6 +498,16 @@ function addStaticVisWeeklyMood() {
     });
   }
 
+  function getDynamicInput() {
+    const button = document.querySelector('#emoji-button');
+    const picker = new EmojiButton();
+  
+    button.addEventListener('click', () => {
+      picker.togglePicker(button);
+    });
+    picker.on('emoji', emoji => { document.querySelector('input').value += emoji;});
+  }
+
 function uploadImage(target, index) {
   console.log(target, index);
   var file = document.querySelectorAll('input[type=file]')[index].files[0];
