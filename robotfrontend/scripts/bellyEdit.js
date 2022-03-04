@@ -433,7 +433,7 @@ function setNavButton(target) {
 
 function addDynamicMoodViz() {
   let btn = document.createElement("button");
-  btn.innerHTML = "Submit";
+  btn.innerHTML = "&#128528;";
   btn.type = "submit";
   btn.name = "formBtn";
   document.body.appendChild(btn);
@@ -504,16 +504,6 @@ function addStaticVisWeeklyMood() {
       // initiate drawing the chart
       chart.draw();
     });
-  }
-
-  function getDynamicInput() {
-    const button = document.querySelector('#emoji-button');
-    const picker = new EmojiButton();
-  
-    button.addEventListener('click', () => {
-      picker.togglePicker(button);
-    });
-    picker.on('emoji', emoji => { document.querySelector('input').value += emoji;});
   }
 
 function uploadImage(target, index) {
