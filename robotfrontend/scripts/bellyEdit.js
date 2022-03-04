@@ -431,6 +431,14 @@ function setNavButton(target) {
   }
 }
 
+function addDynamicMoodViz() {
+  let btn = document.createElement("button");
+  btn.innerHTML = "Submit";
+  btn.type = "submit";
+  btn.name = "formBtn";
+  document.body.appendChild(btn);
+}
+
 function addStaticVisCommunityMood() {
   firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
       console.log("PIE DICTIONARY")

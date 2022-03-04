@@ -108,16 +108,12 @@
           </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
-          <button id="emoji-button" onclick="getDynamicInput()">Choose Level</button>
-          <input type="text" onchange="getDynamicInput()">
-
         <div class="card">
           <div class="card-header bg-light" style="display: flex; flex-direction: row;">
             <h2 style="margin-right: 2rem;">Dynamic Viz</h2>
-            <button class="btn btn-success" type="button" onclick="addStaticVis(pathToVis)">Moods</button>
-            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVis(pathToVis)">Stress</button>
-            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVis(pathToVis)">Text</button>
+            <button class="btn btn-success" type="button" onclick="addDynamicMoodViz()">Moods</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addDynamicStressViz()">Stress</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addDynamicTextViz()">Text</button>
           </div>
           <div class="card-body">
             <div class='list-group' id='data-vis-settings'>
