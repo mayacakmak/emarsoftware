@@ -528,12 +528,12 @@ function addStaticVisCommunityMood() {
           total += data[i];
         }
         console.log(total)
-        console.log("low")
-        let low = (data[0] * total);
-        console.log(low)
         console.log("med")
-        let med = (data[1] * total);
+        let med = (data[0] * total);
         console.log(med)
+        console.log("low")
+        let low = (data[1] * total);
+        console.log(low)
         console.log("high")
         let high = (data[2] * total);
         console.log(high)
@@ -546,6 +546,7 @@ function addStaticVisCommunityMood() {
         console.log(keys)
         console.log(vals)
         var mapping = [
+          // order of firebase
           {x: "🙂", value: vals[0]},
           {x: "😐", value: vals[1]},
           {x: "🙁", value: vals[2]}
