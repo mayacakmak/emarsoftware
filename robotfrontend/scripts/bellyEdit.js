@@ -432,32 +432,128 @@ function setNavButton(target) {
 }
 
 function addDynamicMoodViz() {
-  let btn = document.createElement("button");
-  btn.innerHTML = "&#128528;";
-  btn.type = "submit";
-  btn.name = "formBtn";
-  document.body.appendChild(btn);
+  let btn1 = document.createElement("button");
+  btn1.innerHTML = "&#128578;";
+  btn1.type = "submit";
+  btn1.name = "formBtn";
+  btn1.style.position = "relative"; 
+  btn1.style.background= '#008000';
+  btn1.style.width = '70px'; // setting the width 
+  btn1.style.height = '35px'; // setting the height
+  btn1.style.fontSize = '25px'; 
+  document.body.appendChild(btn1);
+
+  let btn2 = document.createElement("button");
+  btn2.innerHTML = "&#128528;";
+  btn2.type = "submit";
+  btn2.name = "formBtn";
+  btn2.style.position = "relative"; 
+  btn2.style.background= '#FFFFFF';
+  btn2.style.width = '70px'; // setting the width 
+  btn2.style.height = '35px'; // setting the height
+  btn2.style.fontSize = '25px'; 
+  document.body.appendChild(btn2);
+
+  let btn3 = document.createElement("button");
+  btn3.innerHTML = "&#128577;";
+  btn3.type = "submit";
+  btn3.name = "formBtn";
+  btn3.style.position = "relative";
+  btn3.style.background= '#FF0000';
+  btn3.style.width = '70px'; // setting the width 
+  btn3.style.height = '35px'; // setting the height
+  btn3.style.fontSize = '25px'; 
+  document.body.appendChild(btn3);
 }
 
 function addStaticVisCommunityMood() {
   firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
-      console.log("PIE DICTIONARY")
-      // create a pie chart and set the data
-      chart = anychart.pie(snap.val());
-      // set title
-      chart.title("Mood Levels by Community Percentage");
-      // set the container id
-      chart.container("container");
-      // initiate drawing the chart
-      chart.draw();
-    });
+  console.log("moods")
+  console.log(snap.val())
+  let total = 0;
+  let data = snap.val();
+  console.log("data")
+  console.log(data)
+  console.log("total")
+  for (let i = 0; i < data.length; i++) {
+    total += data[i];
   }
+  console.log(total)
+  console.log("low")
+  let low = (data[0] * total);
+  console.log(low)
+  console.log("med")
+  let med = (data[1] * total);
+  console.log(med)
+  console.log("high")
+  let high = (data[2] * total);
+  console.log(high)
+  console.log("arr")
+  let arr = [low, med, high];
+  console.log(arr)
+  console.log("PIE DICTIONARY")
+  let keys = Object.keys(arr);
+  let vals = Object.values(arr);
+  console.log(keys)
+  console.log(vals)
+  var mapping = [
+    {x: "🙁", value: vals[0]},
+    {x: "😐", value: vals[1]},
+    {x: "🙂", value: vals[2]}
+  ];
+  console.log(mapping)
+  // create a pie chart and set the data
+  chart = anychart.pie(mapping);
+  chart.palette(["#FF0000", "#FAF9F6", "#008000"]);
+  // set title
+  chart.title("Mood Levels by Community Percentage");
+  // set the container id
+  chart.container("container");
+  // initiate drawing the chart
+  chart.draw();
+  });
+}
 
   function addStaticVisCommunityStress() {
     firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
+        
+        console.log("stress")
+        console.log(snap.val())
+        let total = 0;
+        let data = snap.val();
+        console.log("data")
+        console.log(data)
+        console.log("total")
+        for (let i = 0; i < data.length; i++) {
+          total += data[i];
+        }
+        console.log(total)
+        console.log("low")
+        let low = (data[0] * total);
+        console.log(low)
+        console.log("med")
+        let med = (data[1] * total);
+        console.log(med)
+        console.log("high")
+        let high = (data[2] * total);
+        console.log(high)
+        console.log("arr")
+        let arr = [low, med, high];
+        console.log(arr)
         console.log("PIE DICTIONARY")
+        let keys = Object.keys(arr);
+        let vals = Object.values(arr);
+        console.log(keys)
+        console.log(vals)
+        var mapping = [
+          {x: "🙂", value: vals[0]},
+          {x: "😐", value: vals[1]},
+          {x: "🙁", value: vals[2]}
+        ];
+        console.log(mapping)
         // create a pie chart and set the data
-        chart = anychart.pie(snap.val());
+        chart = anychart.pie(mapping);
+        chart.palette(["#008000", "#FAF9F6", "#FF0000"]);
         // set title
         chart.title("Stress Levels by Community Percentage");
         // set the container id
