@@ -442,6 +442,13 @@ function addDynamicMoodViz() {
   btn1.style.height = '35px'; // setting the height
   btn1.style.fontSize = '25px'; 
   document.body.appendChild(btn1);
+  // get firebase data
+  // occur1 = firebase, occur2, occur3
+  //onclick1="rendercircle", occur1++, update firebase
+  // rendering 1 time 1 circle
+  // javascript canvas draw shape
+  // update firebase to store occurs
+
 
   let btn2 = document.createElement("button");
   btn2.innerHTML = "&#128528;";
@@ -466,6 +473,8 @@ function addDynamicMoodViz() {
   document.body.appendChild(btn3);
 }
 
+
+
 function addStaticVisCommunityMood() {
   firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
   console.log("moods")
@@ -475,18 +484,21 @@ function addStaticVisCommunityMood() {
   console.log("data")
   console.log(data)
   console.log("total")
-  for (let i = 0; i < data.length; i++) {
-    total += data[i];
+  let dataVal = Object.values(data);
+  for (let i = 0; i < dataVal.length; i++) {
+    console.log("data in index i")
+    console.log(dataVal[i])
+    total += dataVal[i];
   }
   console.log(total)
   console.log("low")
-  let low = (data[0] * total);
+  let low = (dataVal[0] * total);
   console.log(low)
   console.log("med")
-  let med = (data[1] * total);
+  let med = (dataVal[1] * total);
   console.log(med)
   console.log("high")
-  let high = (data[2] * total);
+  let high = (dataVal[2] * total);
   console.log(high)
   console.log("arr")
   let arr = [low, med, high];
@@ -524,18 +536,19 @@ function addStaticVisCommunityMood() {
         console.log("data")
         console.log(data)
         console.log("total")
-        for (let i = 0; i < data.length; i++) {
-          total += data[i];
+        let dataVal = Object.values(data);
+        for (let i = 0; i < dataVal.length; i++) {
+          total += dataVal[i];
         }
         console.log(total)
         console.log("med")
-        let med = (data[0] * total);
+        let med = (dataVal[0] * total);
         console.log(med)
         console.log("low")
-        let low = (data[1] * total);
+        let low = (dataVal[1] * total);
         console.log(low)
         console.log("high")
-        let high = (data[2] * total);
+        let high = (dataVal[2] * total);
         console.log(high)
         console.log("arr")
         let arr = [low, med, high];
