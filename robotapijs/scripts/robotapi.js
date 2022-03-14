@@ -77,7 +77,7 @@ function Robot(robotId, apiDiv) {
                        "<b>soundIndex</b> is an Integer between 0 and " +
                         (Robot.sounds.length-1) +  ", available sounds are:" +
                         Robot._getSoundNames(),
-                       "robot.playSound(0);");
+                       "await robot.playSound(0);");
     if (Robot.faces != null && Robot.faces.length>0)
       apiText += Robot._getAPICardHTML("robot.setFace(faceIndex)",
                         "Sets the robot's face to one of pre-designed faces.",
