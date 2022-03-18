@@ -431,6 +431,24 @@ function setNavButton(target) {
   }
 }
 
+
+function renderCircle() {
+  const canvas = document.getElementById('myCanvas');
+  const context = canvas.getContext('2d');
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const radius = 70;
+
+  context.beginPath();
+  context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+  context.fillStyle = 'green';
+  context.fill();
+  context.lineWidth = 5;
+  context.strokeStyle = '#003300';
+  context.stroke();
+}
+
+
 function addDynamicMoodViz() {
   let btn1 = document.createElement("button");
   btn1.innerHTML = "&#128578;";
@@ -448,6 +466,25 @@ function addDynamicMoodViz() {
   // rendering 1 time 1 circle
   // javascript canvas draw shape
   // update firebase to store occurs
+  firebase.database().ref('robotapi/dynamicMood').on('value', (snap)=>{
+    console.log("dynamic community mood")
+    console.log(snap.val())
+    let data = snap.val();
+    let dataVal = Object.values(data);
+    let occurHigh = dataVal[2];
+    console.log(occurHigh)
+    let occurLow = dataVal[1];
+    let occurMed = dataVal[0];
+    btn1.onclick = function() {
+      occurHigh++;
+      console.log(occurHigh)
+      renderCircle();
+      var firebaseRef = firebase.database().ref('robotapi/dynamicMood');
+      var updateOccur = {"🙂" : occurHigh, "🙁": occurLow, "😐": occurMed};
+      console.log(updateOccur)
+      firebaseRef.update(updateOccur);
+    }
+  });
 
 
   let btn2 = document.createElement("button");
@@ -597,18 +634,41 @@ function addStaticVisWeeklyStress() {
 }
 
 function addStaticVisWeeklyMood() {
-    // get data from firebase
-    firebase.database().ref('robotapi/weeklyMood').on('value', (snap)=>{
-      console.log("CHART DICTIONARY")
+    firebase.database().ref('robotapi/weeklyMood/user1').on('value', (snap)=>{
+        
+      console.log("weekly mood")
       console.log(snap.val())
-      // create a line chart and set the data
-      chart = anychart.line(snap.val());
+      let data = snap.val();
+      console.log("data")
+      console.log(data)
+      //console.log("total")
+      //let dataVal = Object.values(data);
+      //let arr = [low, med, high];
+      //console.log(arr)
+      console.log("LINE DICTIONARY")
+      let keys = Object.keys(data);
+      let vals = Object.values(data);
+      console.log(keys)
+      console.log(vals)
+      var mapping = [
+        // order of firebase
+        {x: keys[0], value: "10"},
+        {x: keys[1], value: "80"},
+        {x: keys[2], value: "50"},
+        {x: keys[3], value: "20"},
+        {x: keys[4], value: "97"},
+        {x: keys[5], value: "67"},
+        {x: keys[6], value: "80"}
+      ];
+      console.log(mapping)
+      // create a pie chart and set the data
+      var chart = anychart.line(mapping);
+      // enable legend
+      var legend = chart.legend();
+      //legend.enabled(true);
+      //chart.palette(["#008000", "#FAF9F6", "#FF0000"]);
       // set title
-      chart.title('Weekly Moods');
-      // set the x axis title
-      chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
-      // set the y axis title
-      chart.yAxis().title('Mood levels');
+      chart.title("Mood Levels of User 1");
       // set the container id
       chart.container("container");
       // initiate drawing the chart
