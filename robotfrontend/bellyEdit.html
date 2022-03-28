@@ -99,21 +99,22 @@
             <h2 style="margin-right: 2rem;">Static Viz</h2>
             <button class="btn btn-success" type="button" onclick="addStaticVisCommunityStress()">Community Stress</button>
             <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisCommunityMood()">Community Moods</button>
-            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisWeeklyStress()">Weekly Stress</button>
-            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisWeeklyMood()">Weekly Moods</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisWeeklyStressFinals()">Weekly Stress (Finals)</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisWeeklyMoodFinals()">Weekly Moods (Finals)</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisWeeklyStressThanksgiving()">Weekly Stress (Thanksgiving)</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVisWeeklyMoodThanksgiving()">Weekly Moods (Thanksgiving)</button>
           </div>
           <div class="card-body">
             <div class='list-group' id='data-vis-settings'>
             </div>
           </div>
         </div>
-
+        <canvas id="myCanvas" width="578" height="200"></canvas>
         <div class="card">
           <div class="card-header bg-light" style="display: flex; flex-direction: row;">
             <h2 style="margin-right: 2rem;">Dynamic Viz</h2>
-            <button class="btn btn-success" type="button" onclick="addStaticVis(pathToVis)">Moods</button>
-            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVis(pathToVis)">Stress</button>
-            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addStaticVis(pathToVis)">Text</button>
+            <button class="btn btn-success" type="button" onclick="addDynamicMoodViz()">Moods</button>
+            <button class="btn btn-success" style="margin-left:5px" type="button" onclick="addDynamicStressViz()">Stress</button>
           </div>
           <div class="card-body">
             <div class='list-group' id='data-vis-settings'>
