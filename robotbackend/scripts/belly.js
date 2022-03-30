@@ -360,6 +360,12 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       // bellyHTML += '</div>';
     }
 
+    // Setting ID's for visualizations
+
+    bellyHTML += "<div id=" + `turkey${Belly.currentScreen}` + "></div>";
+    console.log("turkey" + Belly.currentScreen.toString());
+    
+    const tag = document.getElementById('turkey'+ Belly.currentScreen.toString());
     
     /*********
            Images
