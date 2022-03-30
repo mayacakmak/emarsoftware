@@ -512,7 +512,7 @@ function addDynamicMoodViz() {
 
 
 
-function addStaticVisCommunityMood() {
+function addStaticVisCommunityMood(screen) {
   firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
   console.log("moods")
   console.log(snap.val())
@@ -559,13 +559,13 @@ function addStaticVisCommunityMood() {
   // set the position of labels
   //chart.labels().position("outside");
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + screen);
   // initiate drawing the chart
   chart.draw();
   });
 }
 
-  function addStaticVisCommunityStress() {
+  function addStaticVisCommunityStress(screen) {
     firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
         
         console.log("stress")
@@ -612,13 +612,13 @@ function addStaticVisCommunityMood() {
         // set title
         chart.title("Stress Levels by Community Percentage");
         // set the container id
-        chart.container("container");
+        chart.container("turkey" + screen);
         // initiate drawing the chart
         chart.draw();
       });
     }
 
-function addStaticVisWeeklyStressFinals() {
+function addStaticVisWeeklyStressFinals(screen) {
   firebase.database().ref('robotapi/weeklyStress/FinalsWeek').on('value', (snap)=>{
     console.log("mon moods")
     console.log(snap.val())
@@ -804,13 +804,13 @@ yTitle.text("2 = 🙁, 1 = 😐, 0 = 🙂");
 yTitle.align("bottom");
 
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + screen.toString());
   // initiate drawing the chart
   chart.draw();   
 });
 }
 
-function addStaticVisWeeklyStressThanksgiving() {
+function addStaticVisWeeklyStressThanksgiving(screen) {
   firebase.database().ref('robotapi/weeklyStress/ThanksgivingWeek').on('value', (snap)=>{
     console.log("mon moods")
     console.log(snap.val())
@@ -996,13 +996,13 @@ yTitle.text("2 = 🙁, 1 = 😐, 0 = 🙂");
 yTitle.align("bottom");
 
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + screen.toString());
   // initiate drawing the chart
   chart.draw();   
 });
 }
 
-function addStaticVisWeeklyMoodThanksgiving() {
+function addStaticVisWeeklyMoodThanksgiving(screen) {
   firebase.database().ref('robotapi/weeklyMood/ThanksgivingWeek').on('value', (snap)=>{
     console.log("mon moods")
     console.log(snap.val())
@@ -1188,13 +1188,13 @@ yTitle.text("0 = 🙁, 1 = 😐, 2 = 🙂");
 yTitle.align("bottom");
 
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + screen.toString());
   // initiate drawing the chart
   chart.draw();   
 });
   }
 
-function addStaticVisWeeklyMoodFinals() {
+function addStaticVisWeeklyMoodFinals(screen) {
   firebase.database().ref('robotapi/weeklyMood/FinalsWeek').on('value', (snap)=>{
     console.log("mon moods")
     console.log(snap.val())
@@ -1380,7 +1380,7 @@ yTitle.text("0 = 🙁, 1 = 😐, 2 = 🙂");
 yTitle.align("bottom");
 
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + screen.toString());
   // initiate drawing the chart
   chart.draw();   
 });
@@ -1742,6 +1742,10 @@ function setLayout(element) {
 }
 
 function changeSelectedBellyScreen(event, index) {
+  setTimeout(() => {
+    renderVisuals();
+  }, 5)
+
   selectedBellyScreen = index;
   renderBellyScreenList(bellySnapshot);
   renderSelectedBellyScreen(bellySnapshot);
@@ -2452,12 +2456,242 @@ function deleteIcon(id) {
   printIconList()
 }
 
+setTimeout(() => {
+  
+  renderVisuals();
 
-  //   screen_id = "screenDiv" + selectedBellyScreen.toString();
-  // console.log("belly screen id: " + screen_id)
-  // screen = document.getElementById(screen_id)
-  // const icon = document.createElement("i");
-  // icon.className = 'fa fa-address-book'
-  // screen.appendChild(icon)
+}, 3000)
 
-  // console.log("resize image! " + id + " " + x + " " + y);
+function addViz(viz) {
+  if (!("visualizations" in bellyScreens[selectedBellyScreen])) {
+    bellyScreens[selectedBellyScreen]["visualizations"] = {list:[]}
+  }
+
+  bellyScreens[selectedBellyScreen].visualizations.list.push(viz)
+  
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+
+  renderVisuals();
+}
+
+function renderVisuals() {
+  for (let i = 0; i < bellyScreens.length; i++) {
+    var tag = document.getElementById("turkey" + i.toString())
+    console.log(tag);
+
+    if (bellyScreens[i].visualizations) {
+      console.log(bellyScreens[i].visualizations.list);
+
+      for (let k = 0; k < bellyScreens[i].visualizations.list.length; k++) {
+        // if (bellyScreens[i].visualizations.list[k] == "community_mood") {
+        //   addStaticVisCommunityMood(i);
+        // }
+
+        if (bellyScreens[i].visualizations && bellyScreens[i].visualizations.list[k] == 'community_mood') {
+          addStaticVisCommunityMood(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'static_com_stress') {
+          addStaticVisCommunityStress(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'weekly_stress_finals') {
+          addStaticVisWeeklyStressFinals(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'weekly_mood_finals') {
+          addStaticVisWeeklyMoodFinals(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'weekly_stress_thanksgiving') {
+          addStaticVisWeeklyStressThanksgiving(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'weekly_mood_thanksgiving') {
+          addStaticVisWeeklyMoodThanksgiving(i);
+        }
+        //else if (bellyScreens[i].visualizations.list[k] == 'weekly_stress') {
+        //   addStaticVisWeeklyStress(i);
+        // } else if (bellyScreens[i].visualizations.list[k] == 'weekly_mood') {
+        //   addStaticVisWeeklyMood(i);
+        // }
+      }
+    }
+    
+    // addStaticVisCommunityMood(i);
+
+    // addStaticVisCommunityMood();
+  }
+}
+
+// window.addEventListener('DOMContentLoaded', function(){
+//   setTimeout(() => {
+//     renderVisuals();
+//   }, 500)
+// });
+
+function addVisuals(screen) {
+  if (Belly.bellyScreens[screen] && Belly.bellyScreens[screen].visualizations && Belly.bellyScreens[screen].visualizations.list) {
+    Belly.bellyScreens[screen].visualizations.list.forEach((element) => {
+      console.log(element);
+      if (element == 'community_mood') {
+        addStaticVisCommunityMood();
+      } 
+    })
+  }
+  }
+
+// function addStaticVisCommunityMood(screen) {
+//   firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
+//     console.log("cheese");
+//     console.log(Belly.currentScreen);
+//     console.log("moods")
+//     console.log(snap.val())
+//     let total = 0;
+//     let data = snap.val();
+//     console.log("data")
+//     console.log(data)
+//     console.log("total")
+//     for (let i = 0; i < data.length; i++) {
+//       total += data[i];
+//     }
+//     console.log(total)
+//     console.log("low")
+//     let low = (data[0] * total);
+//     console.log(low)
+//     console.log("med")
+//     let med = (data[1] * total);
+//     console.log(med)
+//     console.log("high")
+//     let high = (data[2] * total);
+//     console.log(high)
+//     console.log("arr")
+//     let arr = [low, med, high];
+//     console.log(arr)
+//     console.log("PIE DICTIONARY")
+//     let keys = Object.keys(arr);
+//     let vals = Object.values(arr);
+//     console.log(keys)
+//     console.log(vals)
+//     var mapping = [
+//       {x: "🙁", value: vals[0]},
+//       {x: "😐", value: vals[1]},
+//       {x: "🙂", value: vals[2]}
+//     ];
+//     console.log(mapping)
+//     // create a pie chart and set the data
+//     chart = anychart.pie(mapping);
+//     chart.palette(["#FF0000", "#FAF9F6", "#008000"]);
+//     // set title
+//     chart.title("Mood Levels by Community Percentage");
+//     // set the container id
+
+//     // bellyHTML += "<div id='turkey'" + Belly.currentScreen + "><h2>hello</h2></div>";
+    
+//     console.log("IN HERE");
+//     const tag = document.getElementById("turkey1");
+//     const tortilla = document.getElementById("tortilla");
+//     console.log("TAG TAG TAG");
+//     // alert(tag);
+//     console.log(tortilla);
+    
+    
+
+//     chart.container("turkey" + screen.toString());
+
+    
+//     // initiate drawing the chart
+//     chart.draw();
+
+//     var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+//     var dbRef = firebase.database().ref(dir);
+//     var updates = { bellyScreens: bellyScreens };
+//     dbRef.update(updates);
+//     // bellyScreens
+//   });
+// }
+
+// function addStaticVisCommunityStress(screen) {
+
+
+//   firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
+      
+//       console.log("stress")
+//       console.log(snap.val())
+//       let total = 0;
+//       let data = snap.val();
+//       console.log("data")
+//       console.log(data)
+//       console.log("total")
+//       for (let i = 0; i < data.length; i++) {
+//         total += data[i];
+//       }
+//       console.log(total)
+//       console.log("med")
+//       let med = (data[0] * total);
+//       console.log(med)
+//       console.log("low")
+//       let low = (data[1] * total);
+//       console.log(low)
+//       console.log("high")
+//       let high = (data[2] * total);
+//       console.log(high)
+//       console.log("arr")
+//       let arr = [low, med, high];
+//       console.log(arr)
+//       console.log("PIE DICTIONARY")
+//       let keys = Object.keys(arr);
+//       let vals = Object.values(arr);
+//       console.log(keys)
+//       console.log(vals)
+//       var mapping = [
+//         // order of firebase
+//         {x: "🙂", value: vals[0]},
+//         {x: "😐", value: vals[1]},
+//         {x: "🙁", value: vals[2]}
+//       ];
+//       console.log(mapping)
+//       // create a pie chart and set the data
+//       chart = anychart.pie(mapping);
+//       chart.palette(["#008000", "#FAF9F6", "#FF0000"]);
+//       // set title
+//       chart.title("Stress Levels by Community Percentage");
+//       // set the container id
+//       chart.container("turkey" + screen.toString());
+
+//       // initiate drawing the chart
+//       chart.draw();
+//     });
+//   }
+
+// function addStaticVisWeeklyStress(screen) {
+//   // get data from firebase
+//   firebase.database().ref('robotapi/weeklyStress').on('value', (snap)=>{
+//     console.log(snap.val())
+//     // create a line chart and set the data
+//     chart = anychart.line(snap.val());
+//     // set title
+//     chart.title('Weekly Stress');
+//     // set the x axis title
+//     chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
+//     // set the y axis title
+//     chart.yAxis().title('Stress levels');
+//     // set the container id
+//     chart.container("turkey" + screen.toString());
+//     // initiate drawing the chart
+//     chart.draw();
+//   });
+// }
+
+// function addStaticVisWeeklyMood(screen) {
+//   // get data from firebase
+//   firebase.database().ref('robotapi/weeklyMood').on('value', (snap)=>{
+//     console.log("CHART DICTIONARY")
+//     console.log(snap.val())
+//     // create a line chart and set the data
+//     chart = anychart.line(snap.val());
+//     // set title
+//     chart.title('Weekly Moods');
+//     // set the x axis title
+//     chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
+//     // set the y axis title
+//     chart.yAxis().title('Mood levels');
+//     // set the container id
+//     chart.container("turkey" + screen.toString());
+//     // initiate drawing the chart
+//     chart.draw();
+//   });
+// }
