@@ -1744,6 +1744,7 @@ function setLayout(element) {
 function changeSelectedBellyScreen(event, index) {
   setTimeout(() => {
     renderVisuals();
+    vizSettings();
   }, 5)
 
   selectedBellyScreen = index;
@@ -2459,6 +2460,7 @@ function deleteIcon(id) {
 setTimeout(() => {
   
   renderVisuals();
+  vizSettings();
 
 }, 3000)
 
@@ -2475,6 +2477,7 @@ function addViz(viz) {
   dbRef.update(updates);
 
   renderVisuals();
+  vizSettings();
 }
 
 function renderVisuals() {
@@ -2517,181 +2520,51 @@ function renderVisuals() {
   }
 }
 
-// window.addEventListener('DOMContentLoaded', function(){
-//   setTimeout(() => {
-//     renderVisuals();
-//   }, 500)
-// });
-
-function addVisuals(screen) {
-  if (Belly.bellyScreens[screen] && Belly.bellyScreens[screen].visualizations && Belly.bellyScreens[screen].visualizations.list) {
-    Belly.bellyScreens[screen].visualizations.list.forEach((element) => {
-      console.log(element);
-      if (element == 'community_mood') {
-        addStaticVisCommunityMood();
-      } 
-    })
-  }
+function vizSettings() {
+  const parent = document.getElementById('data-vis-settings');
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild)
   }
 
-// function addStaticVisCommunityMood(screen) {
-//   firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
-//     console.log("cheese");
-//     console.log(Belly.currentScreen);
-//     console.log("moods")
-//     console.log(snap.val())
-//     let total = 0;
-//     let data = snap.val();
-//     console.log("data")
-//     console.log(data)
-//     console.log("total")
-//     for (let i = 0; i < data.length; i++) {
-//       total += data[i];
-//     }
-//     console.log(total)
-//     console.log("low")
-//     let low = (data[0] * total);
-//     console.log(low)
-//     console.log("med")
-//     let med = (data[1] * total);
-//     console.log(med)
-//     console.log("high")
-//     let high = (data[2] * total);
-//     console.log(high)
-//     console.log("arr")
-//     let arr = [low, med, high];
-//     console.log(arr)
-//     console.log("PIE DICTIONARY")
-//     let keys = Object.keys(arr);
-//     let vals = Object.values(arr);
-//     console.log(keys)
-//     console.log(vals)
-//     var mapping = [
-//       {x: "🙁", value: vals[0]},
-//       {x: "😐", value: vals[1]},
-//       {x: "🙂", value: vals[2]}
-//     ];
-//     console.log(mapping)
-//     // create a pie chart and set the data
-//     chart = anychart.pie(mapping);
-//     chart.palette(["#FF0000", "#FAF9F6", "#008000"]);
-//     // set title
-//     chart.title("Mood Levels by Community Percentage");
-//     // set the container id
+  if (bellyScreens[selectedBellyScreen] && bellyScreens[selectedBellyScreen].visualizations) {
+    console.log(bellyScreens[selectedBellyScreen].visualizations);
 
-//     // bellyHTML += "<div id='turkey'" + Belly.currentScreen + "><h2>hello</h2></div>";
-    
-//     console.log("IN HERE");
-//     const tag = document.getElementById("turkey1");
-//     const tortilla = document.getElementById("tortilla");
-//     console.log("TAG TAG TAG");
-//     // alert(tag);
-//     console.log(tortilla);
-    
-    
+    // Create image settings row for visual on screen
+    for (let i = 0; i < bellyScreens[selectedBellyScreen].visualizations.list.length; i++) {
+      const viz_panel = document.createElement("div");
+      viz_panel.className = 'list-group-item form-inline';
+      viz_panel.innerText = bellyScreens[selectedBellyScreen].visualizations.list[i];
+      viz_panel.style.display = "flex";
+      viz_panel.style.flexDirection = "row";
+      viz_panel.style.justifyContent = "flex-start";
+      viz_panel.style.alignItems = "center";
 
-//     chart.container("turkey" + screen.toString());
+      const del = document.createElement("button")
+      del.type = "submit"
+      del.class = "btn btn-primary mb-2"
+      del.innerText = "Delete"
+      del.style.margin = "5px"
+      del.onclick = function(){
+        deleteViz(i);
+      }
+  
+      // const x_label = document.createElement("h5");
+      // x_label.innerText = "x: "
+      // x_label.style.margin = "5px"
+      viz_panel.appendChild(del);
+      parent.appendChild(viz_panel);
+    }
+  }
+}
 
-    
-//     // initiate drawing the chart
-//     chart.draw();
+function deleteViz(id) {
+  bellyScreens[selectedBellyScreen].visualizations.list.splice(id,1);
 
-//     var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
-//     var dbRef = firebase.database().ref(dir);
-//     var updates = { bellyScreens: bellyScreens };
-//     dbRef.update(updates);
-//     // bellyScreens
-//   });
-// }
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
 
-// function addStaticVisCommunityStress(screen) {
-
-
-//   firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
-      
-//       console.log("stress")
-//       console.log(snap.val())
-//       let total = 0;
-//       let data = snap.val();
-//       console.log("data")
-//       console.log(data)
-//       console.log("total")
-//       for (let i = 0; i < data.length; i++) {
-//         total += data[i];
-//       }
-//       console.log(total)
-//       console.log("med")
-//       let med = (data[0] * total);
-//       console.log(med)
-//       console.log("low")
-//       let low = (data[1] * total);
-//       console.log(low)
-//       console.log("high")
-//       let high = (data[2] * total);
-//       console.log(high)
-//       console.log("arr")
-//       let arr = [low, med, high];
-//       console.log(arr)
-//       console.log("PIE DICTIONARY")
-//       let keys = Object.keys(arr);
-//       let vals = Object.values(arr);
-//       console.log(keys)
-//       console.log(vals)
-//       var mapping = [
-//         // order of firebase
-//         {x: "🙂", value: vals[0]},
-//         {x: "😐", value: vals[1]},
-//         {x: "🙁", value: vals[2]}
-//       ];
-//       console.log(mapping)
-//       // create a pie chart and set the data
-//       chart = anychart.pie(mapping);
-//       chart.palette(["#008000", "#FAF9F6", "#FF0000"]);
-//       // set title
-//       chart.title("Stress Levels by Community Percentage");
-//       // set the container id
-//       chart.container("turkey" + screen.toString());
-
-//       // initiate drawing the chart
-//       chart.draw();
-//     });
-//   }
-
-// function addStaticVisWeeklyStress(screen) {
-//   // get data from firebase
-//   firebase.database().ref('robotapi/weeklyStress').on('value', (snap)=>{
-//     console.log(snap.val())
-//     // create a line chart and set the data
-//     chart = anychart.line(snap.val());
-//     // set title
-//     chart.title('Weekly Stress');
-//     // set the x axis title
-//     chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
-//     // set the y axis title
-//     chart.yAxis().title('Stress levels');
-//     // set the container id
-//     chart.container("turkey" + screen.toString());
-//     // initiate drawing the chart
-//     chart.draw();
-//   });
-// }
-
-// function addStaticVisWeeklyMood(screen) {
-//   // get data from firebase
-//   firebase.database().ref('robotapi/weeklyMood').on('value', (snap)=>{
-//     console.log("CHART DICTIONARY")
-//     console.log(snap.val())
-//     // create a line chart and set the data
-//     chart = anychart.line(snap.val());
-//     // set title
-//     chart.title('Weekly Moods');
-//     // set the x axis title
-//     chart.xAxis().title('Days: 0 as Sun, 1 as Mon, 2 as Tue, 3 as Wed, 4 as Thur, 5 as Fri, 6 as Sat');
-//     // set the y axis title
-//     chart.yAxis().title('Mood levels');
-//     // set the container id
-//     chart.container("turkey" + screen.toString());
-//     // initiate drawing the chart
-//     chart.draw();
-//   });
-// }
+  renderVisuals();
+  vizSettings();
+}
