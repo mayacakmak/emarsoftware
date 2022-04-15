@@ -156,7 +156,7 @@ function renderSelectedBellyScreen(snapshot) {
       
       <div class="dropdown">
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Visualization Sliders
+          Visualization Buttons
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <button class="dropdown-item" onclick='addVizSlider("stress")'>Stress</button>
