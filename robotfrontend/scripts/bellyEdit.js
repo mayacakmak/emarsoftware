@@ -135,9 +135,10 @@ function renderSelectedBellyScreen(snapshot) {
           <button class="dropdown-item" onclick='setFontFamily("instructionSmall", this)'>Times</button>
         </div>
       </div>
+      
       <div class="dropdown">   
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Icons 
+          Icons
         </button>  
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">  
               <a class="dropdown-item" onclick='uploadIcon("fa fa-at")'> <i class="fa fa-at"></i> At </a>  
@@ -151,7 +152,18 @@ function renderSelectedBellyScreen(snapshot) {
               <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-left")'><i class="fa fa-arrow-circle-o-left"></i> Left </a>  
               <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-right")'><i class="fa fa-arrow-circle-o-right"></i> Right </a>  
         </div>  
-      </div>  
+      </div>
+      
+      <div class="dropdown">
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Visualization Sliders
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" onclick='addVizSlider("stress")'>Stress</button>
+          <button class="dropdown-item" onclick='addVizSlider("mood")'>Mood</button>
+        </div>
+      </div>
+
       <div style="display: flex; flex-direction: row;">
       <input type='color' onchange='setScreenColor(this)' name='backgroundColor'
       value='` +
@@ -2567,4 +2579,16 @@ function deleteViz(id) {
 
   renderVisuals();
   vizSettings();
+}
+
+function addVizSlider(type) {
+  if (!("vizSliders" in bellyScreens[selectedBellyScreen])) {
+    bellyScreens[selectedBellyScreen]["vizSliders"] = {list:[]}
+  }
+
+  bellyScreens[selectedBellyScreen].vizSliders.list.push(type)
+  
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  dbRef.update({ bellyScreens: bellyScreens });
 }

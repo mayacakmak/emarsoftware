@@ -360,6 +360,29 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       // bellyHTML += '</div>';
     }
 
+    // visualization sliders
+    // function torti(value) {
+    //   alert(value)
+    // }
+
+    if (screen.vizSliders && screen.vizSliders.list) {
+      screen.vizSliders.list.forEach((element) =>
+        {if (element == "mood") {
+          
+          bellyHTML += '<div style="display: flex, flex-direction: row"> <button style="font-size:2em" onclick="moodLow()">🙁</button> <button style="font-size:2em" onclick="moodNeutral()">😐</button> <button style="font-size:2em" onclick="moodHigh()">🙂</button> </div>'
+          // bellyHTML += '<div><input type="range" min="1" max="3" value="2" onchange="torti(value)"><input type="submit" onclick="alert(value)" value="Submit"></input></div>'
+        } else if (element == "stress"){
+          bellyHTML += '<div style="display: flex, flex-direction: row"> <button style="font-size:2em" onclick="stressLow()">🙁</button> <button style="font-size:2em" onclick="stressNeutral()">😐</button> <button style="font-size:2em" onclick="stressHigh()">🙂</button> </div>'
+        }}
+        // bellyHTML += '<h2>' + element + '</h2>'
+      )
+    }
+
+    // if ('vizSliders' in bellyScreens[selectedBellyScreen]) {
+    //   bellyHTML += '<h2>taco</h2>'
+    // }
+   
+
     // Setting ID's for visualizations
 
     bellyHTML += "<div id=" + `turkey${Belly.currentScreen}` + "></div>";
@@ -737,4 +760,105 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     console.log('Screen has not changed.');
   }
   return bellyHTML;
+}
+
+function updateVizData(type, level) {
+  var today = new Date();
+  today = today.getDay()
+
+  if (type == "mood") {
+    switch(today) {
+      case 0:
+        var dir = 'robotapi/weeklyMood/FinalsWeek/Sun';
+        var dbRef = firebase.database().ref(dir);
+      case 1:
+        var dir = 'robotapi/weeklyMood/FinalsWeek/Mon';
+        var dbRef = firebase.database().ref(dir);
+      case 2:
+        var dir = 'robotapi/weeklyMood/FinalsWeek/Tue';
+        var dbRef = firebase.database().ref(dir);
+      case 3:
+        var dir = 'robotapi/weeklyMood/FinalsWeek/Wed';
+        var dbRef = firebase.database().ref(dir);
+        
+      case 4:
+        var dir = 'robotapi/weeklyMood/FinalsWeek/Thurs';
+        var dbRef = firebase.database().ref(dir);
+        var vizValues
+        dbRef.on('value', (snap)=>{
+          vizValues = Object.values(snap.val())
+          // low = Object.values(snap.val())[0]
+          // medium = Object.values(snap.val())[1]
+          // high = Object.values(snap.val())[2]
+        })
+
+        // var updateOccur = {"🙂" : occurHigh, "🙁": occurLow, "😐": occurMed};
+      // console.log(updateOccur)
+      // firebaseRef.update(updateOccur);
+
+      if (level == "low") {
+        vizValues[0] += 1
+        dbRef.update({'"🙁"': vizValues[0]})
+      }
+
+      if (level == "neutral") {
+        vizValues[1] += 1
+        dbRef.update({'"😐"': vizValues[1]})
+      }
+
+      if (level == "high") {
+        vizValues[2] += 1
+        dbRef.update({'"🙂"': vizValues[2]})
+      }
+
+        // [0] is neutral, [1] is sad, [2] is happy
+        
+      case 5:
+        var dir = 'robotapi/weeklyMood/FinalsWeek/Fri';
+        var dbRef = firebase.database().ref(dir);
+
+        if (level == "low") {
+          vizValues[0] += 1
+          dbRef.update({'"🙁"': vizValues[0]})
+        }
+  
+        if (level == "neutral") {
+          vizValues[1] += 1
+          dbRef.update({'"😐"': vizValues[1]})
+        }
+  
+        if (level == "high") {
+          vizValues[2] += 1
+          dbRef.update({'"🙂"': vizValues[2]})
+        }
+
+      case 6:
+        var dir = 'robotapi/weeklyMood/FinalsWeek/Sat';
+        var dbRef = firebase.database().ref(dir);
+    }
+  }
+}
+
+function moodLow() {
+  updateVizData('mood', 'low')
+}
+
+function moodNeutral() {
+  updateVizData('mood', 'neutral')
+}
+
+function moodHigh() {
+  updateVizData('mood', 'high')
+}
+
+function stressLow() {
+  updateVizData('stress', 'low')
+}
+
+function stressNeutral() {
+  updateVizData('stress', 'neutral')
+}
+
+function stressHigh() {
+  updateVizData('stress', 'high')
 }
