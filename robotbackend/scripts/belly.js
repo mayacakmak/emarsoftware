@@ -370,10 +370,10 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       screen.vizSliders.list.forEach((element) =>
         {if (element == "mood") {
           
-          bellyHTML += '<h3 id="thanks" style="visibility: hidden">Thanks for sharing!</h3><div style="display: flex, flex-direction: row" id="mood-options"> <button style="font-size:2em" onclick="moodLow()">🙁</button> <button style="font-size:2em" onclick="moodNeutral()">😐</button> <button style="font-size:2em" onclick="moodHigh()">🙂</button> </div>'
+          bellyHTML += '<h3 id="thanks" style="visibility: hidden">Thanks for sharing!</h3><div style="display: flex; flex-direction: row;" id="mood-options"> <button style="font-size:3.5em; margin: .5em;" onclick="moodLow()">🙁</button> <button style="font-size:3.5em; margin: .5em;" onclick="moodNeutral()">😐</button> <button style="font-size:3.5em; margin: .5em;" onclick="moodHigh()">🙂</button> </div>'
           // bellyHTML += '<div><input type="range" min="1" max="3" value="2" onchange="torti(value)"><input type="submit" onclick="alert(value)" value="Submit"></input></div>'
         } else if (element == "stress"){
-          bellyHTML += '<div style="display: flex, flex-direction: row"> <button style="font-size:2em" onclick="stressLow()">🙁</button> <button style="font-size:2em" onclick="stressNeutral()">😐</button> <button style="font-size:2em" onclick="stressHigh()">🙂</button> </div>'
+          bellyHTML += '<div style="display: flex, flex-direction: row"> <button style="font-size:3.5em; margin: .5em;" onclick="stressHigh()">🙁</button> <button style="font-size:3.5em; margin: .5em;" onclick="stressNeutral()">😐</button> <button style="font-size:3.5em; margin: .5em;" onclick="stressLow()">🙂</button> </div>'
         }}
         // bellyHTML += '<h2>' + element + '</h2>'
       )
@@ -763,110 +763,20 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
   return bellyHTML;
 }
 
-function updateVizData(type, level) {
-  var today = new Date();
-  today = today.getDay()
-
-  alert(today)
-
-  // if (type == "mood") {
-  //   var low = 0
-  //   var med = 0 
-  //   var high = 0
-  //   switch(today) {
-  //     case 0:
-  //       var dir = 'robotapi/weeklyMood/FinalsWeek/Sun';
-  //       var dbRef = firebase.database().ref(dir);
-  //     case 1:
-  //       var dir = 'robotapi/weeklyMood/FinalsWeek/Mon';
-  //       var dbRef = firebase.database().ref(dir);
-  //     case 2:
-  //       var dir = 'robotapi/weeklyMood/FinalsWeek/Tue';
-  //       var dbRef = firebase.database().ref(dir);
-  //     case 3:
-  //       var dir = 'robotapi/weeklyMood/FinalsWeek/Wed';
-  //       var dbRef = firebase.database().ref(dir);
-        
-  //     case 4:
-  //       var dir = 'robotapi/weeklyMood/FinalsWeek/Thurs';
-  //       var dbRef = firebase.database().ref(dir);
-  //       var vizValues
-  //       dbRef.on('value', (snap)=>{
-  //         vizValues = Object.values(snap.val())
-  //         // low = Object.values(snap.val())[0]
-  //         // medium = Object.values(snap.val())[1]
-  //         // high = Object.values(snap.val())[2]
-  //       })
-
-  //       // var updateOccur = {"🙂" : occurHigh, "🙁": occurLow, "😐": occurMed};
-  //     // console.log(updateOccur)
-  //     // firebaseRef.update(updateOccur);
-      
-  //     if (level == "low") {
-  //       low = 1
-  //       med = 0 
-  //       high = 0
-  //       // vizValues[0] += 1
-  //       // dbRef.update({'"🙁"': vizValues[0]})
-  //     }
-
-  //     if (level == "neutral") {
-  //       med = 1
-  //       high = 0
-  //       low = 0
-  //       // vizValues[1] += 1
-  //       // dbRef.update({'"😐"': vizValues[1]})
-  //     }
-
-  //     if (level == "high") {
-  //       high = 1
-  //       med = 0 
-  //       low = 0
-  //       // vizValues[2] += 1
-  //       // dbRef.update({'"🙂"': vizValues[2]})
-  //     }
-
-  //     dbRef.update({'"🙁"': vizValues[0] + low, '"😐"': vizValues[1] + med, '"🙂"': vizValues[2] + high})
-  //       // [0] is neutral, [1] is sad, [2] is happy
-        
-  //     case 5:
-  //       var dir = 'robotapi/weeklyMood/FinalsWeek/Fri';
-  //       var dbRef = firebase.database().ref(dir);
-
-  //       if (level == "low") {
-  //         vizValues[0] += 1
-  //         dbRef.update({'"🙁"': vizValues[0]})
-  //       }
-  
-  //       if (level == "neutral") {
-  //         vizValues[1] += 1
-  //         dbRef.update({'"😐"': vizValues[1]})
-  //       }
-  
-  //       if (level == "high") {
-  //         vizValues[2] += 1
-  //         dbRef.update({'"🙂"': vizValues[2]})
-  //       }
-
-  //     case 6:
-  //       var dir = 'robotapi/weeklyMood/FinalsWeek/Sat';
-  //       var dbRef = firebase.database().ref(dir);
-  //   }
-  // }
-
-  // var moods = document.getElementById('mood-options');
-  // moods.style.visibility = 'hidden';
-
-  // var thanks = document.getElementById('thanks');
-  // thanks.style.visibility = 'visible';
-}
+// function updateVizData(type, level) {
+//   var today = new Date();
+//   today = today.getDay()
+// }
 
 function moodLow() {
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
+  // alert(today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear());
   // updateVizData('mood', 'low')
 
   // var today = new Date();
   // today = today.getDay()
-  var dir = 'robotapi/weeklyMood/FinalsWeek/Thurs/"🙁"';
+  var dir = `robotapi/weeklyMood/${day}/"🙁"`;
   var dbRef = firebase.database().ref(dir);
   
   // FieldValue = require('firebase-admin').firestore.FieldValue;
@@ -874,27 +784,24 @@ function moodLow() {
   var data
 
   dbRef.once('value', (snap)=>{
+    if (snap.val()) {
+      data = snap.val();
+    } else {
+      data = 0;
+    }
     
-    data = snap.val();
-    // alert(snap.val())
-    // var dict = { '"🙁"': data[0] + 1,  '"😐"': data[1], '"🙂"': data[2] }
+
     dbRef.set(data + 1)
 
-    // alert(value)
-    // alert("pi")
-    // low = Object.values(snap.val())[1]
-    // alert('taco')
-    // alert(vizValues)
-    // low = Object.values(snap.val())[0]
-    // medium = Object.values(snap.val())[1]
-    // high = Object.values(snap.val())[2]
   })
 }
 
 function moodNeutral() {
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
   // updateVizData('mood', 'neutral')
 
-  var dir = 'robotapi/weeklyMood/FinalsWeek/Thurs/"😐"';
+  var dir = `robotapi/weeklyMood/${day}/"😐"`;
   var dbRef = firebase.database().ref(dir);
 
   var data
@@ -902,39 +809,71 @@ function moodNeutral() {
   dbRef.once('value', (snap)=>{
     data = snap.val();
     dbRef.set(data + 1)
-    // data = Object.values(snap.val());
-    // var dict = { '"🙁"': data[0],  '"😐"': data[1] + 1, '"🙂"': data[2] }
-    // dbRef.update(dict)
+
   })
 }
 
 function moodHigh() {
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
   // updateVizData('mood', 'high')
 
-  var dir = 'robotapi/weeklyMood/FinalsWeek/Thurs/"🙂"';
+  var dir = `robotapi/weeklyMood/${day}/"🙂"`;
   var dbRef = firebase.database().ref(dir);
 
   var data
 
   dbRef.once('value', (snap)=>{
-    
-    // data = Object.values(snap.val());
-    // var dict = { '"🙁"': data[0],  '"😐"': data[1], '"🙂"': data[2] + 1}
-    // dbRef.update(dict)
-
     data = snap.val();
     dbRef.set(data + 1)
   })
 }
 
+
 function stressLow() {
-  updateVizData('stress', 'low')
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
+
+  var dir = `robotapi/weeklyStress/${day}/"🙂"`;
+  var dbRef = firebase.database().ref(dir);
+
+  var data
+
+  dbRef.once('value', (snap)=>{
+    data = snap.val();
+    dbRef.set(data + 1)
+
+  })
 }
 
 function stressNeutral() {
-  updateVizData('stress', 'neutral')
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
+
+  var dir = `robotapi/weeklyStress/${day}/"😐"`;
+  var dbRef = firebase.database().ref(dir);
+
+  var data
+
+  dbRef.once('value', (snap)=>{
+    data = snap.val();
+    dbRef.set(data + 1)
+
+  })
 }
 
 function stressHigh() {
-  updateVizData('stress', 'high')
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
+
+  var dir = `robotapi/weeklyStress/${day}/"🙁"`;
+  var dbRef = firebase.database().ref(dir);
+
+  var data
+
+  dbRef.once('value', (snap)=>{
+    data = snap.val();
+    dbRef.set(data + 1)
+
+  })
 }
