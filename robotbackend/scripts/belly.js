@@ -370,10 +370,10 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       screen.vizSliders.list.forEach((element) =>
         {if (element == "mood") {
           
-          bellyHTML += '<h3 id="thanks" style="visibility: hidden">Thanks for sharing!</h3><div style="display: flex; flex-direction: row;" id="mood-options"> <button style="font-size:3.5em; margin: .5em;" onclick="moodLow()">🙁</button> <button style="font-size:3.5em; margin: .5em;" onclick="moodNeutral()">😐</button> <button style="font-size:3.5em; margin: .5em;" onclick="moodHigh()">🙂</button> </div>'
+          bellyHTML += '<h3 id="m-thanks" style="visibility: hidden; position: relative; top: 20%;">Thanks for sharing!</h3><div style="display: flex; flex-direction: row;" id="mood-options"> <button style="font-size:3.5em; margin: .5em;" onclick="moodLow()">🙁</button> <button style="font-size:3.5em; margin: .5em;" onclick="moodNeutral()">😐</button> <button style="font-size:3.5em; margin: .5em;" onclick="moodHigh()">🙂</button> </div>'
           // bellyHTML += '<div><input type="range" min="1" max="3" value="2" onchange="torti(value)"><input type="submit" onclick="alert(value)" value="Submit"></input></div>'
         } else if (element == "stress"){
-          bellyHTML += '<div style="display: flex, flex-direction: row"> <button style="font-size:3.5em; margin: .5em;" onclick="stressHigh()">🙁</button> <button style="font-size:3.5em; margin: .5em;" onclick="stressNeutral()">😐</button> <button style="font-size:3.5em; margin: .5em;" onclick="stressLow()">🙂</button> </div>'
+          bellyHTML += '<h3 id="s-thanks" style="visibility: hidden; position: relative; top: 20%">Thanks for sharing!</h3><div style="display: flex, flex-direction: row;" id="stress-options"> <button style="font-size:3.5em; margin: .5em;" onclick="stressHigh()">🙁</button> <button style="font-size:3.5em; margin: .5em;" onclick="stressNeutral()">😐</button> <button style="font-size:3.5em; margin: .5em;" onclick="stressLow()">🙂</button> </div>'
         }}
         // bellyHTML += '<h2>' + element + '</h2>'
       )
@@ -792,8 +792,13 @@ function moodLow() {
     
 
     dbRef.set(data + 1)
-
   })
+
+  var options = document.getElementById("mood-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("m-thanks");
+  thanks.style.visibility = "visible";
 }
 
 function moodNeutral() {
@@ -811,6 +816,12 @@ function moodNeutral() {
     dbRef.set(data + 1)
 
   })
+
+  var options = document.getElementById("mood-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("m-thanks");
+  thanks.style.visibility = "visible";
 }
 
 function moodHigh() {
@@ -827,6 +838,12 @@ function moodHigh() {
     data = snap.val();
     dbRef.set(data + 1)
   })
+
+  var options = document.getElementById("mood-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("m-thanks");
+  thanks.style.visibility = "visible";
 }
 
 
@@ -844,6 +861,12 @@ function stressLow() {
     dbRef.set(data + 1)
 
   })
+
+  var options = document.getElementById("stress-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("s-thanks");
+  thanks.style.visibility = "visible";
 }
 
 function stressNeutral() {
@@ -860,6 +883,12 @@ function stressNeutral() {
     dbRef.set(data + 1)
 
   })
+
+  var options = document.getElementById("stress-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("s-thanks");
+  thanks.style.visibility = "visible";
 }
 
 function stressHigh() {
@@ -876,4 +905,10 @@ function stressHigh() {
     dbRef.set(data + 1)
 
   })
+
+  var options = document.getElementById("stress-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("s-thanks");
+  thanks.style.visibility = "visible";
 }
