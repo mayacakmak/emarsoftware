@@ -25,8 +25,21 @@ function Sound() {
   }
 
   Sound.makeSound = function(soundIndex) {
+    return new Promise(function(resolve, reject) {
       var soundElementName = "sound" + soundIndex;
-      document.getElementById(soundElementName).play();
+      var this_sound = document.getElementById(soundElementName);
+      var play_promise = this_sound.play();
+      if (play_promise) {
+        play_promise.then(function() {}).catch(
+          function(error) {
+            reject(error);
+          }
+        )
+      }
+      this_sound.onended = function() {
+        resolve("finished playing sound " + soundIndex);
+      }
+    })
   }
 
   Sound.loadVoice = function(isCreateSelector) {

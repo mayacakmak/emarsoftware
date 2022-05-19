@@ -135,9 +135,10 @@ function renderSelectedBellyScreen(snapshot) {
           <button class="dropdown-item" onclick='setFontFamily("instructionSmall", this)'>Times</button>
         </div>
       </div>
+      
       <div class="dropdown">   
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Icons 
+          Icons
         </button>  
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">  
               <a class="dropdown-item" onclick='uploadIcon("fa fa-at")'> <i class="fa fa-at"></i> At </a>  
@@ -151,7 +152,18 @@ function renderSelectedBellyScreen(snapshot) {
               <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-left")'><i class="fa fa-arrow-circle-o-left"></i> Left </a>  
               <a class="dropdown-item" onclick='uploadIcon("fa fa-arrow-circle-o-right")'><i class="fa fa-arrow-circle-o-right"></i> Right </a>  
         </div>  
-      </div>  
+      </div>
+      
+      <div class="dropdown">
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Visualization Buttons
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" onclick='addVizSlider("stress")'>Stress</button>
+          <button class="dropdown-item" onclick='addVizSlider("mood")'>Mood</button>
+        </div>
+      </div>
+
       <div style="display: flex; flex-direction: row;">
       <input type='color' onchange='setScreenColor(this)' name='backgroundColor'
       value='` +
@@ -619,7 +631,7 @@ function addStaticVisCommunityMoodTouch() {
 
 
 
-function addStaticVisCommunityMood() {
+function addStaticVisCommunityMood(screen) {
   firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
   console.log("moods")
   console.log(snap.val())
@@ -666,13 +678,13 @@ function addStaticVisCommunityMood() {
   // set the position of labels
   chart.labels().position("outside");
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + screen);
   // initiate drawing the chart
   chart.draw();
   });
 }
 
-  function addStaticVisCommunityStress() {
+  function addStaticVisCommunityStress(screen) {
     firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
         
         console.log("stress")
@@ -719,13 +731,13 @@ function addStaticVisCommunityMood() {
         // set title
         chart.title("Stress Levels by Community Percentage");
         // set the container id
-        chart.container("container");
+        chart.container("turkey" + screen);
         // initiate drawing the chart
         chart.draw();
       });
     }
 
-function addStaticVisWeeklyStressFinals() {
+function addStaticVisWeeklyStressFinals(screen) {
   firebase.database().ref('robotapi/weeklyStress/FinalsWeek').on('value', (snap)=>{
     console.log("mon moods")
     console.log(snap.val())
@@ -911,7 +923,7 @@ yTitle.text("2 = 🙁, 1 = 😐, 0 = 🙂");
 yTitle.align("bottom");
 
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + screen.toString());
   // initiate drawing the chart
   chart.draw();   
 });
@@ -1295,13 +1307,13 @@ yTitle.text("2 = 🙁, 1 = 😐, 0 = 🙂");
 yTitle.align("bottom");
 
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + screen.toString());
   // initiate drawing the chart
   chart.draw();   
 });
 }
 
-function addStaticVisWeeklyMoodThanksgiving() {
+function addStaticVisWeeklyMoodThanksgiving(screen) {
   firebase.database().ref('robotapi/weeklyMood/ThanksgivingWeek').on('value', (snap)=>{
     console.log("mon moods")
     console.log(snap.val())
@@ -1487,13 +1499,13 @@ yTitle.text("0 = 🙁, 1 = 😐, 2 = 🙂");
 yTitle.align("bottom");
 
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + screen.toString());
   // initiate drawing the chart
   chart.draw();   
 });
   }
 
-function addStaticVisWeeklyMoodFinals() {
+function addStaticVisWeeklyMoodFinals(screen) {
   firebase.database().ref('robotapi/weeklyMood/FinalsWeek').on('value', (snap)=>{
     console.log("mon moods")
     console.log(snap.val())
@@ -1679,7 +1691,7 @@ yTitle.text("0 = 🙁, 1 = 😐, 2 = 🙂");
 yTitle.align("bottom");
 
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + screen.toString());
   // initiate drawing the chart
   chart.draw();   
 });
@@ -2235,6 +2247,11 @@ function setLayout(element) {
 }
 
 function changeSelectedBellyScreen(event, index) {
+  setTimeout(() => {
+    renderVisuals();
+    vizSettings();
+  }, 5)
+
   selectedBellyScreen = index;
   renderBellyScreenList(bellySnapshot);
   renderSelectedBellyScreen(bellySnapshot);
@@ -2945,12 +2962,126 @@ function deleteIcon(id) {
   printIconList()
 }
 
+setTimeout(() => {
+  
+  renderVisuals();
+  vizSettings();
 
-  //   screen_id = "screenDiv" + selectedBellyScreen.toString();
-  // console.log("belly screen id: " + screen_id)
-  // screen = document.getElementById(screen_id)
-  // const icon = document.createElement("i");
-  // icon.className = 'fa fa-address-book'
-  // screen.appendChild(icon)
+}, 3000)
 
-  // console.log("resize image! " + id + " " + x + " " + y);
+function addViz(viz) {
+  if (!("visualizations" in bellyScreens[selectedBellyScreen])) {
+    bellyScreens[selectedBellyScreen]["visualizations"] = {list:[]}
+  }
+
+  bellyScreens[selectedBellyScreen].visualizations.list.push(viz)
+  
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+
+  renderVisuals();
+  vizSettings();
+}
+
+function renderVisuals() {
+  for (let i = 0; i < bellyScreens.length; i++) {
+    var tag = document.getElementById("turkey" + i.toString())
+    console.log(tag);
+
+    if (bellyScreens[i].visualizations) {
+      console.log(bellyScreens[i].visualizations.list);
+
+      for (let k = 0; k < bellyScreens[i].visualizations.list.length; k++) {
+        // if (bellyScreens[i].visualizations.list[k] == "community_mood") {
+        //   addStaticVisCommunityMood(i);
+        // }
+
+        if (bellyScreens[i].visualizations && bellyScreens[i].visualizations.list[k] == 'community_mood') {
+          addStaticVisCommunityMood(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'static_com_stress') {
+          addStaticVisCommunityStress(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'weekly_stress_finals') {
+          addStaticVisWeeklyStressFinals(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'weekly_mood_finals') {
+          addStaticVisWeeklyMoodFinals(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'weekly_stress_thanksgiving') {
+          addStaticVisWeeklyStressThanksgiving(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'weekly_mood_thanksgiving') {
+          addStaticVisWeeklyMoodThanksgiving(i);
+        }
+        //else if (bellyScreens[i].visualizations.list[k] == 'weekly_stress') {
+        //   addStaticVisWeeklyStress(i);
+        // } else if (bellyScreens[i].visualizations.list[k] == 'weekly_mood') {
+        //   addStaticVisWeeklyMood(i);
+        // }
+      }
+    }
+    
+    // addStaticVisCommunityMood(i);
+
+    // addStaticVisCommunityMood();
+  }
+}
+
+function vizSettings() {
+  const parent = document.getElementById('data-vis-settings');
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild)
+  }
+
+  if (bellyScreens[selectedBellyScreen] && bellyScreens[selectedBellyScreen].visualizations) {
+    console.log(bellyScreens[selectedBellyScreen].visualizations);
+
+    // Create image settings row for visual on screen
+    for (let i = 0; i < bellyScreens[selectedBellyScreen].visualizations.list.length; i++) {
+      const viz_panel = document.createElement("div");
+      viz_panel.className = 'list-group-item form-inline';
+      viz_panel.innerText = bellyScreens[selectedBellyScreen].visualizations.list[i];
+      viz_panel.style.display = "flex";
+      viz_panel.style.flexDirection = "row";
+      viz_panel.style.justifyContent = "flex-start";
+      viz_panel.style.alignItems = "center";
+
+      const del = document.createElement("button")
+      del.type = "submit"
+      del.class = "btn btn-primary mb-2"
+      del.innerText = "Delete"
+      del.style.margin = "5px"
+      del.onclick = function(){
+        deleteViz(i);
+      }
+  
+      // const x_label = document.createElement("h5");
+      // x_label.innerText = "x: "
+      // x_label.style.margin = "5px"
+      viz_panel.appendChild(del);
+      parent.appendChild(viz_panel);
+    }
+  }
+}
+
+function deleteViz(id) {
+  bellyScreens[selectedBellyScreen].visualizations.list.splice(id,1);
+
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  var updates = { bellyScreens: bellyScreens };
+  dbRef.update(updates);
+
+  renderVisuals();
+  vizSettings();
+}
+
+function addVizSlider(type) {
+  if (!("vizSliders" in bellyScreens[selectedBellyScreen])) {
+    bellyScreens[selectedBellyScreen]["vizSliders"] = {list:[]}
+  }
+
+  bellyScreens[selectedBellyScreen].vizSliders.list.push(type)
+  
+  var dir = 'robots/' + currentRobot + '/customAPI/inputs/';
+  var dbRef = firebase.database().ref(dir);
+  dbRef.update({ bellyScreens: bellyScreens });
+}
