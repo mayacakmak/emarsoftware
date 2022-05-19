@@ -1,5 +1,6 @@
 var progress = 0;
 
+
 /*
  * Belly class for creating the user interface on the robot's belly tablet
  */
@@ -360,6 +361,35 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
       // bellyHTML += '</div>';
     }
 
+    // visualization sliders
+    // function torti(value) {
+    //   alert(value)
+    // }
+
+    if (screen.vizSliders && screen.vizSliders.list) {
+      screen.vizSliders.list.forEach((element) =>
+        {if (element == "mood") {
+          
+          bellyHTML += '<h3 id="m-thanks" style="visibility: hidden; position: relative; top: 20%;">Thanks for sharing!</h3><div style="display: flex; flex-direction: row;" id="mood-options"> <button style="font-size:3.5em; margin: .5em;" onclick="moodLow()">🙁</button> <button style="font-size:3.5em; margin: .5em;" onclick="moodNeutral()">😐</button> <button style="font-size:3.5em; margin: .5em;" onclick="moodHigh()">🙂</button> </div>'
+          // bellyHTML += '<div><input type="range" min="1" max="3" value="2" onchange="torti(value)"><input type="submit" onclick="alert(value)" value="Submit"></input></div>'
+        } else if (element == "stress"){
+          bellyHTML += '<h3 id="s-thanks" style="visibility: hidden; position: relative; top: 20%">Thanks for sharing!</h3><div style="display: flex, flex-direction: row;" id="stress-options"> <button style="font-size:3.5em; margin: .5em;" onclick="stressHigh()">🙁</button> <button style="font-size:3.5em; margin: .5em;" onclick="stressNeutral()">😐</button> <button style="font-size:3.5em; margin: .5em;" onclick="stressLow()">🙂</button> </div>'
+        }}
+        // bellyHTML += '<h2>' + element + '</h2>'
+      )
+    }
+
+    // if ('vizSliders' in bellyScreens[selectedBellyScreen]) {
+    //   bellyHTML += '<h2>taco</h2>'
+    // }
+   
+
+    // Setting ID's for visualizations
+
+    bellyHTML += "<div id=" + `turkey${Belly.currentScreen}` + "></div>";
+    console.log("turkey" + Belly.currentScreen.toString());
+    
+    const tag = document.getElementById('turkey'+ Belly.currentScreen.toString());
     
     /*********
            Images
@@ -731,4 +761,154 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     console.log('Screen has not changed.');
   }
   return bellyHTML;
+}
+
+// function updateVizData(type, level) {
+//   var today = new Date();
+//   today = today.getDay()
+// }
+
+function moodLow() {
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
+  // alert(today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear());
+  // updateVizData('mood', 'low')
+
+  // var today = new Date();
+  // today = today.getDay()
+  var dir = `robotapi/weeklyMood/${day}/"🙁"`;
+  var dbRef = firebase.database().ref(dir);
+  
+  // FieldValue = require('firebase-admin').firestore.FieldValue;
+  // dbRef.update(Firestore.FieldValue.increment(1))
+  var data
+
+  dbRef.once('value', (snap)=>{
+    if (snap.val()) {
+      data = snap.val();
+    } else {
+      data = 0;
+    }
+    
+
+    dbRef.set(data + 1)
+  })
+
+  var options = document.getElementById("mood-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("m-thanks");
+  thanks.style.visibility = "visible";
+}
+
+function moodNeutral() {
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
+  // updateVizData('mood', 'neutral')
+
+  var dir = `robotapi/weeklyMood/${day}/"😐"`;
+  var dbRef = firebase.database().ref(dir);
+
+  var data
+
+  dbRef.once('value', (snap)=>{
+    data = snap.val();
+    dbRef.set(data + 1)
+
+  })
+
+  var options = document.getElementById("mood-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("m-thanks");
+  thanks.style.visibility = "visible";
+}
+
+function moodHigh() {
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
+  // updateVizData('mood', 'high')
+
+  var dir = `robotapi/weeklyMood/${day}/"🙂"`;
+  var dbRef = firebase.database().ref(dir);
+
+  var data
+
+  dbRef.once('value', (snap)=>{
+    data = snap.val();
+    dbRef.set(data + 1)
+  })
+
+  var options = document.getElementById("mood-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("m-thanks");
+  thanks.style.visibility = "visible";
+}
+
+
+function stressLow() {
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
+
+  var dir = `robotapi/weeklyStress/${day}/"🙂"`;
+  var dbRef = firebase.database().ref(dir);
+
+  var data
+
+  dbRef.once('value', (snap)=>{
+    data = snap.val();
+    dbRef.set(data + 1)
+
+  })
+
+  var options = document.getElementById("stress-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("s-thanks");
+  thanks.style.visibility = "visible";
+}
+
+function stressNeutral() {
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
+
+  var dir = `robotapi/weeklyStress/${day}/"😐"`;
+  var dbRef = firebase.database().ref(dir);
+
+  var data
+
+  dbRef.once('value', (snap)=>{
+    data = snap.val();
+    dbRef.set(data + 1)
+
+  })
+
+  var options = document.getElementById("stress-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("s-thanks");
+  thanks.style.visibility = "visible";
+}
+
+function stressHigh() {
+  var today = new Date();
+  var day = today.getMonth() + "-" + today.getDate() + "-" + today.getFullYear();
+
+  var dir = `robotapi/weeklyStress/${day}/"🙁"`;
+  var dbRef = firebase.database().ref(dir);
+
+  var data
+
+  dbRef.once('value', (snap)=>{
+    data = snap.val();
+    dbRef.set(data + 1)
+
+  })
+
+  var options = document.getElementById("stress-options");
+  options.style.visibility = 'hidden';
+
+  var thanks = document.getElementById("s-thanks");
+  thanks.style.visibility = "visible";
 }

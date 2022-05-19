@@ -77,7 +77,7 @@ function Robot(robotId, apiDiv) {
                        "<b>soundIndex</b> is an Integer between 0 and " +
                         (Robot.sounds.length-1) +  ", available sounds are:" +
                         Robot._getSoundNames(),
-                       "robot.playSound(0);");
+                       "await robot.playSound(0);");
     if (Robot.faces != null && Robot.faces.length>0)
       apiText += Robot._getAPICardHTML("robot.setFace(faceIndex)",
                         "Sets the robot's face to one of pre-designed faces.",
@@ -530,7 +530,19 @@ function Robot(robotId, apiDiv) {
   this.playSound = function(soundIndex){
     console.log("Playing sound: " + soundIndex);
     Robot._requestRobotAction("sound", {index:soundIndex});
-    //TODO: Implement callback for when action is done
+    var dbRef = firebase.database().ref(
+      "/robots/" + Robot.robotId + "/actions/sound/index"
+    );
+    return new Promise(function(resolve, reject) {
+      var dbRef = firebase.database().ref(
+        "/robots/" + Robot.robotId + "/actions/sound/index"
+      );
+      dbRef.on("value", async function(snapshot) {
+        if (snapshot.val() == -1) {
+          resolve("Sound task finished - Next!");
+        }
+      })
+    })
   }
 
   this.moveNeck = function(rotate, tilt, pan, turn) {

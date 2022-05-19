@@ -45,7 +45,7 @@ function RobotBackend(robotId, scale) {
   RobotBackend.resetRobotAction = function(actionName, updates) {
     var dbRef = firebase.database().ref(
       "/robots/" + RobotBackend.robotId + "/actions/" + actionName + "/");
-    dbRef.update(updates);
+    return dbRef.update(updates);
   }
 
   /* ACTIONS */
@@ -69,29 +69,29 @@ function RobotBackend(robotId, scale) {
     }
   }
 
-  RobotBackend.isMakingSound = false;
-  RobotBackend.soundReceived = function(snapshot) {
+  RobotBackend.soundReceived = async function(snapshot) {
     var robotActions = snapshot.val();
     if (robotActions.sound != undefined) {
       var soundIndex = Number(robotActions.sound.index);
       if (soundIndex != -1) {
-        if (!RobotBackend.isMakingSound)
-        {
-          if (Sound.sounds != null && Sound.sounds.length > 0) {
-            if (soundIndex<0 || soundIndex>=Sound.sounds.length)
-              soundIndex = 0;
+        if (Sound.sounds != null && Sound.sounds.length > 0) {
+          if (soundIndex<0 || soundIndex>=Sound.sounds.length)
+            soundIndex = 0;
 
-            RobotBackend.isMakingSound = true;
-            var soundInfo = Sound.sounds[soundIndex];
-            console.log(">>>>>>>>>   Making sound " + soundInfo.name);
-            Sound.makeSound(soundIndex);
-            RobotBackend.resetRobotAction("sound", {index:-1});
+          var soundInfo = Sound.sounds[soundIndex];
+          console.log(">>>>> Queuing up sound " + soundInfo.name);
+          try {
+            const sound_callback = await Sound.makeSound(soundIndex)
+            console.log(await sound_callback);
+          }
+          catch (error) {
+            console.error("ERROR in sound: ", error);
+            return RobotBackend.resetRobotAction("sound", {index:-1})
           }
         }
-      } else {
-        RobotBackend.isMakingSound = false;
       }
     }
+    return RobotBackend.resetRobotAction("sound", {index:-1});
   }
   
   /* STATE CHANGES */
