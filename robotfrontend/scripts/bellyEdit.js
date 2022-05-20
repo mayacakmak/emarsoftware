@@ -523,7 +523,7 @@ function addDynamicMoodViz() {
 }
 
 
-function addStaticVisCommunityMoodTouch() {
+function addStaticVisCommunityMoodTouch(screen) {
   firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
   console.log("moods")
   console.log(snap.val())
@@ -570,13 +570,13 @@ function addStaticVisCommunityMoodTouch() {
   // set the position of labels
   //chart.labels().position("outside");
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + screen);
   // initiate drawing the chart
   chart.draw();
   });
 }
 
-  function addStaticVisCommunityStressTouch() {
+  function addStaticVisCommunityStressTouch(screen) {
     firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
         
         console.log("stress")
@@ -623,7 +623,7 @@ function addStaticVisCommunityMoodTouch() {
         // set title
         chart.title("Stress Levels by Community Percentage");
         // set the container id
-        chart.container("container");
+        chart.container("turkey" + screen);
         // initiate drawing the chart
         chart.draw();
       });
@@ -3000,6 +3000,7 @@ function renderVisuals() {
 
         if (bellyScreens[i].visualizations && bellyScreens[i].visualizations.list[k] == 'community_mood') {
           addStaticVisCommunityMood(i);
+          
         } else if (bellyScreens[i].visualizations.list[k] == 'static_com_stress') {
           addStaticVisCommunityStress(i);
         } else if (bellyScreens[i].visualizations.list[k] == 'weekly_stress_finals') {
@@ -3010,6 +3011,10 @@ function renderVisuals() {
           addStaticVisWeeklyStressThanksgiving(i);
         } else if (bellyScreens[i].visualizations.list[k] == 'weekly_mood_thanksgiving') {
           addStaticVisWeeklyMoodThanksgiving(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'com_stress_touch') {
+          addStaticVisCommunityStressTouch(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'com_mood_touch') {
+          addStaticVisCommunityMoodTouch(i);
         }
         //else if (bellyScreens[i].visualizations.list[k] == 'weekly_stress') {
         //   addStaticVisWeeklyStress(i);
