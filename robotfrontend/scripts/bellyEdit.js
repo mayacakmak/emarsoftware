@@ -929,7 +929,7 @@ yTitle.align("bottom");
 });
 }
 
-function addStaticVisWeeklyStress() {
+function addStaticVisWeeklyStress(i) {
   firebase.database().ref('robotapi/weeklyStress/').on('value', (snap)=>{
     console.log("mon moods")
     console.log(snap.val())
@@ -1115,7 +1115,7 @@ yTitle.text("2 = 🙁, 1 = 😐, 0 = 🙂");
 yTitle.align("bottom");
 
   // set the container id
-  chart.container("container");
+  chart.container("turkey" + i);
   // initiate drawing the chart
   chart.draw();   
 });
@@ -1697,7 +1697,7 @@ yTitle.align("bottom");
 });
   }
 
-  function addStaticVisWeeklyMood() {
+  function addStaticVisWeeklyMood(i) {
     firebase.database().ref('robotapi/weeklyMood/').on('value', (snap)=>{
       console.log("mon moods")
       console.log(snap.val())
@@ -1884,7 +1884,7 @@ yTitle.align("bottom");
   yTitle.align("bottom");
   
     // set the container id
-    chart.container("container");
+    chart.container("turkey" + i);
     // initiate drawing the chart
     chart.draw();  
   });
@@ -3015,12 +3015,12 @@ function renderVisuals() {
           addStaticVisCommunityStressTouch(i);
         } else if (bellyScreens[i].visualizations.list[k] == 'com_mood_touch') {
           addStaticVisCommunityMoodTouch(i);
+        } 
+        else if (bellyScreens[i].visualizations.list[k] == 'weekly_stress') {
+          addStaticVisWeeklyStress(i);
+        } else if (bellyScreens[i].visualizations.list[k] == 'weekly_mood') {
+          addStaticVisWeeklyMood(i);
         }
-        //else if (bellyScreens[i].visualizations.list[k] == 'weekly_stress') {
-        //   addStaticVisWeeklyStress(i);
-        // } else if (bellyScreens[i].visualizations.list[k] == 'weekly_mood') {
-        //   addStaticVisWeeklyMood(i);
-        // }
       }
     }
     
