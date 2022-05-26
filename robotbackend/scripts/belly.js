@@ -22,6 +22,7 @@ function Belly(robotId, scale, resizeAxis) {
     if (newScreenIndex != undefined && Belly.bellyScreens != null) {
       newScreenIndex = Number(robotState.currentBellyScreen);
       progress = (newScreenIndex * 100) / len;
+      
       if (newScreenIndex >= 0 && newScreenIndex < Belly.bellyScreens.length) {
         bellyHTML += renderBellyScreen(newScreenIndex, Belly);
       } else {
@@ -33,6 +34,7 @@ function Belly(robotId, scale, resizeAxis) {
       console.log(Belly.bellyScreens);
       console.log(robotState);
     }
+
   };
 
   Belly.infoButtonClicked = function (screenID) {
@@ -148,26 +150,26 @@ function Belly(robotId, scale, resizeAxis) {
     }
 
     if (target.name == 'checkbox') {
-      Belly.bellyScreens[screenID].checkboxes.list[itemID].value =
+      Belly.bellyScreens[screenID].checkboxes['list'][itemID].value =
         target.checked;
-      Belly.bellyScreens[screenID].checkboxes.list[
+      Belly.bellyScreens[screenID].checkboxes['list'][
         itemID
       ].lastChanged = date.getTime();
     }
 
     if (target.name == 'button') {
-      if (Belly.bellyScreens[screenID].buttons.list[itemID].link) {
+      if (Belly.bellyScreens[screenID].buttons['list'][itemID].link) {
         window.location.href =
-          Belly.bellyScreens[screenID].buttons.list[itemID].link;
+          Belly.bellyScreens[screenID].buttons['list'][itemID].link;
       } else {
-        Belly.bellyScreens[screenID].buttons.list[
+        Belly.bellyScreens[screenID].buttons['list'][
           itemID
         ].lastPressed = date.getTime();
       }
     }
 
     if (target.name == 'imageButton') {
-      Belly.bellyScreens[screenID].imageButtons.list[
+      Belly.bellyScreens[screenID].imageButtons['list'][
         itemID
       ].lastPressed = date.getTime();
     }
@@ -350,9 +352,9 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
 
     
            
-    if (screen.icons && screen.icons.list) {
+    if (screen.icons && screen.icons['list']) {
       // bellyHTML += "<div style='flex-direction: row'>";
-      screen.icons.list.forEach((element) => {
+      screen.icons['list'].forEach((element) => {
         console.log(element);
         
         bellyHTML += '<i class="' + element.type + '"style="position:absolute; top:' + element.position.y + '%; left: ' + element.position.x + '%; font-size: ' + element.size + 'px;"></i>'
@@ -366,8 +368,8 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
     //   alert(value)
     // }
 
-    if (screen.vizSliders && screen.vizSliders.list) {
-      screen.vizSliders.list.forEach((element) =>
+    if (screen.vizSliders && screen.vizSliders['list']) {
+      screen.vizSliders['list'].forEach((element) =>
         {if (element == "mood") {
           
           bellyHTML += '<h3 id="m-thanks" style="visibility: hidden; position: relative; top: 20%;">Thanks for sharing!</h3><div style="display: flex; flex-direction: row;" id="mood-options"> <button style="font-size:3.5em; margin: .5em;" onclick="moodLow()">🙁</button> <button style="font-size:3.5em; margin: .5em;" onclick="moodNeutral()">😐</button> <button style="font-size:3.5em; margin: .5em;" onclick="moodHigh()">🙂</button> </div>'
@@ -388,15 +390,16 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
 
     bellyHTML += "<div id=" + `turkey${Belly.currentScreen}` + "></div>";
     console.log("turkey" + Belly.currentScreen.toString());
+    renderVisuals(Belly, Belly.currentScreen);
     
-    const tag = document.getElementById('turkey'+ Belly.currentScreen.toString());
+    // const tag = document.getElementById('turkey'+ Belly.currentScreen.toString());
     
     /*********
            Images
           *********/
-    if (screen.images && screen.images.isShown && screen.images.list) {
+    if (screen.images && screen.images.isShown && screen.images['list']) {
       bellyHTML += "<div style='flex-direction: row'>";
-      screen.images.list.forEach((element) => {
+      screen.images['list'].forEach((element) => {
         console.log(element);
         var position = '';
         if (
@@ -646,13 +649,13 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
         ? '1vw'
         : '2.5vw';
 
-      if (screen.buttons.list != undefined) {
-        for (var j = 0; j < screen.buttons.list.length; j++) {
-          var name = screen.buttons.list[j].name;
+      if (screen.buttons['list'] != undefined) {
+        for (var j = 0; j < screen.buttons['list'].length; j++) {
+          var name = screen.buttons['list'][j].name;
 
           // Buttons with images
-          if (screen.buttons.list[j].url) {
-            var url = screen.buttons.list[j].url;
+          if (screen.buttons['list'][j].url) {
+            var url = screen.buttons['list'][j].url;
             bellyHTML +=
               "<div style='align-self: start'>" +
               "<button class='btn btn-secondary mx-2 screen-item' " +
@@ -669,12 +672,12 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
               name +
               '</p></button>';
             // Buttons with text
-            if (screen.buttons.list[j].label) {
+            if (screen.buttons['list'][j].label) {
               bellyHTML +=
                 `<h2 style="max-width: 160px; font-size: ` +
                 buttonTextScale +
                 `;">` +
-                screen.buttons.list[j].label +
+                screen.buttons['list'][j].label +
                 '</h2>';
             }
             bellyHTML += '</div>';
@@ -682,7 +685,7 @@ function renderBellyScreen(newScreenIndex, Belly, screenDivId = 'screenDiv') {
 
           // Buttons that have neither label nor image
           // TODO: Why is .name and .label a different thing?
-          if (!screen.buttons.list[j].url && !screen.buttons.list[j].label) {
+          if (!screen.buttons['list'][j].url && !screen.buttons['list'][j].label) {
             bellyHTML +=
               "<div class='mt-2'>" +
               "<button class='btn btn-secondary mx-2 screen-item' " +
@@ -912,3 +915,1431 @@ function stressHigh() {
   var thanks = document.getElementById("s-thanks");
   thanks.style.visibility = "visible";
 }
+
+// window.onload = ()=>{renderVisuals()};
+
+function renderVisuals(Belly, screen) {
+  setTimeout(()=>{
+    console.log('cheese');
+    console.log('turkey'+screen.toString());
+    console.log(document.getElementById('turkey'+screen.toString()));
+    console.log(screen);
+
+    var screen_data = Belly.bellyScreens[screen];
+  
+    if (screen_data.visualizations) {
+      for (let k = 0; k < screen_data.visualizations.list.length; k++) {
+        // if (screen.screen_data.visualizations.list[k] == "community_mood") {
+        //   addStaticVisCommunityMood(screen);
+        // }
+    
+        if (screen_data.visualizations && screen_data.visualizations.list[k] == 'community_mood') {
+          addStaticVisCommunityMood(screen);
+          
+        } else if (screen_data.visualizations.list[k] == 'static_com_stress') {
+          addStaticVisCommunityStress(screen);
+        } else if (screen_data.visualizations.list[k] == 'weekly_stress_finals') {
+          addStaticVisWeeklyStressFinals(screen);
+        } else if (screen_data.visualizations.list[k] == 'weekly_mood_finals') {
+          addStaticVisWeeklyMoodFinals(screen);
+        } else if (screen_data.visualizations.list[k] == 'weekly_stress_thanksgiving') {
+          addStaticVisWeeklyStressThanksgiving(screen);
+        } else if (screen_data.visualizations.list[k] == 'weekly_mood_thanksgiving') {
+          addStaticVisWeeklyMoodThanksgiving(screen);
+        } else if (screen_data.visualizations.list[k] == 'com_stress_touch') {
+          addStaticVisCommunityStressTouch(screen);
+        } else if (screen_data.visualizations.list[k] == 'com_mood_touch') {
+          addStaticVisCommunityMoodTouch(screen);
+        } 
+          else if (screen_data.visualizations.list[k] == 'weekly_stress') {
+          addStaticVisWeeklyStress(screen);
+        } else if (screen_data.visualizations.list[k] == 'weekly_mood') {
+          addStaticVisWeeklyMood(screen);
+        }
+      }
+    }
+  }, 100)
+  // var target = document.getElementById('turkey' + screen.toString());
+  // while (target == null) {
+  //   var target = document.getElementById('turkey' + screen.toString());
+  // }
+  
+  // var bellyScreens = Belly.bellyScreens;
+  // console.log(Belly['bellyScreens'][0]['visualizations']['list'].length);
+  // for (let i = 0; i < bellyScreens.length; i++) {
+  //   var tag = document.getElementById("turkey" + i.toString())
+  //   console.log(tag);
+
+  //   if (screen.visualizations) {
+  //     console.log(screen.screen_data.visualizations.list);
+ 
+    // }
+  // }
+}
+
+function addStaticVisCommunityMoodTouch(screen) {
+  firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
+  console.log("moods")
+  console.log(snap.val())
+  let total = 0;
+  let data = snap.val();
+  console.log("data")
+  console.log(data)
+  console.log("total")
+  let dataVal = Object.values(data);
+  for (let i = 0; i < dataVal.length; i++) {
+    console.log("data in index i")
+    console.log(dataVal[i])
+    total += dataVal[i];
+  }
+  console.log(total)
+  console.log("low")
+  let low = ((dataVal[0] * 100) / total);
+  console.log(low)
+  console.log("med")
+  let med = ((dataVal[1] * 100) / total);
+  console.log(med)
+  console.log("high")
+  let high = ((dataVal[2] * 100) / total);
+  console.log(high)
+  console.log("arr")
+  let arr = [low, med, high];
+  console.log(arr)
+  console.log("PIE DICTIONARY")
+  let keys = Object.keys(arr);
+  let vals = Object.values(arr);
+  console.log(keys)
+  console.log(vals)
+  var mapping = [
+    {x: "🙁", value: dataVal[0]},
+    {x: "😐", value: dataVal[1]},
+    {x: "🙂", value: dataVal[2]}
+  ];
+  console.log(mapping)
+  // create a pie chart and set the data
+  chart = anychart.pie(mapping);
+  chart.palette(["#FF0000", "#FAF9F6", "#008000"]);
+  // set title
+  chart.title("Mood Levels by Community Percentage");
+  // set the position of labels
+  //chart.labels().position("outside");
+  // set the container id
+  chart.container("turkey" + screen.toString());
+  // initiate drawing the chart
+  chart.draw();
+  });
+}
+
+  function addStaticVisCommunityStressTouch(screen) {
+    firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
+        
+        console.log("stress")
+        console.log(snap.val())
+        let total = 0;
+        let data = snap.val();
+        console.log("data")
+        console.log(data)
+        console.log("total")
+        let dataVal = Object.values(data);
+        for (let i = 0; i < dataVal.length; i++) {
+          total += dataVal[i];
+        }
+        console.log(total)
+        console.log("med")
+        let med = ((dataVal[0] * 100) / total);
+        console.log(med)
+        console.log("low")
+        let low = ((dataVal[1] * 100) / total);
+        console.log(low)
+        console.log("high")
+        let high = ((dataVal[2] * 100) / total);
+        console.log(high)
+        console.log("arr")
+        let arr = [low, med, high];
+        console.log(arr)
+        console.log("PIE DICTIONARY")
+        let keys = Object.keys(arr);
+        let vals = Object.values(arr);
+        console.log(keys)
+        console.log(vals)
+        var mapping = [
+          // order of firebase
+          {x: "🙁", value: dataVal[0]},
+          {x: "😐", value: dataVal[1]},
+          {x: "🙂", value: dataVal[2]}
+        ];
+        console.log(mapping)
+        // create a pie chart and set the data
+        chart = anychart.pie(mapping);
+        chart.palette(["#008000", "#FAF9F6", "#FF0000"]);
+        // set the position of labels
+        //chart.labels().position("outside");
+        // set title
+        chart.title("Stress Levels by Community Percentage");
+        // set the container id
+        chart.container("turkey" + screen.toString());
+        // initiate drawing the chart
+        chart.draw();
+      });
+    }
+
+
+
+function addStaticVisCommunityMood(screen) {
+  firebase.database().ref('robotapi/communityMood').on('value', (snap)=>{
+  console.log("moods")
+  console.log(snap.val())
+  let total = 0;
+  let data = snap.val();
+  console.log("data")
+  console.log(data)
+  console.log("total")
+  let dataVal = Object.values(data);
+  for (let i = 0; i < dataVal.length; i++) {
+    console.log("data in index i")
+    console.log(dataVal[i])
+    total += dataVal[i];
+  }
+  console.log(total)
+  console.log("low")
+  let low = ((dataVal[0] * 100) / total);
+  console.log(low)
+  console.log("med")
+  let med = ((dataVal[1] * 100) / total);
+  console.log(med)
+  console.log("high")
+  let high = ((dataVal[2] * 100) / total);
+  console.log(high)
+  console.log("arr")
+  let arr = [low, med, high];
+  console.log(arr)
+  console.log("PIE DICTIONARY")
+  let keys = Object.keys(arr);
+  let vals = Object.values(arr);
+  console.log(keys)
+  console.log(vals)
+  var mapping = [
+    {x: "🙁", value: dataVal[0]},
+    {x: "😐", value: dataVal[1]},
+    {x: "🙂", value: dataVal[2]}
+  ];
+  console.log(mapping)
+  // create a pie chart and set the data
+  chart = anychart.pie(mapping);
+  chart.palette(["#FF0000", "#FAF9F6", "#008000"]);
+  // set title
+  chart.title("Mood Levels by Community Percentage");
+  // set the position of labels
+  chart.labels().position("outside");
+  // set the container id
+  chart.container("turkey" + screen.toString());
+  // initiate drawing the chart
+  chart.draw();
+  });
+}
+
+  function addStaticVisCommunityStress(screen) {
+    firebase.database().ref('robotapi/communityStress').on('value', (snap)=>{
+        
+        console.log("stress")
+        console.log(snap.val())
+        let total = 0;
+        let data = snap.val();
+        console.log("data")
+        console.log(data)
+        console.log("total")
+        let dataVal = Object.values(data);
+        for (let i = 0; i < dataVal.length; i++) {
+          total += dataVal[i];
+        }
+        console.log(total)
+        console.log("med")
+        let med = ((dataVal[0] * 100) / total);
+        console.log(med)
+        console.log("low")
+        let low = ((dataVal[1] * 100) / total);
+        console.log(low)
+        console.log("high")
+        let high = ((dataVal[2] * 100) / total);
+        console.log(high)
+        console.log("arr")
+        let arr = [low, med, high];
+        console.log(arr)
+        console.log("PIE DICTIONARY")
+        let keys = Object.keys(arr);
+        let vals = Object.values(arr);
+        console.log(keys)
+        console.log(vals)
+        var mapping = [
+          // order of firebase
+          {x: "🙁", value: dataVal[0]},
+          {x: "😐", value: dataVal[1]},
+          {x: "🙂", value: dataVal[2]}
+        ];
+        console.log(mapping)
+        // create a pie chart and set the data
+        chart = anychart.pie(mapping);
+        chart.palette(["#008000", "#FAF9F6", "#FF0000"]);
+        // set the position of labels
+        chart.labels().position("outside");
+        // set title
+        chart.title("Stress Levels by Community Percentage");
+        // set the container id
+        chart.container("turkey" + screen.toString());
+        // initiate drawing the chart
+        chart.draw();
+      });
+    }
+
+function addStaticVisWeeklyStressFinals(screen) {
+  firebase.database().ref('robotapi/weeklyStress/FinalsWeek').on('value', (snap)=>{
+    console.log("mon moods")
+    console.log(snap.val())
+    let finalsData = Object.values(snap.val());
+    let finalsKeys = Object.keys(snap.val());
+    console.log("finals Keys")
+    console.log(finalsKeys)
+    let monKeyIdx = finalsKeys.indexOf("Mon");
+    let tueKeyIdx = finalsKeys.indexOf("Tue");
+    let wedKeyIdx = finalsKeys.indexOf("Wed");
+    let thursKeyIdx = finalsKeys.indexOf("Thurs");
+    let friKeyIdx = finalsKeys.indexOf("Fri");
+    let satKeyIdx = finalsKeys.indexOf("Sat");
+    let sunKeyIdx = finalsKeys.indexOf("Sun");
+    console.log(monKeyIdx)
+    let monData = finalsData[monKeyIdx];
+    let tueData = finalsData[tueKeyIdx];
+    let wedData = finalsData[wedKeyIdx];
+    let thursData = finalsData[thursKeyIdx];
+    let friData = finalsData[friKeyIdx];
+    let satData = finalsData[satKeyIdx];
+    let sunData = finalsData[sunKeyIdx];
+    console.log("mon data")
+    console.log(monData)
+
+  console.log("mon vals")
+  console.log(Object.values(monData))
+  let monVals = Object.values(monData);
+  let monMax = Math.max(...monVals);
+  console.log("mon max")
+  console.log(monMax)
+  let tueMax = Math.max(...Object.values(tueData));
+  let wedMax = Math.max(...Object.values(wedData));
+  let thursMax = Math.max(...Object.values(thursData));
+  let friMax = Math.max(...Object.values(friData));
+  let satMax = Math.max(...Object.values(satData));
+  let sunMax = Math.max(...Object.values(sunData));
+
+  let monMoodIdx = Object.values(monData).indexOf(monMax);
+  console.log(monMoodIdx)
+  let monMoods = Object.keys(monData);
+  console.log(monMoods)
+  let monMood = monMoods[monMoodIdx];
+  console.log(monMood)
+
+  if (monMood === '"🙁"') {
+      monMood = 2;
+  } else if(monMood === '"🙂"') {
+    monMood = 0;
+  } else {
+    monMood = 1;
+  }
+
+  console.log(monMood)
+
+  let wedMoodIdx = Object.values(wedData).indexOf(wedMax);
+  console.log(wedMoodIdx)
+  let wedMoods = Object.keys(wedData);
+  console.log(wedMoods)
+  let wedMood = wedMoods[wedMoodIdx];
+  console.log(wedMood)
+
+  if (wedMood === '"🙁"') {
+      wedMood = 2;
+  } else if(wedMood === '"🙂"') {
+    wedMood = 0;
+  } else {
+    wedMood = 1;
+  }
+
+  console.log(wedMood)
+
+  let tueMoodIdx = Object.values(tueData).indexOf(tueMax);
+  console.log(tueMoodIdx)
+  let tueMoods = Object.keys(tueData);
+  console.log(tueMoods)
+  let tueMood = tueMoods[tueMoodIdx];
+  console.log(tueMood)
+
+  if (tueMood === '"🙁"') {
+      tueMood = 2;
+  } else if(tueMood === '"🙂"') {
+    tueMood = 0;
+  } else {
+    tueMood = 1;
+  }
+
+  console.log(tueMood)
+
+  let friMoodIdx = Object.values(friData).indexOf(friMax);
+  console.log(friMoodIdx)
+  let friMoods = Object.keys(friData);
+  console.log(friMoods)
+  let friMood = friMoods[friMoodIdx];
+  console.log(friMood)
+
+  if (friMood === '"🙁"') {
+      friMood = 2;
+  } else if(friMood === '"🙂"') {
+    friMood = 0;
+  } else {
+    friMood = 1;
+  }
+
+  console.log(friMood)
+
+  let satMoodIdx = Object.values(satData).indexOf(satMax);
+  console.log(satMoodIdx)
+  let satMoods = Object.keys(satData);
+  console.log(satMoods)
+  let satMood = satMoods[satMoodIdx];
+  console.log(satMood)
+
+  if (satMood === '"🙁"') {
+      satMood = 2;
+  } else if(satMood === '"🙂"') {
+    satMood = 0;
+  } else {
+    satMood = 1;
+  }
+
+  console.log(satMood)
+
+  let sunMoodIdx = Object.values(sunData).indexOf(sunMax);
+  console.log(sunMoodIdx)
+  let sunMoods = Object.keys(sunData);
+  console.log(sunMoods)
+  let sunMood = sunMoods[sunMoodIdx];
+  console.log(sunMood)
+
+  if (sunMood === '"🙁"') {
+      sunMood = 2;
+  } else if(sunMood === '"🙂"') {
+    sunMood = 0;
+  } else {
+    sunMood = 1;
+  }
+
+  console.log(sunMood)
+
+  let thursMoodIdx = Object.values(thursData).indexOf(thursMax);
+  console.log(thursMoodIdx)
+  let thursMoods = Object.keys(thursData);
+  console.log(thursMoods)
+  let thursMood = thursMoods[thursMoodIdx];
+  console.log(thursMood)
+
+  if (thursMood === '"🙁"') {
+      thursMood = 2;
+  } else if(thursMood === '"🙂"') {
+    thursMood = 0;
+  } else {
+    thursMood = 1;
+  }
+
+  console.log(thursMood)
+
+  var mapping = [
+    // order of firebase
+    {x: "Mon", value: monMood},
+    {x: "Tue", value: tueMood},
+    {x: "Wed", value: wedMood},
+    {x: "Thurs", value: thursMood},
+    {x: "Fri", value: friMood},
+    {x: "Sat", value: satMood},
+    {x: "Sun", value: sunMood}
+  ];
+  console.log(mapping)
+  // create a pie chart and set the data
+  var chart = anychart.line(mapping);
+  chart.yScale().minimum(0);
+  chart.yScale().maximum(2);
+  
+
+  // set title
+  chart.title("Stress Levels of Finals Week");
+
+  var xAxis = chart.xAxis();
+
+var yTitle = chart.yAxis().title();
+yTitle.enabled(true);
+yTitle.text("2 = 🙁, 1 = 😐, 0 = 🙂");
+yTitle.align("bottom");
+
+  // set the container id
+  chart.container("turkey" + screen.toString());
+  // initiate drawing the chart
+  chart.draw();   
+});
+}
+
+function addStaticVisWeeklyStress(screen) {
+  firebase.database().ref('robotapi/weeklyStress/').on('value', (snap)=>{
+    console.log("mon moods")
+    console.log(snap.val())
+    let finalsData = Object.values(snap.val());
+    let finalsKeys = Object.keys(snap.val());
+    console.log("finals Keys")
+    console.log(finalsKeys)
+    let monKeyIdx = finalsKeys.indexOf("3-18-2022");
+      let tueKeyIdx = finalsKeys.indexOf("4-10-2022");
+      let wedKeyIdx = finalsKeys.indexOf("4-11-2022");
+      let thursKeyIdx = finalsKeys.indexOf("4-12-2022");
+      let friKeyIdx = finalsKeys.indexOf("4-13-2022");
+    //let satKeyIdx = finalsKeys.indexOf("Sat");
+    //let sunKeyIdx = finalsKeys.indexOf("Sun");
+    console.log(monKeyIdx)
+    let monData = finalsData[monKeyIdx];
+    let tueData = finalsData[tueKeyIdx];
+    let wedData = finalsData[wedKeyIdx];
+    let thursData = finalsData[thursKeyIdx];
+    let friData = finalsData[friKeyIdx];
+    //let satData = finalsData[satKeyIdx];
+    //let sunData = finalsData[sunKeyIdx];
+    console.log("mon data")
+    console.log(monData)
+
+  console.log("mon vals")
+  console.log(Object.values(monData))
+  let monVals = Object.values(monData);
+  let monMax = Math.max(...monVals);
+  console.log("mon max")
+  console.log(monMax)
+  let tueMax = Math.max(...Object.values(tueData));
+  let wedMax = Math.max(...Object.values(wedData));
+  let thursMax = Math.max(...Object.values(thursData));
+  let friMax = Math.max(...Object.values(friData));
+  //let satMax = Math.max(...Object.values(satData));
+  //let sunMax = Math.max(...Object.values(sunData));
+
+  let monMoodIdx = Object.values(monData).indexOf(monMax);
+  console.log(monMoodIdx)
+  let monMoods = Object.keys(monData);
+  console.log(monMoods)
+  let monMood = monMoods[monMoodIdx];
+  console.log(monMood)
+
+  if (monMood === '"🙁"') {
+      monMood = 2;
+  } else if(monMood === '"🙂"') {
+    monMood = 0;
+  } else {
+    monMood = 1;
+  }
+
+  console.log(monMood)
+
+  let wedMoodIdx = Object.values(wedData).indexOf(wedMax);
+  console.log(wedMoodIdx)
+  let wedMoods = Object.keys(wedData);
+  console.log(wedMoods)
+  let wedMood = wedMoods[wedMoodIdx];
+  console.log(wedMood)
+
+  if (wedMood === '"🙁"') {
+      wedMood = 2;
+  } else if(wedMood === '"🙂"') {
+    wedMood = 0;
+  } else {
+    wedMood = 1;
+  }
+
+  console.log(wedMood)
+
+  let tueMoodIdx = Object.values(tueData).indexOf(tueMax);
+  console.log(tueMoodIdx)
+  let tueMoods = Object.keys(tueData);
+  console.log(tueMoods)
+  let tueMood = tueMoods[tueMoodIdx];
+  console.log(tueMood)
+
+  if (tueMood === '"🙁"') {
+      tueMood = 2;
+  } else if(tueMood === '"🙂"') {
+    tueMood = 0;
+  } else {
+    tueMood = 1;
+  }
+
+  console.log(tueMood)
+
+  let friMoodIdx = Object.values(friData).indexOf(friMax);
+  console.log(friMoodIdx)
+  let friMoods = Object.keys(friData);
+  console.log(friMoods)
+  let friMood = friMoods[friMoodIdx];
+  console.log(friMood)
+
+  if (friMood === '"🙁"') {
+      friMood = 2;
+  } else if(friMood === '"🙂"') {
+    friMood = 0;
+  } else {
+    friMood = 1;
+  }
+
+  console.log(friMood)
+/*
+  let satMoodIdx = Object.values(satData).indexOf(satMax);
+  console.log(satMoodIdx)
+  let satMoods = Object.keys(satData);
+  console.log(satMoods)
+  let satMood = satMoods[satMoodIdx];
+  console.log(satMood)
+
+  if (satMood === '"🙁"') {
+      satMood = 2;
+  } else if(satMood === '"🙂"') {
+    satMood = 0;
+  } else {
+    satMood = 1;
+  }
+
+  console.log(satMood)
+
+  let sunMoodIdx = Object.values(sunData).indexOf(sunMax);
+  console.log(sunMoodIdx)
+  let sunMoods = Object.keys(sunData);
+  console.log(sunMoods)
+  let sunMood = sunMoods[sunMoodIdx];
+  console.log(sunMood)
+
+  if (sunMood === '"🙁"') {
+      sunMood = 2;
+  } else if(sunMood === '"🙂"') {
+    sunMood = 0;
+  } else {
+    sunMood = 1;
+  }
+
+  console.log(sunMood)
+*/
+  let thursMoodIdx = Object.values(thursData).indexOf(thursMax);
+  console.log(thursMoodIdx)
+  let thursMoods = Object.keys(thursData);
+  console.log(thursMoods)
+  let thursMood = thursMoods[thursMoodIdx];
+  console.log(thursMood)
+
+  if (thursMood === '"🙁"') {
+      thursMood = 2;
+  } else if(thursMood === '"🙂"') {
+    thursMood = 0;
+  } else {
+    thursMood = 1;
+  }
+
+  console.log(thursMood)
+
+  var mapping = [
+    // order of firebase
+    {x: "Mon", value: monMood},
+    {x: "Tue", value: tueMood},
+    {x: "Wed", value: wedMood},
+    {x: "Thurs", value: thursMood},
+    {x: "Fri", value: friMood}
+    //{x: "Sat", value: satMood},
+    //{x: "Sun", value: sunMood}
+  ];
+  console.log(mapping)
+  // create a pie chart and set the data
+  var chart = anychart.line(mapping);
+  chart.yScale().minimum(0);
+  chart.yScale().maximum(2);
+  
+
+  // set title
+  chart.title("Weekly Stress Levels");
+
+  var xAxis = chart.xAxis();
+
+var yTitle = chart.yAxis().title();
+yTitle.enabled(true);
+yTitle.text("2 = 🙁, 1 = 😐, 0 = 🙂");
+yTitle.align("bottom");
+
+  // set the container id
+  chart.container("turkey" + screen.toString());
+  // initiate drawing the chart
+  chart.draw();   
+});
+}
+
+function addStaticVisWeeklyStressThanksgiving() {
+  firebase.database().ref('robotapi/weeklyStress/ThanksgivingWeek').on('value', (snap)=>{
+    console.log("mon moods")
+    console.log(snap.val())
+    let finalsData = Object.values(snap.val());
+    let finalsKeys = Object.keys(snap.val());
+    console.log("finals Keys")
+    console.log(finalsKeys)
+    let monKeyIdx = finalsKeys.indexOf("Mon");
+    let tueKeyIdx = finalsKeys.indexOf("Tue");
+    let wedKeyIdx = finalsKeys.indexOf("Wed");
+    let thursKeyIdx = finalsKeys.indexOf("Thurs");
+    let friKeyIdx = finalsKeys.indexOf("Fri");
+    let satKeyIdx = finalsKeys.indexOf("Sat");
+    let sunKeyIdx = finalsKeys.indexOf("Sun");
+    console.log(monKeyIdx)
+    let monData = finalsData[monKeyIdx];
+    let tueData = finalsData[tueKeyIdx];
+    let wedData = finalsData[wedKeyIdx];
+    let thursData = finalsData[thursKeyIdx];
+    let friData = finalsData[friKeyIdx];
+    let satData = finalsData[satKeyIdx];
+    let sunData = finalsData[sunKeyIdx];
+    console.log("mon data")
+    console.log(monData)
+
+  console.log("mon vals")
+  console.log(Object.values(monData))
+  let monVals = Object.values(monData);
+  let monMax = Math.max(...monVals);
+  console.log("mon max")
+  console.log(monMax)
+  let tueMax = Math.max(...Object.values(tueData));
+  let wedMax = Math.max(...Object.values(wedData));
+  let thursMax = Math.max(...Object.values(thursData));
+  let friMax = Math.max(...Object.values(friData));
+  let satMax = Math.max(...Object.values(satData));
+  let sunMax = Math.max(...Object.values(sunData));
+
+  let monMoodIdx = Object.values(monData).indexOf(monMax);
+  console.log(monMoodIdx)
+  let monMoods = Object.keys(monData);
+  console.log(monMoods)
+  let monMood = monMoods[monMoodIdx];
+  console.log(monMood)
+
+  if (monMood === '"🙁"') {
+      monMood = 2;
+  } else if(monMood === '"🙂"') {
+    monMood = 0;
+  } else {
+    monMood = 1;
+  }
+
+  console.log(monMood)
+
+  let wedMoodIdx = Object.values(wedData).indexOf(wedMax);
+  console.log(wedMoodIdx)
+  let wedMoods = Object.keys(wedData);
+  console.log(wedMoods)
+  let wedMood = wedMoods[wedMoodIdx];
+  console.log(wedMood)
+
+  if (wedMood === '"🙁"') {
+      wedMood = 2;
+  } else if(wedMood === '"🙂"') {
+    wedMood = 0;
+  } else {
+    wedMood = 1;
+  }
+
+  console.log(wedMood)
+
+  let tueMoodIdx = Object.values(tueData).indexOf(tueMax);
+  console.log(tueMoodIdx)
+  let tueMoods = Object.keys(tueData);
+  console.log(tueMoods)
+  let tueMood = tueMoods[tueMoodIdx];
+  console.log(tueMood)
+
+  if (tueMood === '"🙁"') {
+      tueMood = 2;
+  } else if(tueMood === '"🙂"') {
+    tueMood = 0;
+  } else {
+    tueMood = 1;
+  }
+
+  console.log(tueMood)
+
+  let friMoodIdx = Object.values(friData).indexOf(friMax);
+  console.log(friMoodIdx)
+  let friMoods = Object.keys(friData);
+  console.log(friMoods)
+  let friMood = friMoods[friMoodIdx];
+  console.log(friMood)
+
+  if (friMood === '"🙁"') {
+      friMood = 2;
+  } else if(friMood === '"🙂"') {
+    friMood = 0;
+  } else {
+    friMood = 1;
+  }
+
+  console.log(friMood)
+
+  let satMoodIdx = Object.values(satData).indexOf(satMax);
+  console.log(satMoodIdx)
+  let satMoods = Object.keys(satData);
+  console.log(satMoods)
+  let satMood = satMoods[satMoodIdx];
+  console.log(satMood)
+
+  if (satMood === '"🙁"') {
+      satMood = 2;
+  } else if(satMood === '"🙂"') {
+    satMood = 0;
+  } else {
+    satMood = 1;
+  }
+
+  console.log(satMood)
+
+  let sunMoodIdx = Object.values(sunData).indexOf(sunMax);
+  console.log(sunMoodIdx)
+  let sunMoods = Object.keys(sunData);
+  console.log(sunMoods)
+  let sunMood = sunMoods[sunMoodIdx];
+  console.log(sunMood)
+
+  if (sunMood === '"🙁"') {
+      sunMood = 2;
+  } else if(sunMood === '"🙂"') {
+    sunMood = 0;
+  } else {
+    sunMood = 1;
+  }
+
+  console.log(sunMood)
+
+  let thursMoodIdx = Object.values(thursData).indexOf(thursMax);
+  console.log(thursMoodIdx)
+  let thursMoods = Object.keys(thursData);
+  console.log(thursMoods)
+  let thursMood = thursMoods[thursMoodIdx];
+  console.log(thursMood)
+
+  if (thursMood === '"🙁"') {
+      thursMood = 2;
+  } else if(thursMood === '"🙂"') {
+    thursMood = 0;
+  } else {
+    thursMood = 1;
+  }
+
+  console.log(thursMood)
+
+  var mapping = [
+    // order of firebase
+    {x: "Mon", value: monMood},
+    {x: "Tue", value: tueMood},
+    {x: "Wed", value: wedMood},
+    {x: "Thurs", value: thursMood},
+    {x: "Fri", value: friMood},
+    {x: "Sat", value: satMood},
+    {x: "Sun", value: sunMood}
+  ];
+  console.log(mapping)
+  // create a pie chart and set the data
+  var chart = anychart.line(mapping);
+  chart.yScale().minimum(0);
+  chart.yScale().maximum(2);
+  
+
+  // set title
+  chart.title("Stress Levels of Thanksgiving Week");
+
+  var xAxis = chart.xAxis();
+
+var yTitle = chart.yAxis().title();
+yTitle.enabled(true);
+yTitle.text("2 = 🙁, 1 = 😐, 0 = 🙂");
+yTitle.align("bottom");
+
+  // set the container id
+  chart.container("turkey" + screen.toString());
+  // initiate drawing the chart
+  chart.draw();   
+});
+}
+
+function addStaticVisWeeklyMoodThanksgiving(screen) {
+  firebase.database().ref('robotapi/weeklyMood/ThanksgivingWeek').on('value', (snap)=>{
+    console.log("mon moods")
+    console.log(snap.val())
+    let finalsData = Object.values(snap.val());
+    let finalsKeys = Object.keys(snap.val());
+    console.log("finals Keys")
+    console.log(finalsKeys)
+    let monKeyIdx = finalsKeys.indexOf("Mon");
+    let tueKeyIdx = finalsKeys.indexOf("Tue");
+    let wedKeyIdx = finalsKeys.indexOf("Wed");
+    let thursKeyIdx = finalsKeys.indexOf("Thurs");
+    let friKeyIdx = finalsKeys.indexOf("Fri");
+    let satKeyIdx = finalsKeys.indexOf("Sat");
+    let sunKeyIdx = finalsKeys.indexOf("Sun");
+    console.log(monKeyIdx)
+    let monData = finalsData[monKeyIdx];
+    let tueData = finalsData[tueKeyIdx];
+    let wedData = finalsData[wedKeyIdx];
+    let thursData = finalsData[thursKeyIdx];
+    let friData = finalsData[friKeyIdx];
+    let satData = finalsData[satKeyIdx];
+    let sunData = finalsData[sunKeyIdx];
+    console.log("mon data")
+    console.log(monData)
+
+  console.log("mon vals")
+  console.log(Object.values(monData))
+  let monVals = Object.values(monData);
+  let monMax = Math.max(...monVals);
+  console.log("mon max")
+  console.log(monMax)
+  let tueMax = Math.max(...Object.values(tueData));
+  let wedMax = Math.max(...Object.values(wedData));
+  let thursMax = Math.max(...Object.values(thursData));
+  let friMax = Math.max(...Object.values(friData));
+  let satMax = Math.max(...Object.values(satData));
+  let sunMax = Math.max(...Object.values(sunData));
+
+  let monMoodIdx = Object.values(monData).indexOf(monMax);
+  console.log(monMoodIdx)
+  let monMoods = Object.keys(monData);
+  console.log(monMoods)
+  let monMood = monMoods[monMoodIdx];
+  console.log(monMood)
+
+  if (monMood === '"🙁"') {
+      monMood = 0;
+  } else if(monMood === '"🙂"') {
+    monMood = 2;
+  } else {
+    monMood = 1;
+  }
+
+  console.log(monMood)
+
+  let wedMoodIdx = Object.values(wedData).indexOf(wedMax);
+  console.log(wedMoodIdx)
+  let wedMoods = Object.keys(wedData);
+  console.log(wedMoods)
+  let wedMood = wedMoods[wedMoodIdx];
+  console.log(wedMood)
+
+  if (wedMood === '"🙁"') {
+      wedMood = 0;
+  } else if(wedMood === '"🙂"') {
+    wedMood = 2;
+  } else {
+    wedMood = 1;
+  }
+
+  console.log(wedMood)
+
+  let tueMoodIdx = Object.values(tueData).indexOf(tueMax);
+  console.log(tueMoodIdx)
+  let tueMoods = Object.keys(tueData);
+  console.log(tueMoods)
+  let tueMood = tueMoods[tueMoodIdx];
+  console.log(tueMood)
+
+  if (tueMood === '"🙁"') {
+      tueMood = 0;
+  } else if(tueMood === '"🙂"') {
+    tueMood = 2;
+  } else {
+    tueMood = 1;
+  }
+
+  console.log(tueMood)
+
+  let friMoodIdx = Object.values(friData).indexOf(friMax);
+  console.log(friMoodIdx)
+  let friMoods = Object.keys(friData);
+  console.log(friMoods)
+  let friMood = friMoods[friMoodIdx];
+  console.log(friMood)
+
+  if (friMood === '"🙁"') {
+      friMood = 0;
+  } else if(friMood === '"🙂"') {
+    friMood = 2;
+  } else {
+    friMood = 1;
+  }
+
+  console.log(friMood)
+
+  let satMoodIdx = Object.values(satData).indexOf(satMax);
+  console.log(satMoodIdx)
+  let satMoods = Object.keys(satData);
+  console.log(satMoods)
+  let satMood = satMoods[satMoodIdx];
+  console.log(satMood)
+
+  if (satMood === '"🙁"') {
+      satMood = 0;
+  } else if(satMood === '"🙂"') {
+    satMood = 2;
+  } else {
+    satMood = 1;
+  }
+
+  console.log(satMood)
+
+  let sunMoodIdx = Object.values(sunData).indexOf(sunMax);
+  console.log(sunMoodIdx)
+  let sunMoods = Object.keys(sunData);
+  console.log(sunMoods)
+  let sunMood = sunMoods[sunMoodIdx];
+  console.log(sunMood)
+
+  if (sunMood === '"🙁"') {
+      sunMood = 0;
+  } else if(sunMood === '"🙂"') {
+    sunMood = 2;
+  } else {
+    sunMood = 1;
+  }
+
+  console.log(sunMood)
+
+  let thursMoodIdx = Object.values(thursData).indexOf(thursMax);
+  console.log(thursMoodIdx)
+  let thursMoods = Object.keys(thursData);
+  console.log(thursMoods)
+  let thursMood = thursMoods[thursMoodIdx];
+  console.log(thursMood)
+
+  if (thursMood === '"🙁"') {
+      thursMood = 0;
+  } else if(thursMood === '"🙂"') {
+    thursMood = 2;
+  } else {
+    thursMood = 1;
+  }
+
+  console.log(thursMood)
+
+  var mapping = [
+    // order of firebase
+    {x: "Mon", value: monMood},
+    {x: "Tue", value: tueMood},
+    {x: "Wed", value: wedMood},
+    {x: "Thurs", value: thursMood},
+    {x: "Fri", value: friMood},
+    {x: "Sat", value: satMood},
+    {x: "Sun", value: sunMood}
+  ];
+  console.log(mapping)
+  // create a pie chart and set the data
+  var chart = anychart.line(mapping);
+  chart.yScale().minimum(0);
+  chart.yScale().maximum(2);
+  
+
+  // set title
+  chart.title("Mood Levels of Thanksgiving Week");
+
+  var xAxis = chart.xAxis();
+
+var yTitle = chart.yAxis().title();
+yTitle.enabled(true);
+yTitle.text("0 = 🙁, 1 = 😐, 2 = 🙂");
+yTitle.align("bottom");
+
+  // set the container id
+  chart.container("turkey" + screen.toString());
+  // initiate drawing the chart
+  chart.draw();   
+});
+  }
+
+function addStaticVisWeeklyMoodFinals(screen) {
+  firebase.database().ref('robotapi/weeklyMood/FinalsWeek').on('value', (snap)=>{
+    console.log("mon moods")
+    console.log(snap.val())
+    let finalsData = Object.values(snap.val());
+    let finalsKeys = Object.keys(snap.val());
+    console.log("finals Keys")
+    console.log(finalsKeys)
+    let monKeyIdx = finalsKeys.indexOf("Mon");
+    let tueKeyIdx = finalsKeys.indexOf("Tue");
+    let wedKeyIdx = finalsKeys.indexOf("Wed");
+    let thursKeyIdx = finalsKeys.indexOf("Thurs");
+    let friKeyIdx = finalsKeys.indexOf("Fri");
+    let satKeyIdx = finalsKeys.indexOf("Sat");
+    let sunKeyIdx = finalsKeys.indexOf("Sun");
+    console.log(monKeyIdx)
+    let monData = finalsData[monKeyIdx];
+    let tueData = finalsData[tueKeyIdx];
+    let wedData = finalsData[wedKeyIdx];
+    let thursData = finalsData[thursKeyIdx];
+    let friData = finalsData[friKeyIdx];
+    let satData = finalsData[satKeyIdx];
+    let sunData = finalsData[sunKeyIdx];
+    console.log("mon data")
+    console.log(monData)
+
+  console.log("mon vals")
+  console.log(Object.values(monData))
+  let monVals = Object.values(monData);
+  let monMax = Math.max(...monVals);
+  console.log("mon max")
+  console.log(monMax)
+  let tueMax = Math.max(...Object.values(tueData));
+  let wedMax = Math.max(...Object.values(wedData));
+  let thursMax = Math.max(...Object.values(thursData));
+  let friMax = Math.max(...Object.values(friData));
+  let satMax = Math.max(...Object.values(satData));
+  let sunMax = Math.max(...Object.values(sunData));
+
+  let monMoodIdx = Object.values(monData).indexOf(monMax);
+  console.log(monMoodIdx)
+  let monMoods = Object.keys(monData);
+  console.log(monMoods)
+  let monMood = monMoods[monMoodIdx];
+  console.log(monMood)
+
+  if (monMood === '"🙁"') {
+      monMood = 0;
+  } else if(monMood === '"🙂"') {
+    monMood = 2;
+  } else {
+    monMood = 1;
+  }
+
+  console.log(monMood)
+
+  let wedMoodIdx = Object.values(wedData).indexOf(wedMax);
+  console.log(wedMoodIdx)
+  let wedMoods = Object.keys(wedData);
+  console.log(wedMoods)
+  let wedMood = wedMoods[wedMoodIdx];
+  console.log(wedMood)
+
+  if (wedMood === '"🙁"') {
+      wedMood = 0;
+  } else if(wedMood === '"🙂"') {
+    wedMood = 2;
+  } else {
+    wedMood = 1;
+  }
+
+  console.log(wedMood)
+
+  let tueMoodIdx = Object.values(tueData).indexOf(tueMax);
+  console.log(tueMoodIdx)
+  let tueMoods = Object.keys(tueData);
+  console.log(tueMoods)
+  let tueMood = tueMoods[tueMoodIdx];
+  console.log(tueMood)
+
+  if (tueMood === '"🙁"') {
+      tueMood = 0;
+  } else if(tueMood === '"🙂"') {
+    tueMood = 2;
+  } else {
+    tueMood = 1;
+  }
+
+  console.log(tueMood)
+
+  let friMoodIdx = Object.values(friData).indexOf(friMax);
+  console.log(friMoodIdx)
+  let friMoods = Object.keys(friData);
+  console.log(friMoods)
+  let friMood = friMoods[friMoodIdx];
+  console.log(friMood)
+
+  if (friMood === '"🙁"') {
+      friMood = 0;
+  } else if(friMood === '"🙂"') {
+    friMood = 2;
+  } else {
+    friMood = 1;
+  }
+
+  console.log(friMood)
+
+  let satMoodIdx = Object.values(satData).indexOf(satMax);
+  console.log(satMoodIdx)
+  let satMoods = Object.keys(satData);
+  console.log(satMoods)
+  let satMood = satMoods[satMoodIdx];
+  console.log(satMood)
+
+  if (satMood === '"🙁"') {
+      satMood = 0;
+  } else if(satMood === '"🙂"') {
+    satMood = 2;
+  } else {
+    satMood = 1;
+  }
+
+  console.log(satMood)
+
+  let sunMoodIdx = Object.values(sunData).indexOf(sunMax);
+  console.log(sunMoodIdx)
+  let sunMoods = Object.keys(sunData);
+  console.log(sunMoods)
+  let sunMood = sunMoods[sunMoodIdx];
+  console.log(sunMood)
+
+  if (sunMood === '"🙁"') {
+      sunMood = 0;
+  } else if(sunMood === '"🙂"') {
+    sunMood = 2;
+  } else {
+    sunMood = 1;
+  }
+
+  console.log(sunMood)
+
+  let thursMoodIdx = Object.values(thursData).indexOf(thursMax);
+  console.log(thursMoodIdx)
+  let thursMoods = Object.keys(thursData);
+  console.log(thursMoods)
+  let thursMood = thursMoods[thursMoodIdx];
+  console.log(thursMood)
+
+  if (thursMood === '"🙁"') {
+      thursMood = 0;
+  } else if(thursMood === '"🙂"') {
+    thursMood = 2;
+  } else {
+    thursMood = 1;
+  }
+
+  console.log(thursMood)
+
+  var mapping = [
+    // order of firebase
+    {x: "Mon", value: monMood},
+    {x: "Tue", value: tueMood},
+    {x: "Wed", value: wedMood},
+    {x: "Thurs", value: thursMood},
+    {x: "Fri", value: friMood},
+    {x: "Sat", value: satMood},
+    {x: "Sun", value: sunMood}
+  ];
+  console.log(mapping)
+  // create a pie chart and set the data
+  var chart = anychart.line(mapping);
+  chart.yScale().minimum(0);
+  chart.yScale().maximum(2);
+  
+
+  // set title
+  chart.title("Mood Levels of Finals Week");
+
+  var xAxis = chart.xAxis();
+
+var yTitle = chart.yAxis().title();
+yTitle.enabled(true);
+yTitle.text("0 = 🙁, 1 = 😐, 2 = 🙂");
+yTitle.align("bottom");
+
+  // set the container id
+  chart.container("turkey" + screen.toString());
+  // initiate drawing the chart
+  chart.draw();   
+});
+  }
+
+  function addStaticVisWeeklyMood(screen) {
+    firebase.database().ref('robotapi/weeklyMood/').on('value', (snap)=>{
+      console.log("mon moods")
+      console.log(snap.val())
+      let finalsData = Object.values(snap.val());
+      let finalsKeys = Object.keys(snap.val());
+      console.log("finals Keys")
+      console.log(finalsKeys)
+      
+      let monKeyIdx = finalsKeys.indexOf("3-18-2022");
+      let tueKeyIdx = finalsKeys.indexOf("4-10-2022");
+      let wedKeyIdx = finalsKeys.indexOf("4-11-2022");
+      let thursKeyIdx = finalsKeys.indexOf("4-12-2022");
+      let friKeyIdx = finalsKeys.indexOf("4-13-2022");
+      //let satKeyIdx = finalsKeys.indexOf("Sat");
+      //let sunKeyIdx = finalsKeys.indexOf("Sun");
+      console.log(monKeyIdx)
+      let monData = finalsData[monKeyIdx];
+      let tueData = finalsData[tueKeyIdx];
+      let wedData = finalsData[wedKeyIdx];
+      let thursData = finalsData[thursKeyIdx];
+      let friData = finalsData[friKeyIdx];
+      //let satData = finalsData[satKeyIdx];
+      //let sunData = finalsData[sunKeyIdx];
+      console.log("mon data")
+      console.log(monData)
+  
+    console.log("mon vals")
+    console.log(Object.values(monData))
+    let monVals = Object.values(monData);
+    let monMax = Math.max(...monVals);
+    console.log("mon max")
+    console.log(monMax)
+    let tueMax = Math.max(...Object.values(tueData));
+    let wedMax = Math.max(...Object.values(wedData));
+    let thursMax = Math.max(...Object.values(thursData));
+    let friMax = Math.max(...Object.values(friData));
+    //let satMax = Math.max(...Object.values(satData));
+    //let sunMax = Math.max(...Object.values(sunData));
+  
+    let monMoodIdx = Object.values(monData).indexOf(monMax);
+    console.log(monMoodIdx)
+    let monMoods = Object.keys(monData);
+    console.log(monMoods)
+    let monMood = monMoods[monMoodIdx];
+    console.log(monMood)
+  
+    if (monMood === '"🙁"') {
+        monMood = 0;
+    } else if(monMood === '"🙂"') {
+      monMood = 2;
+    } else {
+      monMood = 1;
+    }
+  
+    console.log(monMood)
+  
+    let wedMoodIdx = Object.values(wedData).indexOf(wedMax);
+    console.log(wedMoodIdx)
+    let wedMoods = Object.keys(wedData);
+    console.log(wedMoods)
+    let wedMood = wedMoods[wedMoodIdx];
+    console.log(wedMood)
+  
+    if (wedMood === '"🙁"') {
+        wedMood = 0;
+    } else if(wedMood === '"🙂"') {
+      wedMood = 2;
+    } else {
+      wedMood = 1;
+    }
+  
+    console.log(wedMood)
+  
+    let tueMoodIdx = Object.values(tueData).indexOf(tueMax);
+    console.log(tueMoodIdx)
+    let tueMoods = Object.keys(tueData);
+    console.log(tueMoods)
+    let tueMood = tueMoods[tueMoodIdx];
+    console.log(tueMood)
+  
+    if (tueMood === '"🙁"') {
+        tueMood = 0;
+    } else if(tueMood === '"🙂"') {
+      tueMood = 2;
+    } else {
+      tueMood = 1;
+    }
+  
+    console.log(tueMood)
+  
+    let friMoodIdx = Object.values(friData).indexOf(friMax);
+    console.log(friMoodIdx)
+    let friMoods = Object.keys(friData);
+    console.log(friMoods)
+    let friMood = friMoods[friMoodIdx];
+    console.log(friMood)
+  
+    if (friMood === '"🙁"') {
+        friMood = 0;
+    } else if(friMood === '"🙂"') {
+      friMood = 2;
+    } else {
+      friMood = 1;
+    }
+  
+    console.log(friMood)
+  /*
+    let satMoodIdx = Object.values(satData).indexOf(satMax);
+    console.log(satMoodIdx)
+    let satMoods = Object.keys(satData);
+    console.log(satMoods)
+    let satMood = satMoods[satMoodIdx];
+    console.log(satMood)
+  
+    if (satMood === '"🙁"') {
+        satMood = 0;
+    } else if(satMood === '"🙂"') {
+      satMood = 2;
+    } else {
+      satMood = 1;
+    }
+  
+    console.log(satMood)
+  
+    let sunMoodIdx = Object.values(sunData).indexOf(sunMax);
+    console.log(sunMoodIdx)
+    let sunMoods = Object.keys(sunData);
+    console.log(sunMoods)
+    let sunMood = sunMoods[sunMoodIdx];
+    console.log(sunMood)
+  
+    if (sunMood === '"🙁"') {
+        sunMood = 0;
+    } else if(sunMood === '"🙂"') {
+      sunMood = 2;
+    } else {
+      sunMood = 1;
+    }
+  
+    console.log(sunMood)
+  */
+    let thursMoodIdx = Object.values(thursData).indexOf(thursMax);
+    console.log(thursMoodIdx)
+    let thursMoods = Object.keys(thursData);
+    console.log(thursMoods)
+    let thursMood = thursMoods[thursMoodIdx];
+    console.log(thursMood)
+  
+    if (thursMood === '"🙁"') {
+        thursMood = 0;
+    } else if(thursMood === '"🙂"') {
+      thursMood = 2;
+    } else {
+      thursMood = 1;
+    }
+  
+    console.log(thursMood)
+  
+    var mapping = [
+      // order of firebase
+      {x: "Mon", value: monMood},
+      {x: "Tue", value: tueMood},
+      {x: "Wed", value: wedMood},
+      {x: "Thurs", value: thursMood},
+      {x: "Fri", value: friMood}
+      //{x: "Sat", value: satMood},
+      //{x: "Sun", value: sunMood}
+    ];
+    console.log(mapping)
+    // create a pie chart and set the data
+    var chart = anychart.line(mapping);
+    chart.yScale().minimum(0);
+    chart.yScale().maximum(2);
+    
+  
+    // set title
+    chart.title("Weekly Mood Levels");
+  
+    var xAxis = chart.xAxis();
+  
+  var yTitle = chart.yAxis().title();
+  yTitle.enabled(true);
+  yTitle.text("0 = 🙁, 1 = 😐, 2 = 🙂");
+  yTitle.align("bottom");
+  
+    // set the container id
+  chart.container("turkey" + screen.toString());
+  // initiate drawing the chart
+  chart.draw();  
+  });
+    }
