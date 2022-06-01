@@ -1025,6 +1025,8 @@ function addStaticVisCommunityMoodTouch(screen) {
   //chart.labels().position("outside");
   // set the container id
   chart.container("turkey" + screen.toString());
+  document.getElementById("turkey" + screen.toString()).style.height = "60vh";
+  document.getElementById("turkey" + screen.toString()).style.width = "60vh";
   // initiate drawing the chart
   chart.draw();
   });
@@ -1078,6 +1080,8 @@ function addStaticVisCommunityMoodTouch(screen) {
         chart.title("Stress Levels by Community Percentage");
         // set the container id
         chart.container("turkey" + screen.toString());
+        document.getElementById("turkey" + screen.toString()).style.height = "60vh";
+  document.getElementById("turkey" + screen.toString()).style.width = "60vh";
         // initiate drawing the chart
         chart.draw();
       });
@@ -1133,6 +1137,8 @@ function addStaticVisCommunityMood(screen) {
   chart.labels().position("outside");
   // set the container id
   chart.container("turkey" + screen.toString());
+  document.getElementById("turkey" + screen.toString()).style.height = "60vh";
+  document.getElementById("turkey" + screen.toString()).style.width = "60vh";
   // initiate drawing the chart
   chart.draw();
   });
@@ -1186,6 +1192,8 @@ function addStaticVisCommunityMood(screen) {
         chart.title("Stress Levels by Community Percentage");
         // set the container id
         chart.container("turkey" + screen.toString());
+        document.getElementById("turkey" + screen.toString()).style.height = "60vh";
+        document.getElementById("turkey" + screen.toString()).style.width = "60vh";
         // initiate drawing the chart
         chart.draw();
       });
@@ -1378,6 +1386,8 @@ yTitle.align("bottom");
 
   // set the container id
   chart.container("turkey" + screen.toString());
+  document.getElementById("turkey" + screen.toString()).style.height = "60vh";
+  document.getElementById("turkey" + screen.toString()).style.width = "60vh";
   // initiate drawing the chart
   chart.draw();   
 });
@@ -1570,6 +1580,8 @@ yTitle.align("bottom");
 
   // set the container id
   chart.container("turkey" + screen.toString());
+  document.getElementById("turkey" + screen.toString()).style.height = "60vh";
+  document.getElementById("turkey" + screen.toString()).style.width = "60vh";
   // initiate drawing the chart
   chart.draw();   
 });
@@ -1762,6 +1774,8 @@ yTitle.align("bottom");
 
   // set the container id
   chart.container("turkey" + screen.toString());
+  document.getElementById("turkey" + screen.toString()).style.height = "60vh";
+  document.getElementById("turkey" + screen.toString()).style.width = "60vh";
   // initiate drawing the chart
   chart.draw();   
 });
@@ -1954,6 +1968,8 @@ yTitle.align("bottom");
 
   // set the container id
   chart.container("turkey" + screen.toString());
+  document.getElementById("turkey" + screen.toString()).style.height = "60vh";
+  document.getElementById("turkey" + screen.toString()).style.width = "60vh";
   // initiate drawing the chart
   chart.draw();   
 });
@@ -2146,6 +2162,8 @@ yTitle.align("bottom");
 
   // set the container id
   chart.container("turkey" + screen.toString());
+  document.getElementById("turkey" + screen.toString()).style.height = "60vh";
+  document.getElementById("turkey" + screen.toString()).style.width = "60vh";
   // initiate drawing the chart
   chart.draw();   
 });
@@ -2339,6 +2357,8 @@ yTitle.align("bottom");
   
     // set the container id
   chart.container("turkey" + screen.toString());
+  document.getElementById("turkey" + screen.toString()).style.height = "60vh";
+  document.getElementById("turkey" + screen.toString()).style.width = "60vh";
   // initiate drawing the chart
   chart.draw();  
   });
