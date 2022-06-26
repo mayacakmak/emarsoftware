@@ -103,15 +103,13 @@ function updateMyProgramList(snapshot) {
   programsButtonDiv.innerHTML = "My programs";
 }
 
-function updateRobotList(snapshot) { 
-  console.log("UPDATE: ");
+function updateRobotList(snapshot) {
   let robotListHTML = "";
   let programRobotListHTML = "";
   let robots = snapshot.val();
-  delete robots["undefined"];
   robotNames = [];
   robotPrograms = [];
-  for (var i=0; i<Object.keys(robots).length; i++) {
+  for (var i=0; i<robots.length; i++) {
     robotNames.push(robots[i].name);
     robotPrograms.push(robots[i].programs);
 		robotListHTML += "<a class='dropdown-item' href='#' onclick='selectedRobotChanged(" +

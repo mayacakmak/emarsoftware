@@ -109,7 +109,3 @@ async function runProgram(robotId, programId) {
   eval("(async () => {" + codeText + "})();");
 }
 
-$('.btn-primary').on('click', function(e) {
-  e.stopPropagation();
-});
-
