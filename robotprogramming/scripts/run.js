@@ -10,7 +10,7 @@ function initialize() {
   Robot.initialize(apiDiv);
 
   let dbRefRobot = firebase.database().ref('/robots/');
-  dbRefRobot.on("value", updateRobotList);
+  dbRefRobot.once("value", updateRobotList);
 }
 
 function updateRobotList(snapshot) { 
@@ -108,4 +108,8 @@ async function runProgram(robotId, programId) {
   codeText = codeText.replace(/robot.sleep/g, "await robot.sleep");
   eval("(async () => {" + codeText + "})();");
 }
+
+$('.btn-primary').on('click', function(e) {
+  e.stopPropagation();
+});
 
