@@ -111,7 +111,16 @@ function prepRobotProgram(robotId) {
 }
 
 async function runProgram(robotId, programId) {
-  console.log("Will run program: " + robotPrograms[robotId][programId].name);
+  let robotListDiv = document.getElementById("logClicksToggle");
+  let programName = robotPrograms[robotId][programId].name
+
+  if (robotListDiv.checked) {
+    // Log timestamp to db if "Track Clicks" is toggled
+    robot.logData(programId, "run_program", "robot" + robotId, programName);
+    console.log("Logging in Firebase: " + programName);
+  }
+  
+  console.log("Will run program: " + programName);
   let codeText = robotPrograms[robotId][programId].program;
   codeText = codeText.replace(/robot.sleep/g, "await robot.sleep");
   eval("(async () => {" + codeText + "})();");
