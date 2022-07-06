@@ -44,11 +44,13 @@ function updateRobotList(snapshot) {
       expandButton.setAttribute('data-target', '#collapseRobot'+i);
       expandButton.setAttribute('aria-expanded', 'true');
       expandButton.setAttribute('aria-controls', 'collapseRobot'+i);
+      expandButton.setAttribute('onclick', 'prepRobotProgram('+ i + ')');
       expandButton.innerHTML = 'Programs on ' + robots[i].name;
 
       let collapseDiv = document.createElement('div');
       collapseDiv.setAttribute('class', 'collapse collapsed');
       collapseDiv.setAttribute('id', 'collapseRobot'+i);
+      collapseDiv.setAttribute('data-parent', '#robotList');
       collapseDiv.setAttribute('aria-labelledby', 'robot'+i);
             
       let cardBodyDiv = document.createElement('div');
@@ -102,7 +104,17 @@ function updateRobotList(snapshot) {
 
 }
 
+function prepRobotProgram(robotId) {
+  if (robotId != Robot.robotId) {
+    Robot.setRobotId(robotId);
+  }
+}
+
 async function runProgram(robotId, programId) {
+  // await prepRunProgram(robotId);
+  // if (robotId != Robot.robotId) {
+  //   Robot.setRobotId(robotId);
+  // }
   console.log("Will run program: " + robotPrograms[robotId][programId].name);
   let codeText = robotPrograms[robotId][programId].program;
   codeText = codeText.replace(/robot.sleep/g, "await robot.sleep");
