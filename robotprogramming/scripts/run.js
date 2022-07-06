@@ -111,10 +111,6 @@ function prepRobotProgram(robotId) {
 }
 
 async function runProgram(robotId, programId) {
-  // await prepRunProgram(robotId);
-  // if (robotId != Robot.robotId) {
-  //   Robot.setRobotId(robotId);
-  // }
   console.log("Will run program: " + robotPrograms[robotId][programId].name);
   let codeText = robotPrograms[robotId][programId].program;
   codeText = codeText.replace(/robot.sleep/g, "await robot.sleep");
