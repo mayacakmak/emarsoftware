@@ -103,7 +103,7 @@ function updateMyProgramList(snapshot) {
   programsButtonDiv.innerHTML = "My programs";
 }
 
-function updateRobotList(snapshot) { 
+function updateRobotList(snapshot) {
   let robotListHTML = "";
   let programRobotListHTML = "";
   let robots = snapshot.val();

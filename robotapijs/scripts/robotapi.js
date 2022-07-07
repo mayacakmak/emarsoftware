@@ -18,6 +18,18 @@ function Robot(robotId, apiDiv) {
   
   Robot.setRobotId = function(robotId) {
     Robot.robotId = robotId;
+    
+    // reset current states
+    Robot.faces = null;
+    Robot.bellyScreens = null;
+    Robot.currentScreen = -1;
+    Robot.sounds = null;
+    Robot.tactile = null;
+    Robot.motors = null;
+    Robot.currentMotorState = null;
+    Robot.poses = null;
+    Robot.poseState = null;
+
     Robot.initialize();
   }
 
@@ -43,7 +55,7 @@ function Robot(robotId, apiDiv) {
       Robot.poseState = snapshot.val();
     })
 
-    console.log("Robot initialized.");
+    console.log("Robot initialized: " + Robot.robotId);
   }
 
   Robot.getAPIHTML = function() {

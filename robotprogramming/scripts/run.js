@@ -10,7 +10,7 @@ function initialize() {
   Robot.initialize(apiDiv);
 
   let dbRefRobot = firebase.database().ref('/robots/');
-  dbRefRobot.on("value", updateRobotList);
+  dbRefRobot.once("value", updateRobotList);
 }
 
 function updateRobotList(snapshot) { 
@@ -44,11 +44,13 @@ function updateRobotList(snapshot) {
       expandButton.setAttribute('data-target', '#collapseRobot'+i);
       expandButton.setAttribute('aria-expanded', 'true');
       expandButton.setAttribute('aria-controls', 'collapseRobot'+i);
+      expandButton.setAttribute('onclick', 'prepRobotProgram('+ i + ')');
       expandButton.innerHTML = 'Programs on ' + robots[i].name;
 
       let collapseDiv = document.createElement('div');
       collapseDiv.setAttribute('class', 'collapse collapsed');
       collapseDiv.setAttribute('id', 'collapseRobot'+i);
+      collapseDiv.setAttribute('data-parent', '#robotList');
       collapseDiv.setAttribute('aria-labelledby', 'robot'+i);
             
       let cardBodyDiv = document.createElement('div');
@@ -102,8 +104,23 @@ function updateRobotList(snapshot) {
 
 }
 
+function prepRobotProgram(robotId) {
+  if (robotId != Robot.robotId) {
+    Robot.setRobotId(robotId);
+  }
+}
+
 async function runProgram(robotId, programId) {
-  console.log("Will run program: " + robotPrograms[robotId][programId].name);
+  let robotListDiv = document.getElementById("logClicksToggle");
+  let programName = robotPrograms[robotId][programId].name
+
+  if (robotListDiv.checked) {
+    // Log timestamp to db if "Track Clicks" is toggled
+    robot.logData(programId, "run_program", "robot" + robotId, programName);
+    console.log("Logging in Firebase: " + programName);
+  }
+  
+  console.log("Will run program: " + programName);
   let codeText = robotPrograms[robotId][programId].program;
   codeText = codeText.replace(/robot.sleep/g, "await robot.sleep");
   eval("(async () => {" + codeText + "})();");
