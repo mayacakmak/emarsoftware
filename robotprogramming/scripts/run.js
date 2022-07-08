@@ -2,6 +2,7 @@ var config = new Config();
 var robot = new Robot(0);
 var db = new Database(config.config, initialize);
 
+// Robots to enable simplified modal view for
 var modalViewEnabled = [57];
 
 var robotPrograms;
@@ -154,16 +155,13 @@ function operatorView(robotId, robotName) {
   for (let i = 0; i < movePrograms.length; i++) {
     modalInnerHTML += movePrograms[i].innerHTML;
   }
-
   modalInnerHTML += `
       </div>
       <div class="col-md-6">
   `;
-
   for (let i = 0; i < soundPrograms.length; i++) {
     modalInnerHTML += soundPrograms[i].innerHTML;
   }
-
   modalInnerHTML += `
       </div>
     </div>
