@@ -2,6 +2,9 @@ var config = new Config();
 var robot = new Robot(0);
 var db = new Database(config.config, initialize);
 
+// Robots to enable simplified modal view for
+var modalViewEnabled = [57];
+
 var robotPrograms;
 var robotNames = null;
 
@@ -58,6 +61,19 @@ function updateRobotList(snapshot) {
       let programDiv = document.createElement('div');
       programDiv.setAttribute('class', 'program-grid');
 
+      if (modalViewEnabled.includes(i)) {
+        // If generalizing outside of Digital Shield, can consider adding field in Firebase to enable modal view
+        let operatorBtn = document.createElement('button');
+        operatorBtn.setAttribute('type', 'button');
+        operatorBtn.setAttribute('onclick', 'operatorView('+ i + ', "' + robots[i].name + '")');
+        operatorBtn.setAttribute('class', 'btn btn-secondary');
+        operatorBtn.setAttribute('data-toggle', 'modal');
+        operatorBtn.setAttribute('data-target', '#runProgramModal');        
+        operatorBtn.innerHTML = "Operator View";
+
+        programDiv.appendChild(operatorBtn);
+      }
+
       // Add each program one by one
       for (let j=0; j<robots[i].programs.length; j++){
         let itemDiv = document.createElement('div');
@@ -102,6 +118,57 @@ function updateRobotList(snapshot) {
     }
 	}
 
+}
+
+function operatorView(robotId, robotName) {
+  // Populate and open modal view for sound/movement programs
+  // If generalizing outside of Digital Shield, should consider other breakdowns of names
+
+  let modalBody = document.getElementById("runProgramModalBody");
+  let modalTitle = document.getElementById("runProgramModalTitle");
+
+  modalTitle.innerHTML = robotName;
+
+  let movePrograms = [];
+  let soundPrograms = [];
+
+  let allPrograms = document.querySelectorAll("#collapseRobot" + robotId + " .card-body .program-grid .program-item");
+  for (let i = 0; i < allPrograms.length; i++) {
+    let programNameSub = allPrograms[i].firstChild.innerHTML.substring(0, 5).toLowerCase()
+    if (programNameSub === "sound") {
+      soundPrograms.push(allPrograms[i]);
+    }
+    else if (programNameSub === "activ") {
+      movePrograms.push(allPrograms[i]);
+    }
+  }  
+  
+  // Build inner HTML for Modal
+  let modalInnerHTML = `
+    <div class="row">
+      <div class="col-md-6">Movements</div>
+      <div class="col-md-6">Sounds</div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+  `;
+  for (let i = 0; i < movePrograms.length; i++) {
+    modalInnerHTML += movePrograms[i].innerHTML;
+  }
+  modalInnerHTML += `
+      </div>
+      <div class="col-md-6">
+  `;
+  for (let i = 0; i < soundPrograms.length; i++) {
+    modalInnerHTML += soundPrograms[i].innerHTML;
+  }
+  modalInnerHTML += `
+      </div>
+    </div>
+  `;
+
+  modalBody.innerHTML = modalInnerHTML;
+  
 }
 
 function prepRobotProgram(robotId) {
