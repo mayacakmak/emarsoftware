@@ -131,6 +131,7 @@ function operatorView(robotId, robotName) {
 
   let movePrograms = [];
   let soundPrograms = [];
+  let finishPrograms = [];
 
   let allPrograms = document.querySelectorAll("#collapseRobot" + robotId + " .card-body .program-grid .program-item");
   for (let i = 0; i < allPrograms.length; i++) {
@@ -141,26 +142,39 @@ function operatorView(robotId, robotName) {
     else if (programNameSub === "activ") {
       movePrograms.push(allPrograms[i]);
     }
-  }  
+    else if (programNameSub === "finis") {
+      finishPrograms.push(allPrograms[i]);
+    }
+  }
   
   // Build inner HTML for Modal
   let modalInnerHTML = `
     <div class="row">
-      <div class="col-md-6">Movements</div>
-      <div class="col-md-6">Sounds</div>
+      <div class="col-md-4">Movements</div>
+      <div class="col-md-4">Sounds</div>
+      <div class="col-md-4">Finish</div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
   `;
   for (let i = 0; i < movePrograms.length; i++) {
     modalInnerHTML += movePrograms[i].innerHTML;
   }
   modalInnerHTML += `
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
   `;
   for (let i = 0; i < soundPrograms.length; i++) {
     modalInnerHTML += soundPrograms[i].innerHTML;
+  }
+  modalInnerHTML += `
+      </div>
+      <div class="col-md-4">
+  `;
+  for (let i = 0; i < finishPrograms.length; i++) {
+    modalInnerHTML += finishPrograms[i].innerHTML
+      .replace("btn-primary", "btn-danger")
+      .replace("Run", "Finish");
   }
   modalInnerHTML += `
       </div>
