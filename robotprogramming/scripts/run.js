@@ -173,7 +173,7 @@ function operatorView(robotId, robotName) {
   `;
   for (let i = 0; i < finishPrograms.length; i++) {
     modalInnerHTML += finishPrograms[i].innerHTML
-      .replace("btn-primary", "btn-danger")
+      .replace("btn-primary", 'btn-danger" data-dismiss="modal')
       .replace("Run", "Finish");
   }
   modalInnerHTML += `
