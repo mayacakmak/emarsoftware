@@ -1,1 +1,1 @@
-Repository for robot programming tools in the EMAR project.`
+Repository for robot programming tools in the EMAR project.
