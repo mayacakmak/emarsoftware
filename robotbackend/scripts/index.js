@@ -33,6 +33,8 @@ function updateUserRobotInfo(snapshot) {
     else
       selectedRobotDiv.innerHTML = robotNames[currentRobot];
   }
+  else
+    console.log("Database.uid is null");
 }
 
 function setRobot(robotId) {
